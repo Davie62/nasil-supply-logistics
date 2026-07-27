@@ -81,4 +81,4 @@ Open **http://127.0.0.1:8000/** in your browser.
 
 **Ssebunya David**
 
-Computer Science / IT Student • Rugby Athlete • Aspiring Software Developer
+Computer Science / IT Student • Rugby Athlete • Aspiring Software Developer/Network Engineer/Data science & ML
