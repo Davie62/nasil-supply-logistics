@@ -4,145 +4,163 @@
 
 {% block content %}
 
-<section class="login-section">
+<section class="login-section py-5">
 
-<div class="container">
+    <div class="container">
 
-<div class="row shadow-lg rounded overflow-hidden">
+        <div class="row shadow-lg rounded-4 overflow-hidden login-card">
 
-    <!-- Left Side -->
+            <!-- Left Panel -->
 
-    <div class="col-lg-6 login-left d-flex align-items-center">
+            <div class="col-lg-6 login-left d-flex align-items-center">
 
-        <div class="text-white p-5">
+                <div class="login-overlay p-5 text-white">
 
-            <h1 class="display-5 fw-bold">
-                NASIL SUPPLY
-                <br>
-                & LOGISTICS
-            </h1>
+                    <h1 class="display-4 fw-bold mb-4">
+                        NASIL SUPPLY <br>
+                        & LOGISTICS
+                    </h1>
 
-            <p class="lead mt-4">
+                    <p class="lead">
+                        Delivering dependable logistics solutions across Uganda and East Africa.
+                    </p>
 
-                Secure logistics.
-                Reliable deliveries.
-                Trusted partnerships.
+                    <hr class="my-4">
 
-            </p>
+                    <h5 class="mb-3">
+                        Staff Management Portal
+                    </h5>
 
-            <hr>
+                    <p>
+                        Access internal company systems securely to manage shipments,
+                        quotations, customers and logistics operations.
+                    </p>
 
-            <p>
+                    <div class="mt-5">
 
-                Welcome to the staff portal.
-                Access your dashboard securely to manage
-                logistics operations.
+                        <div class="d-flex align-items-center mb-3">
+                            ✔ Secure Authentication
+                        </div>
 
-            </p>
+                        <div class="d-flex align-items-center mb-3">
+                            ✔ Shipment Management
+                        </div>
 
-        </div>
-
-    </div>
-
-    <!-- Right Side -->
-
-    <div class="col-lg-6 bg-white">
-
-        <div class="p-5">
-
-            <h2 class="mb-4 text-center">
-
-                Staff Login
-
-            </h2>
-
-            {% if form.errors %}
-
-            <div class="alert alert-danger">
-
-                Invalid username or password.
-
-            </div>
-
-            {% endif %}
-
-            <form method="post">
-
-                {% csrf_token %}
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Username
-
-                    </label>
-
-                    {{ form.username }}
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-
-                        Password
-
-                    </label>
-
-                    {{ form.password }}
-
-                </div>
-
-                <div class="d-flex justify-content-between mb-4">
-
-                    <div class="form-check">
-
-                        <input
-                            class="form-check-input"
-                            type="checkbox">
-
-                        <label class="form-check-label">
-
-                            Remember Me
-
-                        </label>
+                        <div class="d-flex align-items-center">
+                            ✔ Staff Dashboard
+                        </div>
 
                     </div>
 
-                    <a href="#">
+                </div>
 
-                        Forgot Password?
+            </div>
 
-                    </a>
+            <!-- Right Panel -->
+
+            <div class="col-lg-6 bg-white">
+
+                <div class="login-form p-5">
+
+                    <h2 class="fw-bold mb-2">
+                        Staff Login
+                    </h2>
+
+                    <p class="text-muted mb-4">
+                        Sign in to access the Nasil Logistics Management System.
+                    </p>
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Invalid username or password.
+                    </div>
+                    {% endif %}
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control form-control-lg"
+                                placeholder="Enter your username"
+                                required>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password"
+                                class="form-control form-control-lg"
+                                placeholder="Enter your password"
+                                required>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div class="form-check">
+
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="remember">
+
+                                <label
+                                    class="form-check-label"
+                                    for="remember">
+
+                                    Remember Me
+
+                                </label>
+
+                            </div>
+
+                            <a href="#" class="text-decoration-none">
+                                Forgot Password?
+                            </a>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning btn-lg w-100 fw-bold">
+
+                            Login
+
+                        </button>
+
+                    </form>
+
+                    <hr class="my-4">
+
+                    <small class="text-muted">
+
+                        Protected by encrypted authentication.
+                        Access is restricted to authorised Nasil Supply & Logistics staff.
+
+                    </small>
 
                 </div>
 
-                <button
-                    class="btn btn-primary w-100 btn-lg">
-
-                    Login
-
-                </button>
-
-            </form>
-
-            <hr>
-
-            <small class="text-muted">
-
-                Protected by encrypted authentication.
-                Authorised personnel only.
-
-            </small>
+            </div>
 
         </div>
 
     </div>
-
-</div>
-
-</div>
 
 </section>
 
