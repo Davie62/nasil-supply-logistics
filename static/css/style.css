@@ -1,0 +1,18 @@
+
+body{
+    font-family: 'Arial', Helvetica, sans-serif;
+
+}
+
+.navbar{
+    background:#0B3D91 !important;
+}
+
+.btn-warning{
+    background:#F7941D;
+    border:none;
+}
+
+footer{
+    margin-top: 80px;
+}
