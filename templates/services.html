@@ -1,79 +1,47 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="container mt-5">
+<section class="container py-5">
 
     <div class="text-center mb-5">
         <h1>Our Services</h1>
-        <p class="lead">
-            We provide reliable logistics and supply chain solutions across Uganda and East Africa.
+        <p class="text-muted">
+            Comprehensive logistics solutions designed for businesses of all sizes.
         </p>
     </div>
 
-    <div class="row">
+    <div class="row g-4">
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Road Freight</h4>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h3>🚛 Road Freight</h3>
                     <p>
-                        Safe and timely transportation of goods throughout Uganda and neighbouring countries.
+                        Fast and secure transportation across Uganda and East Africa.
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Warehousing</h4>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h3>🏢 Warehousing</h3>
                     <p>
-                        Secure storage facilities with inventory management and distribution services.
+                        Safe storage facilities with inventory management.
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Supply Chain Management</h4>
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <h3>📦 Supply Chain</h3>
                     <p>
-                        End-to-end supply chain planning, coordination and optimisation.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Freight Forwarding</h4>
-                    <p>
-                        Efficient import and export logistics through trusted transportation partners.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Customs Clearance</h4>
-                    <p>
-                        Professional customs documentation and clearance support for cross-border shipments.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
-                <div class="card-body">
-                    <h4>Last Mile Delivery</h4>
-                    <p>
-                        Fast and dependable delivery from our warehouses directly to customers.
+                        End-to-end supply chain planning and execution.
                     </p>
                 </div>
             </div>
@@ -81,6 +49,6 @@
 
     </div>
 
-</div>
+</section>
 
 {% endblock %}
