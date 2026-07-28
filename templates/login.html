@@ -1,0 +1,149 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="login-section">
+
+<div class="container">
+
+<div class="row shadow-lg rounded overflow-hidden">
+
+    <!-- Left Side -->
+
+    <div class="col-lg-6 login-left d-flex align-items-center">
+
+        <div class="text-white p-5">
+
+            <h1 class="display-5 fw-bold">
+                NASIL SUPPLY
+                <br>
+                & LOGISTICS
+            </h1>
+
+            <p class="lead mt-4">
+
+                Secure logistics.
+                Reliable deliveries.
+                Trusted partnerships.
+
+            </p>
+
+            <hr>
+
+            <p>
+
+                Welcome to the staff portal.
+                Access your dashboard securely to manage
+                logistics operations.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Right Side -->
+
+    <div class="col-lg-6 bg-white">
+
+        <div class="p-5">
+
+            <h2 class="mb-4 text-center">
+
+                Staff Login
+
+            </h2>
+
+            {% if form.errors %}
+
+            <div class="alert alert-danger">
+
+                Invalid username or password.
+
+            </div>
+
+            {% endif %}
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Username
+
+                    </label>
+
+                    {{ form.username }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Password
+
+                    </label>
+
+                    {{ form.password }}
+
+                </div>
+
+                <div class="d-flex justify-content-between mb-4">
+
+                    <div class="form-check">
+
+                        <input
+                            class="form-check-input"
+                            type="checkbox">
+
+                        <label class="form-check-label">
+
+                            Remember Me
+
+                        </label>
+
+                    </div>
+
+                    <a href="#">
+
+                        Forgot Password?
+
+                    </a>
+
+                </div>
+
+                <button
+                    class="btn btn-primary w-100 btn-lg">
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <hr>
+
+            <small class="text-muted">
+
+                Protected by encrypted authentication.
+                Authorised personnel only.
+
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+{% endblock %}

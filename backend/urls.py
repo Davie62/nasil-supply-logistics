@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from logistics import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('logistics.urls')),  # Include the URLs from the logistics app
@@ -26,5 +27,7 @@ urlpatterns = [
     path('services/', views.services, name='services'),  # Services page
     path('quote/', views.quote, name='quote'),  # Quote page
     path('contact/', views.contact, name='contact'),  # Contact page
-    path('faq/', views.faq, name='faq'),  # FAQ page    
+    path('faq/', views.faq, name='faq'),  # FAQ page
+    path('login/', views.login_view, name='login'),  # Login page
+    path('dashboard/', views.dashboard, name='dashboard'),  # Dashboard page    
 ]

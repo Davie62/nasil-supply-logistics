@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.forms import AuthenticationForm
 
 def home(request):
     return render(request, 'home.html')
@@ -22,6 +23,7 @@ def dashboard(request):
     return render(request, 'dashboard.html')
 
 def login_view(request):
-    return render(request, 'login.html')
+    form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
 
 

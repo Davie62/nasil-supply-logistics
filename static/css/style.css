@@ -16,3 +16,65 @@ footer{
     margin-top: 80px;
 }
 
+/* Login Page */
+
+.login-section{
+
+    min-height:90vh;
+
+    display:flex;
+
+    align-items:center;
+
+    background:#f4f7fa;
+
+}
+
+.login-left{
+
+    background:linear-gradient(
+    135deg,
+    #003366,
+    #00509e);
+
+    min-height:650px;
+
+}
+
+.login-left h1{
+
+    font-weight:700;
+
+}
+
+.login-left p{
+
+    font-size:18px;
+
+}
+
+input{
+
+    height:50px;
+
+}
+
+.card{
+
+    border:none;
+
+}
+
+.btn-primary{
+
+    background:#ff7a00;
+
+    border:none;
+
+}
+
+.btn-primary:hover{
+
+    background:#e76d00;
+
+}
