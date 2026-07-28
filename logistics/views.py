@@ -18,4 +18,10 @@ def contact(request):
 def faq(request):
     return render(request, 'faq.html')
 
+def dashboard(request):
+    return render(request, 'dashboard.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
 
