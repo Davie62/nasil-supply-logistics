@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1>Contact Us</h1>
+        <p class="text-muted">
+            We'd love to hear from you. Reach out to us for transport, logistics,
+            procurement, or import and export services.
+        </p>
+    </div>
+
+    <div class="row">
+
+        <!-- Company Information -->
+        <div class="col-lg-5 mb-4">
+
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+
+                    <h3 class="mb-4">Get in Touch</h3>
+
+                    <p>
+                        <strong>📍 Office</strong><br>
+                        Kampala, Uganda
+                    </p>
+
+                    <p>
+                        <strong>📞 Phone</strong><br>
+                        +256 749676580 |
+                        +256 776988267 |
+                        +256 706820347 |
+                    </p>
+
+                    <p>
+                        <strong>✉ Email</strong><br>
+                        nasilsupplyandlogistics@gmail.com
+                    </p>
+
+                    <p>
+                        <strong>🕒 Working Hours</strong><br>
+                        Monday - Friday<br>
+                        8:00 AM - 5:00 PM
+                    </p>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body">
+
+                    <h3 class="mb-4">Send Us a Message</h3>
+
+                    <form>
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Enter your name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email Address</label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                placeholder="Enter your email">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Subject</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Subject">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea
+                                class="form-control"
+                                rows="5"
+                                placeholder="Write your message here..."></textarea>
+                        </div>
+
+                        <button class="btn btn-primary">
+                            Send Message
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
