@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+        <h1>Request a Quote</h1>
+        <p class="text-muted">
+            Tell us about your shipment and we'll provide you with a customised quotation.
+        </p>
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body p-4">
+
+            <form>
+
+                <h4 class="mb-4">Customer Information</h4>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control">
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <h4 class="mb-4">Shipment Information</h4>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Pickup Location</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Delivery Destination</label>
+                        <input type="text" class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Cargo Type</label>
+                        <select class="form-select">
+
+                            <option selected>Select Cargo Type</option>
+                            <option>General Goods</option>
+                            <option>Fragile Goods</option>
+                            <option>Perishable Goods</option>
+                            <option>Electronics</option>
+                            <option>Construction Materials</option>
+
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estimated Weight (kg)</label>
+                        <input type="number" class="form-control">
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Preferred Delivery Date
+                    </label>
+
+                    <input type="date" class="form-control">
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Additional Information
+                    </label>
+
+                    <textarea
+                        rows="5"
+                        class="form-control"
+                        placeholder="Provide any additional details about your shipment..."></textarea>
+
+                </div>
+
+                <button class="btn btn-primary btn-lg">
+                    Request Quote
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
