@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class QuotationsConfig(AppConfig):
-    name = 'Quotations'
+    name = 'quotations'

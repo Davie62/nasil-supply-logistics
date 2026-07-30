@@ -1,29 +1,25 @@
 from django.shortcuts import render
-from django.contrib.auth.forms import AuthenticationForm
+
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
+
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, "about.html")
+
 
 def services(request):
-    return render(request, 'services.html')
+    return render(request, "services.html")
+
 
 def quote(request):
-    return render(request, 'quote.html')
+    return render(request, "quote.html")
+
 
 def contact(request):
-    return render(request, 'contact.html')
+    return render(request, "contact.html")
+
 
 def faq(request):
-    return render(request, 'faq.html')
-
-def dashboard(request):
-    return render(request, 'dashboard.html')
-
-def login_view(request):
-    form = AuthenticationForm()
-    return render(request, 'login.html', {'form': form})
-
-
+    return render(request, "faq.html")

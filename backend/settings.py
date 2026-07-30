@@ -38,15 +38,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Project apps
-    'accounts',
-    'logistics',
-    'shipments',
-    'tracking',
-    'Quotations',
-    'Payments',
-    'Dashboard',
-    'audit_logs',
+
+ # Project apps
+    "accounts.apps.AccountsConfig",
+    "organization.apps.OrganizationConfig",
+    "core",
+    "dashboard",
+    "logistics",
+    "shipments",
+    "quotations",
+    "payments",
+    "customers",
+    
 ]
 
 MIDDLEWARE = [
@@ -132,3 +135,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Custom User Model
+AUTH_USER_MODEL = "accounts.User"

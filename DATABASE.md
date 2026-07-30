@@ -328,3 +328,32 @@ Manual database modifications are not permitted.
 Version 1.0
 
 Initial database design.
+
+FINAL DATABASE DESIGN
+
+NASIL Logistics Database
+
+Authentication
+│
+├── CustomUser
+├── Department
+├── Role
+├── AuditLog
+└── ActivityLog
+
+Business
+│
+├── Customer
+├── Service
+├── Carrier
+├── Quote
+├── Shipment
+└── ContactMessage
+
+System
+│
+├── Notification
+├── Attachment
+├── Payment
+├── FeatureFlag
+└── SystemSetting
