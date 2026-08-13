@@ -1,30 +1,115 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<section class="bg-primary text-white text-center py-5">
-    <div class="container">
-        <h1 class="display-4 fw-bold">Nasil Supply and Logistics</h1>
-        <p class="lead">Reliable transportation and supply chain solutions across Uganda.</p>
-        <a href="#" class="btn btn-warning btn-lg mt-3">Request a Quote</a>
-    </div>
-</section>
 
-<section class="py-5">
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
     <div class="container">
-        <div class="row text-left">
-            <div class="col-md-4">
-                <h3>Fast Delivery</h3>
-                <p>Efficient road freight and last-mile delivery services.</p>
-            </div>
-            <div class="col-md-4">
-                <h3>Supply Chain Solutions</h3>
-                <p>Comprehensive logistics management for businesses.</p>
-            </div>
-            <div class="col-md-4">
-                <h3>Procurement</h3>
-                <p>Helping businesses source and acquire goods and services efficiently.</p>
+        <div class="hero-content">
+            <h1>Reliable Logistics Solutions for Your Business</h1>
+            <p>We provide comprehensive supply chain management, procurement, and logistics services to businesses across Uganda and East Africa. Trusted by industry leaders.</p>
+            <div class="hero-buttons">
+                <a href="{% url 'quote' %}" class="btn-primary-hero">Request a Quote</a>
+                <a href="{% url 'services' %}" class="btn-secondary-hero">Learn More</a>
             </div>
         </div>
     </div>
 </section>
+
+<!-- ================= FEATURES SECTION ================= -->
+<section>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">WHY CHOOSE US</span>
+            <h2 class="section-title">Delivering Excellence Every Time</h2>
+            <p class="section-subtitle">We combine industry expertise with innovative solutions to ensure your logistics run smoothly.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
+                <h3>Fast Delivery</h3>
+                <p>Efficient road freight and last-mile delivery services with real-time tracking and transparent communication.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+                <h3>Supply Chain Solutions</h3>
+                <p>Comprehensive logistics management including warehousing, inventory control, and distribution network optimization.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-bag-check"></i>
+                </div>
+                <h3>Procurement Services</h3>
+                <p>Strategic procurement solutions to help businesses source and acquire goods and services efficiently and cost-effectively.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <h3>Import & Export</h3>
+                <p>Seamless international trade solutions with customs clearance, documentation, and compliance management.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h3>Reliable Partnership</h3>
+                <p>Dedicated account managers and 24/7 customer support to ensure your business operations run without interruption.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h3>Growth Focused</h3>
+                <p>Scalable solutions designed to grow with your business, from startups to enterprise-level operations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= STATS SECTION ================= -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Satisfied Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">1000+</div>
+                <div class="stat-label">Deliveries Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">3+</div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">On-Time Delivery</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Transform Your Logistics?</h2>
+            <p>Let's discuss how NASIL can optimize your supply chain and drive business growth.</p>
+            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Request Your Free Consultation</a>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

@@ -1,0 +1,69 @@
+.hero{
+
+    margin-bottom:30px;
+
+}
+
+.hero h2{
+
+    font-weight:700;
+
+}
+
+.hero p{
+
+    color:var(--text-light);
+
+}
+
+.kpi-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:var(--shadow);
+
+    transition:var(--transition);
+
+}
+
+.kpi-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.kpi-icon{
+
+    width:70px;
+
+    height:70px;
+
+    background:var(--primary-light);
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.kpi-icon i{
+
+    color:var(--primary);
+
+    font-size:34px;
+
+}

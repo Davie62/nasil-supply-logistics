@@ -1,11 +1,15 @@
 import uuid
 
+from .managers import ActiveManager, AllObjectsManager
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
 
+
 class BaseModel(models.Model):
+    objects = ActiveManager()
+    all_objects = AllObjectsManager()
     """
     Enterprise base model inherited by every model
     in the system.

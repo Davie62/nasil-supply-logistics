@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Our Fleet</h1>
+            <p>A modern, well-maintained fleet of vehicles equipped with the latest technology to ensure safe and reliable delivery of your cargo across Uganda and East Africa.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= FLEET OVERVIEW SECTION ================= -->
+<section>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">TRANSPORTATION</span>
+            <h2 class="section-title">Our Vehicle Fleet</h2>
+            <p class="section-subtitle">Well-maintained vehicles equipped with modern tracking and safety systems.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-truck"></i>
+                </div>
+                <h3>Heavy Trucks</h3>
+                <p>Large capacity trucks for bulk shipments and long-distance transportation with GPS tracking and professional drivers.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-minecart"></i>
+                </div>
+                <h3>Medium Vehicles</h3>
+                <p>Versatile medium-sized vehicles suitable for general freight and local deliveries with quick turnaround times.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-bicycle"></i>
+                </div>
+                <h3>Light Vans</h3>
+                <p>Nimble light vehicles for urban deliveries, last-mile delivery, and time-sensitive shipments with eco-friendly options.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-thermometer-half"></i>
+                </div>
+                <h3>Temperature-Controlled</h3>
+                <p>Refrigerated units for perishable goods, medical supplies, and temperature-sensitive cargo requiring strict climate control.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <h3>Specialized Equipment</h3>
+                <p>Vehicles with specialized handling equipment for fragile items, dangerous goods, and specialized cargo types.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-map"></i>
+                </div>
+                <h3>GPS Tracking</h3>
+                <p>All vehicles equipped with real-time GPS tracking and communication systems for safety and transparency.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= FLEET FEATURES SECTION ================= -->
+<section style="background: var(--background);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">QUALITY ASSURANCE</span>
+            <h2 class="section-title">Fleet Maintenance & Safety</h2>
+            <p class="section-subtitle">We maintain the highest standards of vehicle maintenance and driver safety.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-wrench"></i>
+                </div>
+                <h3>Regular Maintenance</h3>
+                <p>Preventive maintenance schedule and regular inspections to ensure all vehicles meet safety and performance standards.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-person-check"></i>
+                </div>
+                <h3>Professional Drivers</h3>
+                <p>Experienced, licensed drivers with extensive training in safety protocols, customer service, and cargo handling.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+                <h3>Insurance Coverage</h3>
+                <p>Comprehensive insurance coverage on all vehicles providing protection for cargo and peace of mind for our clients.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h3>Safety Systems</h3>
+                <p>Modern safety features including anti-lock brakes, traction control, and emergency communication systems.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <h3>Regular Inspections</h3>
+                <p>Daily pre-trip inspections and periodic comprehensive checks to identify and address any maintenance issues.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <h3>Compliance</h3>
+                <p>Full compliance with all regulatory requirements including vehicle registration, emissions standards, and safety codes.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= STATS SECTION ================= -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">50+</div>
+                <div class="stat-label">Vehicles in Fleet</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">99%</div>
+                <div class="stat-label">On-Time Delivery</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">GPS Equipped</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Support Available</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Ship with Us?</h2>
+            <p>Our modern fleet and professional team are ready to handle your logistics needs with excellence.</p>
+            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Request a Quote</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

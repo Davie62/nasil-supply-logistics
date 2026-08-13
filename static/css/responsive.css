@@ -1,0 +1,54 @@
+@media (max-width: 1199px) {
+    :root { --sidebar-width: 248px; }
+    .sidebar-header { padding-inline: 19px; }
+    .search-box { width: 235px; min-width: 0; }
+    .status-card-content { gap: 16px; }
+    .status-ring { width: 120px; height: 120px; }
+    .status-ring::after { width: 94px; height: 94px; }
+}
+
+@media (max-width: 991px) {
+    .sidebar { width: 272px; transform: translateX(-105%); transition: transform 220ms ease; box-shadow: 14px 0 35px rgba(15, 39, 68, 0.16); }
+    .dashboard-body.sidebar-open { overflow: hidden; }
+    .dashboard-body.sidebar-open .sidebar { transform: translateX(0); }
+    .dashboard-body.sidebar-open .sidebar-overlay { position: fixed; z-index: 1030; display: block; inset: 0; background: rgba(15, 39, 68, 0.45); backdrop-filter: blur(2px); }
+    .main { margin-left: 0; }
+    .menu-toggle { display: inline-flex; }
+    .topbar { padding-inline: 24px; }
+    .content { padding: 28px 24px 40px; }
+    .quick-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+    .topbar { min-height: 70px; padding-inline: 16px; }
+    .topbar-right { gap: 7px; }
+    .search-box,
+    .topbar-right .icon-btn:last-of-type,
+    .profile-dropdown > div:not(.avatar),
+    .profile-dropdown > i,
+    .breadcrumb { display: none; }
+    .icon-btn { width: 39px; height: 39px; }
+    .page-title { font-size: 15px; }
+    .content { padding: 24px 16px 32px; }
+    .dashboard-header { align-items: flex-start; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+    .dashboard-header h1 { font-size: 25px; }
+    .dashboard-header p { font-size: 12px; }
+    .dashboard-card { padding: 18px; }
+    .dashboard-card-header { gap: 10px; margin-bottom: 17px; }
+    .dashboard-card-header h2 { font-size: 15px; }
+    .period-label { padding: 7px 9px; font-size: 10px; }
+    .chart-container { height: 242px; }
+    .status-card-content { justify-content: center; }
+    .quick-actions { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 450px) {
+    .kpi-card { min-height: 137px; padding: 18px; }
+    .kpi-value { font-size: 26px; }
+    .kpi-value--currency { font-size: 20px; }
+    .dashboard-header-status { font-size: 10px; }
+    .status-card-content { align-items: flex-start; flex-direction: column; padding-left: 12px; }
+    .status-ring { align-self: center; }
+    .status-list { width: 100%; }
+    .status-card-note { margin-top: 18px; }
+}

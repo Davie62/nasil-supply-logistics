@@ -1,0 +1,25 @@
+* { box-sizing: border-box; }
+
+html { min-width: 320px; }
+
+body.dashboard-body {
+    min-height: 100vh;
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: "Poppins", "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+button,
+input { font: inherit; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, 0.3);
+    outline-offset: 2px;
+}
+
+::selection { background: #bae6fd; color: var(--navy); }

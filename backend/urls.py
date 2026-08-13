@@ -24,17 +24,17 @@ urlpatterns = [
     path("", include("logistics.urls")),
 
     # Authentication
-    path("accounts", include("accounts.urls")),
+    path("accounts/", include("accounts.urls")),
 
     # Dashboard
-    path("dashboard", include("dashboard.urls")),
+    path("dashboard/", include("dashboard.urls")),
 
     # Shipments
-    path("shipments", include("shipments.urls")),
+    path("shipments/", include("shipments.urls")),
 
     # Quotations
-    path("quotations", include("quotations.urls")),
+    path("quotations/", include("quotations.urls")),
 
     # Payments
-    path("payments", include("payments.urls")),
+    path("payments/", include("payments.urls")),
 ]

@@ -1,0 +1,30 @@
+"""
+Project-wide constants.
+
+Changing a value here updates
+the whole application.
+"""
+
+COMPANY_PREFIX = "NSL"
+
+DEFAULT_COUNTRY = "Uganda"
+
+DEFAULT_CURRENCY = "UGX"
+
+DEFAULT_LANGUAGE = "en"
+
+MAX_LOGIN_ATTEMPTS = 5
+
+ACCOUNT_LOCK_MINUTES = 30
+
+SESSION_TIMEOUT = 1800
+
+TRACKING_PREFIX = "TRK"
+
+QUOTE_PREFIX = "QTN"
+
+SHIPMENT_PREFIX = "SHP"
+
+PAYMENT_PREFIX = "PAY"
+
+INVOICE_PREFIX = "INV"

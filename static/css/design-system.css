@@ -1,0 +1,62 @@
+/* ==============================
+   NASIL ERP DESIGN SYSTEM
+   ============================== */
+
+:root{
+
+    /* Brand */
+
+    --primary:#0EA5E9;
+    --primary-dark:#0284C7;
+    --primary-light:#E0F7FF;
+
+    /* Surfaces */
+
+    --background:#F4F8FC;
+    --surface:#FFFFFF;
+
+    /* Typography */
+
+    --text:#1E293B;
+    --text-light:#64748B;
+
+    /* Status */
+
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    /* Borders */
+
+    --border:#E2E8F0;
+
+    /* Radius */
+
+    --radius-sm:10px;
+    --radius:18px;
+    --radius-lg:24px;
+
+    /* Shadows */
+
+    --shadow-sm:0 4px 12px rgba(15,23,42,.05);
+
+    --shadow:0 10px 30px rgba(15,23,42,.08);
+
+    --transition:.25s ease;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:var(--background);
+
+    color:var(--text);
+
+}

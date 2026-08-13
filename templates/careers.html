@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Join Our Team</h1>
+            <p>Are you passionate about logistics and supply chain excellence? We're looking for talented individuals to join our growing team.</p>
+            <div class="hero-buttons">
+                <a href="#openings" class="btn-primary-hero">View Open Positions</a>
+                <a href="{% url 'contact' %}" class="btn-secondary-hero">Learn More</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= WHY JOIN US SECTION ================= -->
+<section style="background: var(--background);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">WORK WITH US</span>
+            <h2 class="section-title">Why Join NASIL?</h2>
+            <p class="section-subtitle">Be part of a dynamic team committed to excellence and innovation in logistics.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h3>Great Team Culture</h3>
+                <p>Work with dedicated professionals who are passionate about delivering exceptional logistics solutions.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h3>Career Growth</h3>
+                <p>We invest in our team's development with training programs, mentorship, and clear advancement opportunities.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-briefcase"></i>
+                </div>
+                <h3>Competitive Benefits</h3>
+                <p>Enjoy competitive salaries, health insurance, and other benefits that reward your dedication and hard work.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+                <h3>Innovation Focus</h3>
+                <p>Be part of a company that's constantly innovating and improving logistics solutions for the future.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-hand-thumbs-up"></i>
+                </div>
+                <h3>Work-Life Balance</h3>
+                <p>We believe in maintaining a healthy balance between professional success and personal well-being.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <h3>Industry Leadership</h3>
+                <p>Join a company that's recognized for excellence and innovation in the logistics and supply chain sector.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= OPEN POSITIONS SECTION ================= -->
+<section id="openings">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">OPPORTUNITIES</span>
+            <h2 class="section-title">Open Positions</h2>
+            <p class="section-subtitle">Check back soon for exciting job opportunities. We're actively hiring!</p>
+        </div>
+
+        <div style="text-align: center; padding: 60px 30px; background: var(--background); border-radius: 12px;">
+            <i class="bi bi-briefcase" style="font-size: 48px; color: var(--accent); margin-bottom: 20px; display: block;"></i>
+            <h3 style="color: var(--primary); margin-bottom: 12px;">Positions Coming Soon</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">We're always looking for talented individuals. Subscribe to our careers updates or contact us directly to inquire about opportunities.</p>
+            <a href="{% url 'contact' %}" class="btn-primary-hero">Get in Touch</a>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Make an Impact?</h2>
+            <p>Join NASIL and be part of a team that's transforming logistics in East Africa.</p>
+            <a href="{% url 'contact' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Contact Our HR Team</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

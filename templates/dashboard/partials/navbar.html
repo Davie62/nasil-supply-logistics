@@ -1,0 +1,92 @@
+<nav class="topbar">
+
+    <div class="topbar-left">
+
+        <button class="menu-toggle">
+
+            <i class="bi bi-list"></i>
+
+        </button>
+
+        <div>
+
+            <h4 class="page-title">
+                Dashboard
+            </h4>
+
+            <small class="breadcrumb">
+
+                Home / Dashboard
+
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="topbar-right">
+
+        <!-- Search -->
+
+        <div class="search-box">
+
+            <i class="bi bi-search"></i>
+
+            <input
+                type="text"
+                placeholder="Search shipments, quotations..."
+            >
+
+        </div>
+
+        <!-- Notification -->
+
+        <button class="icon-btn">
+
+            <i class="bi bi-bell-fill"></i>
+
+            <span class="badge-dot"></span>
+
+        </button>
+
+        <!-- Messages -->
+
+        <button class="icon-btn">
+
+            <i class="bi bi-envelope-fill"></i>
+
+        </button>
+
+        <!-- User -->
+
+        <div class="profile-dropdown">
+
+            <div class="avatar">
+
+                {{ request.user.username|first|upper }}
+
+            </div>
+
+            <div>
+
+                <strong>
+
+                    {{ request.user.get_full_name|default:request.user.username }}
+
+                </strong>
+
+                <small>
+
+                    Administrator
+
+                </small>
+
+            </div>
+
+            <i class="bi bi-chevron-down"></i>
+
+        </div>
+
+    </div>
+
+</nav>

@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Dashboard{% endblock %} | NASIL</title>
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Dashboard CSS -->
+    <link
+        rel="stylesheet"
+        href="{% static 'css/dashboard-modern.css' %}"
+    >
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<div class="dashboard-wrapper">
+
+    <!-- MOBILE OVERLAY -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- ================= TOPBAR ================= -->
+    <header class="topbar">
+
+        <div class="topbar-left">
+            <button class="mobile-menu-button" type="button" aria-label="Open menu">
+                <i class="bi bi-list"></i>
+            </button>
+            <h1>NASIL</h1>
+        </div>
+
+        <div class="topbar-right">
+
+            <!-- SEARCH -->
+            <div class="dashboard-search">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search...">
+            </div>
+
+            <!-- NOTIFICATION -->
+            <button class="topbar-icon" type="button">
+                <i class="bi bi-bell"></i>
+                <span class="notification-dot"></span>
+            </button>
+
+            <!-- MESSAGE -->
+            <button class="topbar-icon" type="button">
+                <i class="bi bi-envelope"></i>
+            </button>
+
+            <!-- USER -->
+            <div class="topbar-user">
+                <div class="topbar-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="topbar-user-info">
+                    <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+                    <span>Administrator</span>
+                </div>
+
+                <i class="bi bi-chevron-down user-chevron"></i>
+
+                <!-- User Dropdown Menu -->
+                <div class="topbar-user-menu">
+                    <a href="{% url 'logout' %}" class="user-menu-item">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+            <a href="{% url 'dashboard' %}" class="brand-link">
+                <div class="brand-logo">
+                    <img src="{% static 'images/logo.png' %}" alt="NASIL Logo">
+                </div>
+                <div class="brand-text">
+                    <strong>NASIL</strong>
+                    <span>Logistics</span>
+                </div>
+            </a>
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="sidebar-nav">
+
+            <div class="nav-section-title">
+                MAIN MENU
+            </div>
+
+            <a href="{% url 'dashboard' %}" class="sidebar-link active">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/shipments/" class="sidebar-link">
+                <i class="bi bi-truck"></i>
+                <span>Shipments</span>
+            </a>
+
+            <a href="/quotations/" class="sidebar-link">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Quotations</span>
+            </a>
+
+            <a href="/payments/" class="sidebar-link">
+                <i class="bi bi-wallet2"></i>
+                <span>Payments</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-people"></i>
+                <span>Employees</span>
+            </a>
+
+            <div class="nav-section-title second-section">
+                MANAGEMENT
+            </div>
+
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-bar-chart-line"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+        <!-- SIDEBAR USER -->
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="user-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="user-details">
+                    <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <a href="{% url 'logout' %}" class="logout-button">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content">
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+            {% block content %}
+            {% endblock %}
+        </section>
+
+    </main>
+
+</div>
+
+<script src="{% static 'js/dashboard.js' %}"></script>
+
+{% block extra_js %}
+{% endblock %}
+
+</body>
+</html>

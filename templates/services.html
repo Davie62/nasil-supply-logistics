@@ -3,96 +3,114 @@
 
 {% block content %}
 
-<section class="container py-5">
-
-    <div class="text-center mb-5">
-        <h1>Our Services</h1>
-        <p class="text-muted">
-            Comprehensive logistics solutions designed for businesses of all sizes.
-        </p>
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Comprehensive Logistics Solutions</h1>
+            <p>From procurement to delivery, we provide end-to-end services tailored to your industry and business needs.</p>
+            <div class="hero-buttons">
+                <a href="{% url 'quote' %}" class="btn-primary-hero">Get Started</a>
+                <a href="{% url 'contact' %}" class="btn-secondary-hero">Contact Us</a>
+            </div>
+        </div>
     </div>
+</section>
 
-    <div class="row g-4">
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🚛 Road Freight</h3>
-                    <p>
-                        Fast and secure transportation across Uganda and East Africa.
-                    </p>
-                </div>
-            </div>
+<!-- ================= SERVICES SECTION ================= -->
+<section class="services-section">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">OUR EXPERTISE</span>
+            <h2 class="section-title">Services We Offer</h2>
+            <p class="section-subtitle">Industry-specific logistics solutions designed to streamline your operations and maximize efficiency.</p>
         </div>
 
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🏗️ Construction Materials</h3>
-                    <p>
-                        Specialised logistics for construction projects.
-                    </p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-truck"></i>
                 </div>
+                <h3>Road Freight</h3>
+                <p>Fast and secure transportation across Uganda and East Africa with real-time tracking and professional drivers.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+                <h3>Construction Materials</h3>
+                <p>Specialized logistics for construction projects including heavy equipment and bulk material transport.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-globe"></i>
+                </div>
+                <h3>Import & Export</h3>
+                <p>Efficient international shipment handling with customs clearance, documentation, and compliance management.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-bag-check"></i>
+                </div>
+                <h3>Procurement</h3>
+                <p>Strategic sourcing and acquisition of goods and services with competitive pricing and quality assurance.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-lightning"></i>
+                </div>
+                <h3>Electrical & Electronics</h3>
+                <p>Specialized handling for electronic components and devices with proper packaging and security measures.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-hospital"></i>
+                </div>
+                <h3>Medical & Healthcare</h3>
+                <p>Temperature-controlled logistics for medical supplies with compliance to health and safety regulations.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <h3>Office Supplies</h3>
+                <p>Streamlined supply chain management for office equipment and supplies with inventory control.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-warehouse"></i>
+                </div>
+                <h3>Warehousing</h3>
+                <p>Secure storage facilities with inventory management systems and organized distribution.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+                <h3>Supply Chain Management</h3>
+                <p>End-to-end supply chain planning and execution with optimization for cost and efficiency.</p>
             </div>
         </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🌐 Import & Export</h3>
-                    <p>
-                        Efficient handling of international shipments and customs clearance.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🛒 Procurement</h3>
-                    <p>
-                        Sourcing and acquiring goods and services for your business.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🔌 Electrical</h3>
-                    <p>
-                        Specialised logistics for electronic components and devices.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>🏥 Medical & Healthcare supplies</h3>
-                    <p>
-                        Specialised logistics for medical supplies and equipment.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body text-center">
-                    <h3>📦 Office Supplies</h3>
-                    <p>
-                        End-to-end supply chain planning and execution.
-                    </p>
-                </div>
-            </div>
-        </div>
-
     </div>
+</section>
 
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Need a Custom Solution?</h2>
+            <p>Our team can develop tailored logistics solutions for your specific business requirements.</p>
+            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Request a Quote</a>
+        </div>
+    </div>
 </section>
 
 {% endblock %}

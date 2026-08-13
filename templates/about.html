@@ -1,45 +1,118 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
 
-    <h1 class="text-center mb-4">About Nasil Supply & Logistics</h1>
-
-    <p class="lead text-center">
-        Nasil Supply & Logistics provides reliable transportation, warehousing,
-        freight forwarding, and supply chain solutions across Uganda and East Africa.
-    </p>
-
-    <hr>
-
-    <div class="row mt-5">
-        <div class="col-md-6">
-            <h3>Our Mission</h3>
-            <p>
-                To deliever quality products and logistics services that exceed custmer expectations through professionalism, integrity and operational excellence.
-            </p>
-        </div>
-
-        <div class="col-md-6">
-            <h3>Our Vision</h3>
-            <p>
-                To become one of the leading supply and logistics companies in East Africa by providing innovative and efficient supply chain solutions that exceed customer expectations.  
-            </p>
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>About Nasil Supply & Logistics</h1>
+            <p>Trusted partner for reliable transportation, warehousing, freight forwarding, and supply chain solutions across Uganda and East Africa.</p>
         </div>
     </div>
+</section>
 
-    <div class="mt-5">
-        <h3>Core Values</h3>
+<!-- ================= MISSION & VISION ================= -->
+<section>
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-bullseye"></i>
+                </div>
+                <h3>Our Mission</h3>
+                <p>To deliver quality products and logistics services that exceed customer expectations through professionalism, integrity, and operational excellence.</p>
+            </div>
 
-        <ul class="list-group">
-            <li class="list-group-item">Integrity</li>
-            <li class="list-group-item">Customer Satisfaction</li>
-            <li class="list-group-item">Innovation</li>
-            <li class="list-group-item">Professionalism</li>
-            <li class="list-group-item"> Excellence</li>
-            <li class="list-group-item">Reliability</li>
-        </ul>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-eye"></i>
+                </div>
+                <h3>Our Vision</h3>
+                <p>To become one of the leading supply and logistics companies in East Africa by providing innovative and efficient supply chain solutions.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-heart"></i>
+                </div>
+                <h3>Our Promise</h3>
+                <p>We commit to building lasting relationships with our clients through transparency, reliability, and exceptional service delivery.</p>
+            </div>
+        </div>
     </div>
+</section>
 
-</div>
+<!-- ================= CORE VALUES SECTION ================= -->
+<section style="background: var(--background);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">WHAT DRIVES US</span>
+            <h2 class="section-title">Our Core Values</h2>
+            <p class="section-subtitle">These principles guide every decision we make and every service we deliver.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+                <h3>Integrity</h3>
+                <p>We operate with honesty and transparency in all our business dealings, building trust with every interaction.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-chat-heart"></i>
+                </div>
+                <h3>Customer Satisfaction</h3>
+                <p>Your success is our success. We go above and beyond to exceed your expectations consistently.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+                <h3>Innovation</h3>
+                <p>We embrace new technologies and methodologies to continuously improve our services and solutions.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3>Professionalism</h3>
+                <p>Our team maintains the highest standards of expertise, training, and ethical conduct in all operations.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-star"></i>
+                </div>
+                <h3>Excellence</h3>
+                <p>We strive for perfection in everything we do, from planning to execution and continuous improvement.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <h3>Reliability</h3>
+                <p>You can count on us to deliver consistently, on time, and with the quality you expect every single time.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Join Our Growing Network</h2>
+            <p>Experience the NASIL difference with professional, reliable, and innovative logistics solutions.</p>
+            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Get in Touch Today</a>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

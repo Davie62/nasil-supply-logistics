@@ -1,0 +1,95 @@
+{% load static %}
+
+<aside class="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-header">
+
+        <img src="{% static 'images/logo.png' %}" alt="NASIL Logo">
+
+        <div>
+
+            <h4>NASIL</h4>
+
+            <small>Supply & Logistics</small>
+
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+        <a href="{% url 'dashboard' %}" class="active">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-truck"></i>
+            <span>Shipments</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-file-earmark-text"></i>
+            <span>Quotations</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-cash-stack"></i>
+            <span>Payments</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-people-fill"></i>
+            <span>Employees</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-bar-chart-fill"></i>
+            <span>Reports</span>
+        </a>
+
+        <a href="#">
+            <i class="bi bi-gear-fill"></i>
+            <span>Settings</span>
+        </a>
+
+    </nav>
+
+    <!-- User -->
+    <div class="sidebar-footer">
+
+        <div class="user-card">
+
+            <div class="avatar">
+
+                {{ request.user.username|first|upper }}
+
+            </div>
+
+            <div>
+
+                <strong>
+
+                    {{ request.user.get_full_name|default:request.user.username }}
+
+                </strong>
+
+                <small>Administrator</small>
+
+            </div>
+
+        </div>
+
+        <a href="{% url 'logout' %}" class="logout-btn">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </a>
+
+    </div>
+
+</aside>

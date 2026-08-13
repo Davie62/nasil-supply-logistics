@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Industries We Serve</h1>
+            <p>We provide specialized logistics solutions tailored to the unique needs of various industries across Uganda and East Africa.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= INDUSTRIES SECTION ================= -->
+<section>
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">OUR EXPERTISE</span>
+            <h2 class="section-title">Specialized Services by Industry</h2>
+            <p class="section-subtitle">Decades of experience serving diverse industries with tailored solutions.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-shop"></i>
+                </div>
+                <h3>Retail & E-Commerce</h3>
+                <p>Fast, reliable last-mile delivery services for retail chains and online merchants with flexible scheduling and tracking.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-hospital"></i>
+                </div>
+                <h3>Healthcare & Pharma</h3>
+                <p>Temperature-controlled logistics for pharmaceutical products and medical supplies with strict regulatory compliance.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+                <h3>Construction</h3>
+                <p>Heavy equipment transport and bulk material delivery for construction projects with specialized handling capabilities.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-cup-hot"></i>
+                </div>
+                <h3>Food & Beverage</h3>
+                <p>Cold chain logistics for perishable goods ensuring food safety and quality throughout the supply chain.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-gear"></i>
+                </div>
+                <h3>Manufacturing</h3>
+                <p>Just-in-time delivery and supply chain coordination for manufacturing facilities to optimize production efficiency.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-tree"></i>
+                </div>
+                <h3>Agriculture</h3>
+                <p>Specialized transport for agricultural products, equipment, and supplies from farms to markets nationwide.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-lightning"></i>
+                </div>
+                <h3>Energy & Utilities</h3>
+                <p>Safe transport of specialized equipment and materials for energy infrastructure projects and maintenance.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <h3>Education</h3>
+                <p>Distribution services for educational materials, supplies, and equipment to schools and institutions nationwide.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-cup"></i>
+                </div>
+                <h3>Hospitality</h3>
+                <p>Reliable supply chain solutions for hotels, restaurants, and hospitality businesses with consistent delivery schedules.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= INDUSTRY BENEFITS SECTION ================= -->
+<section style="background: var(--background);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <span class="section-label">WHY CHOOSE US</span>
+            <h2 class="section-title">Industry-Specific Solutions</h2>
+            <p class="section-subtitle">We understand the unique challenges of each industry and provide tailored solutions.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-award"></i>
+                </div>
+                <h3>Industry Expertise</h3>
+                <p>Deep understanding of industry-specific requirements, regulations, and best practices for optimal service delivery.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-gear-wide-connected"></i>
+                </div>
+                <h3>Customized Solutions</h3>
+                <p>Tailored logistics solutions designed specifically for your industry's unique supply chain challenges and goals.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-briefcase-check"></i>
+                </div>
+                <h3>Compliance</h3>
+                <p>Full compliance with industry-specific regulations, safety standards, and quality requirements for peace of mind.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-speedometer2"></i>
+                </div>
+                <h3>Efficiency</h3>
+                <p>Optimized processes and routes to reduce costs and delivery times while maintaining quality and reliability.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <h3>Scalability</h3>
+                <p>Solutions that grow with your business, from seasonal peaks to long-term expansion across new markets.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="bi bi-telephone-check"></i>
+                </div>
+                <h3>24/7 Support</h3>
+                <p>Dedicated support team available around the clock to address your industry-specific logistics needs and concerns.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CTA SECTION ================= -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Optimize Your Supply Chain?</h2>
+            <p>Let's discuss how NASIL can provide industry-specific logistics solutions for your business.</p>
+            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Request a Consultation</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

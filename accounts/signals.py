@@ -1,22 +1,18 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from .models import User, EmployeeProfile
+from .models import User
+from .services import EmployeeService
 
 
 @receiver(post_save, sender=User)
-def create_employee_profile(sender, instance, created, **kwargs):
+def create_employee(sender, instance, created, **kwargs):
+
     if created:
-        EmployeeProfile.objects.create(
-            user=instance,
-            employee_id=f"NSL-{instance.id:04d}",
-            department="ADMIN",
-            position="Employee",
-            branch="Head Office",
-        )
 
+        try:
+            EmployeeService.create_employee_profile(instance)
 
-@receiver(post_save, sender=User)
-def save_employee_profile(sender, instance, **kwargs):
-    if hasattr(instance, "profile"):
-        instance.profile.save()
+        except ValueError:
+            # Organization not configured yet.
+            pass
