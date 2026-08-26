@@ -64,9 +64,9 @@ Deliverables
 
 ---
 
-# Phase 3 — Backend Development 🚧
+# Phase 3 — Backend Development ✅
 
-Status: In Progress
+Status: Completed
 
 Objectives
 
@@ -187,11 +187,11 @@ Deliverables
 
 Current Phase
 
-Phase 3 – Backend Development
+Phase 4 – Authentication & Security
 
 Current Task
 
-Database Design
+Staff authentication
 
 ---
 

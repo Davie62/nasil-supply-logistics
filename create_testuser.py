@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import getpass
 import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -12,10 +13,11 @@ try:
     user = User.objects.get(username='testuser')
     print(f"User 'testuser' already exists")
 except User.DoesNotExist:
+    password = os.environ.get('DJANGO_TESTUSER_PASSWORD') or getpass.getpass('Password for testuser: ')
     # Create test user
     user = User.objects.create_superuser(
         username='testuser',
         email='testuser@example.com',
-        password='testpass123'
+        password=password
     )
-    print(f"Created superuser 'testuser' with password 'testpass123'")
+    print("Created superuser 'testuser'.")
