@@ -51,24 +51,16 @@
 
         <div class="topbar-right">
 
-            <!-- SEARCH -->
             <div class="dashboard-search">
                 <i class="bi bi-search"></i>
                 <input type="text" placeholder="Search...">
             </div>
 
-            <!-- NOTIFICATION -->
-            <button class="topbar-icon" type="button">
+            <button class="topbar-icon" type="button" aria-label="Notifications">
                 <i class="bi bi-bell"></i>
                 <span class="notification-dot"></span>
             </button>
 
-            <!-- MESSAGE -->
-            <button class="topbar-icon" type="button">
-                <i class="bi bi-envelope"></i>
-            </button>
-
-            <!-- USER -->
             <div class="topbar-user">
                 <div class="topbar-avatar">
                     {{ request.user.username|first|upper }}
@@ -81,7 +73,6 @@
 
                 <i class="bi bi-chevron-down user-chevron"></i>
 
-                <!-- User Dropdown Menu -->
                 <div class="topbar-user-menu">
                     <form method="post" action="{% url 'logout' %}" class="user-menu-form">
                         {% csrf_token %}
@@ -103,7 +94,7 @@
         <div class="sidebar-brand">
             <a href="{% url 'dashboard' %}" class="brand-link">
                 <div class="brand-logo">
-                    <img src="{% static 'images/logo.png' %}" alt="NASIL Logo">
+                    <span aria-hidden="true">N</span>
                 </div>
                 <div class="brand-text">
                     <strong>NASIL</strong>
@@ -112,12 +103,9 @@
             </a>
         </div>
 
-        <!-- NAVIGATION -->
         <nav class="sidebar-nav">
 
-            <div class="nav-section-title">
-                MAIN MENU
-            </div>
+            <div class="nav-section-title">MAIN MENU</div>
 
             <a href="{% url 'dashboard' %}" class="sidebar-link active">
                 <i class="bi bi-grid-1x2-fill"></i>
@@ -145,9 +133,7 @@
                 <span>Employees</span>
             </a>
 
-            <div class="nav-section-title second-section">
-                MANAGEMENT
-            </div>
+            <div class="nav-section-title second-section">MANAGEMENT</div>
 
             <a href="{% url 'dashboard_reports' %}" class="sidebar-link">
                 <i class="bi bi-bar-chart-line"></i>
@@ -161,7 +147,6 @@
 
         </nav>
 
-        <!-- SIDEBAR USER -->
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 <div class="user-avatar">
@@ -177,8 +162,8 @@
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="logout-button">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Logout</span>
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Logout</span>
                 </button>
             </form>
         </div>

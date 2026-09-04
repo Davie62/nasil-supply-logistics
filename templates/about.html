@@ -1,118 +1,114 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
-<!-- ================= HERO SECTION ================= -->
-<section class="hero-section">
-    <div class="container">
-        <div class="hero-content">
-            <h1>About Nasil Supply & Logistics</h1>
-            <p>Trusted partner for reliable transportation, warehousing, freight forwarding, and supply chain solutions across Uganda and East Africa.</p>
-        </div>
+<div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
+  <div class="container">
+    <div class="row align-items-center justify-content-center text-center">
+      <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+        <h1 class="text-white font-weight-light text-uppercase font-weight-bold">About Us</h1>
+        <p class="breadcrumb-custom"><a href="{% url 'home' %}">Home</a> <span class="mx-2">&gt;</span> <span>About Us</span></p>
+      </div>
     </div>
-</section>
+  </div>
+</div>
 
-<!-- ================= MISSION & VISION ================= -->
-<section>
-    <div class="container">
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-bullseye"></i>
-                </div>
-                <h3>Our Mission</h3>
-                <p>To deliver quality products and logistics services that exceed customer expectations through professionalism, integrity, and operational excellence.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-eye"></i>
-                </div>
-                <h3>Our Vision</h3>
-                <p>To become one of the leading supply and logistics companies in East Africa by providing innovative and efficient supply chain solutions.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-heart"></i>
-                </div>
-                <h3>Our Promise</h3>
-                <p>We commit to building lasting relationships with our clients through transparency, reliability, and exceptional service delivery.</p>
-            </div>
+<div class="site-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-md-5 ml-auto mb-5 order-md-2" data-aos="fade">
+        <img src="{% static 'images/img_1.jpg' %}" alt="About Nasil" class="img-fluid rounded">
+      </div>
+      <div class="col-md-6 order-md-1" data-aos="fade">
+        <div class="text-left pb-1 border-primary mb-4">
+          <h2 class="text-primary">Our History</h2>
         </div>
+        <p>We are a Ugandan supply and logistics company focused on moving goods, materials, and services reliably for businesses across multiple sectors.</p>
+        <p class="mb-5">From procurement and import support to storage, distribution, and last-mile coordination, our team works closely with clients to keep operations efficient, dependable, and responsive.</p>
+
+        <div class="row">
+          <div class="col-md-12 mb-md-5 mb-0 col-lg-6">
+            <div class="unit-4">
+              <div class="unit-4-icon mb-3 mr-4"><span class="text-primary flaticon-frontal-truck"></span></div>
+              <div>
+                <h3>Ground Shipping</h3>
+                <p>Reliable transport coordination for movement across regional and local routes.</p>
+                <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 mb-md-5 mb-0 col-lg-6">
+            <div class="unit-4">
+              <div class="unit-4-icon mb-3 mr-4"><span class="text-primary flaticon-travel"></span></div>
+              <div>
+                <h3>Air Freight</h3>
+                <p>Fast, dependable cargo movement for urgent and time-sensitive deliveries.</p>
+                <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </div>
+</div>
 
-<!-- ================= CORE VALUES SECTION ================= -->
-<section style="background: var(--background);">
-    <div class="container">
-        <div style="text-align: center; margin-bottom: 60px;">
-            <span class="section-label">WHAT DRIVES US</span>
-            <h2 class="section-title">Our Core Values</h2>
-            <p class="section-subtitle">These principles guide every decision we make and every service we deliver.</p>
-        </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-shield-lock"></i>
-                </div>
-                <h3>Integrity</h3>
-                <p>We operate with honesty and transparency in all our business dealings, building trust with every interaction.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-chat-heart"></i>
-                </div>
-                <h3>Customer Satisfaction</h3>
-                <p>Your success is our success. We go above and beyond to exceed your expectations consistently.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-lightbulb"></i>
-                </div>
-                <h3>Innovation</h3>
-                <p>We embrace new technologies and methodologies to continuously improve our services and solutions.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-person-badge"></i>
-                </div>
-                <h3>Professionalism</h3>
-                <p>Our team maintains the highest standards of expertise, training, and ethical conduct in all operations.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-star"></i>
-                </div>
-                <h3>Excellence</h3>
-                <p>We strive for perfection in everything we do, from planning to execution and continuous improvement.</p>
-            </div>
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="bi bi-check-circle"></i>
-                </div>
-                <h3>Reliability</h3>
-                <p>You can count on us to deliver consistently, on time, and with the quality you expect every single time.</p>
-            </div>
-        </div>
+<div class="site-section bg-image overlay" style="background-image: url('/static/images/hero_bg_4.jpg');">
+  <div class="container">
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-7 text-center border-primary">
+        <h2 class="font-weight-light text-primary" data-aos="fade">How It Works</h2>
+      </div>
     </div>
-</section>
-
-<!-- ================= CTA SECTION ================= -->
-<section class="cta-section">
-    <div class="container">
-        <div class="cta-box">
-            <h2>Join Our Growing Network</h2>
-            <p>Experience the NASIL difference with professional, reliable, and innovative logistics solutions.</p>
-            <a href="{% url 'quote' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Get in Touch Today</a>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+        <div class="how-it-work-item">
+          <span class="number">1</span>
+          <div class="how-it-work-body">
+            <h2>Choose Your Service</h2>
+            <p class="mb-5">We help you select the best logistics structure for your cargo, schedule, and business needs.</p>
+            <ul class="ul-check list-unstyled white">
+              <li class="text-white">Flexible service planning</li>
+              <li class="text-white">Operational guidance</li>
+              <li class="text-white">Customer-focused support</li>
+            </ul>
+          </div>
         </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+        <div class="how-it-work-item">
+          <span class="number">2</span>
+          <div class="how-it-work-body">
+            <h2>Select Your Payment</h2>
+            <p class="mb-5">Our team works with you on practical pricing and service planning that fits your business requirements.</p>
+            <ul class="ul-check list-unstyled white">
+              <li class="text-white">Clear pricing guidance</li>
+              <li class="text-white">Tailored solutions</li>
+              <li class="text-white">Transparent process</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="300">
+        <div class="how-it-work-item">
+          <span class="number">3</span>
+          <div class="how-it-work-body">
+            <h2>Tracking Your Order</h2>
+            <p class="mb-5">We keep communication consistent so you stay informed from dispatch through final delivery.</p>
+            <ul class="ul-check list-unstyled white">
+              <li class="text-white">Shipment visibility</li>
+              <li class="text-white">Strong coordination</li>
+              <li class="text-white">Reliable delivery updates</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-</section>
+  </div>
+</div>
+
 
 {% endblock %}

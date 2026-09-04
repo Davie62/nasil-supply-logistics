@@ -1,150 +1,161 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Nasil Supply & Logistics provides reliable procurement, supply and logistics solutions in Uganda and East Africa.">
+  <head>
     <title>{% block title %}Nasil Supply & Logistics{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Nasil Supply & Logistics provides reliable procurement, supply and logistics solutions in Uganda and East Africa.">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
+    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/website-modern.css' %}">
-    <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
     {% block extra_css %}{% endblock %}
-</head>
-
-<body>
-    <!-- ================= NAVIGATION ================= -->
-    <nav class="navbar">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <a class="navbar-brand" href="{% url 'home' %}" aria-label="Nasil Supply and Logistics home">
-                <span class="brand-logo-wrap">
-                    <img src="{% static 'images/logo.png' %}" class="logo" alt="Nasil Supply and Logistics logo">
-                </span>
-                <div>
-                    <span class="company-name">NASIL</span>
-                    <span class="company-sub">SUPPLY & LOGISTICS</span>
-                </div>
-            </a>
-
-            <button class="navbar-toggler" type="button" id="navToggle" aria-label="Toggle navigation">
-                <i class="bi bi-list"></i>
-            </button>
-
-            <div class="navbar-nav" id="navMenu">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-                <a class="nav-link" href="{% url 'services' %}">Services</a>
-                <a class="nav-link" href="{% url 'quote' %}">Request Quote</a>
-                <a class="nav-link" href="{% url 'faq' %}">FAQ</a>
-                <a class="nav-link" href="{% url 'contact' %}">Contact</a>
-                <a class="login-btn" href="{% url 'login' %}">Staff Login</a>
-            </div>
+  </head>
+  <body>
+    <div class="site-wrap">
+      <div class="site-mobile-menu">
+        <div class="site-mobile-menu-header">
+          <div class="site-mobile-menu-close mt-3">
+            <span class="icon-close2 js-menu-toggle"></span>
+          </div>
         </div>
-    </nav>
+        <div class="site-mobile-menu-body"></div>
+      </div>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="site-main">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="footer">
+      <header class="site-navbar py-3" role="banner">
         <div class="container">
-            <div class="row g-4" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-bottom: 40px;">
-                <div>
-                    <a class="footer-brand" href="{% url 'home' %}" aria-label="Nasil Supply and Logistics home">
-                        <img src="{% static 'images/logo.png' %}" class="footer-logo" alt="Nasil Supply and Logistics logo">
-                        <span>NASIL</span>
+          <div class="row align-items-center">
+            <div class="col-11 col-xl-2">
+              <h1 class="mb-0"><a href="{% url 'home' %}" class="text-white h2 mb-0">Nasil</a></h1>
+            </div>
+            <div class="col-12 col-md-10 d-none d-xl-block">
+              <nav class="site-navigation position-relative text-right" role="navigation">
+                <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
+                  <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                  <li><a href="{% url 'about' %}">About Us</a></li>
+                  <li class="has-children">
+                    <a href="{% url 'services' %}">Services</a>
+                    <ul class="dropdown">
+                      <li><a href="{% url 'services' %}">Procurement</a></li>
+                      <li><a href="{% url 'services' %}">Ground Shipping</a></li>
+                      <li><a href="{% url 'services' %}">Storage</a></li>
+                      <li><a href="{% url 'services' %}">Import & Export</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="{% url 'quote' %}">Request Quote</a></li>
+                  <li>
+                    <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
+                      {% if request.user.is_authenticated %}Dashboard{% else %}Admin Login{% endif %}
                     </a>
-                    <p class="footer-tagline">Delivering Excellence. Connecting Businesses.</p>
-                    <p class="footer-tagline">Reliable procurement, supply and logistics solutions for organisations across Uganda and East Africa.</p>
-                </div>
-
-                <div>
-                    <h5>Quick Links</h5>
-                    <ul>
-                        <li><a href="{% url 'about' %}">About Us</a></li>
-                        <li><a href="{% url 'services' %}">Our Services</a></li>
-                        <li><a href="{% url 'quote' %}">Request a Quote</a></li>
-                        <li><a href="{% url 'faq' %}">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h5>Services</h5>
-                    <ul>
-                        <li><a href="{% url 'services' %}">Procurement</a></li>
-                        <li><a href="{% url 'services' %}">Logistics</a></li>
-                        <li><a href="{% url 'services' %}">General Supplies</a></li>
-                        <li><a href="{% url 'services' %}">Import & Export</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h5>Contact</h5>
-                    <p class="footer-contact"><i class="bi bi-geo-alt-fill"></i><span>French Plaza, Kampala, Uganda</span></p>
-                    <p class="footer-contact"><i class="bi bi-telephone-fill"></i><a href="tel:+256749676580">+256 749 676 580</a></p>
-                    <p class="footer-contact"><i class="bi bi-envelope-fill"></i><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></p>
-                </div>
+                  </li>
+                  <li><a href="{% url 'faq' %}">FAQ</a></li>
+                  <li><a href="{% url 'contact' %}">Contact</a></li>
+                </ul>
+              </nav>
             </div>
 
-            <hr>
-
-            <div class="footer-bottom">
-                <p>&copy; 2026 Nasil Supply & Logistics Ltd. All rights reserved.</p>
-                <p>Secure • Reliable • Efficient</p>
+            <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
+              <a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a>
             </div>
+          </div>
         </div>
-    </footer>
+      </header>
 
-    <script>
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
+      {% block content %}{% endblock %}
 
-        // Mobile menu toggle
-        const navToggle = document.getElementById('navToggle');
-        const navMenu = document.getElementById('navMenu');
-        
-        if (navToggle && navMenu) {
-            navToggle.addEventListener('click', () => {
-                navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
-            });
+      <footer class="site-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-md-3">
+                  <h2 class="footer-heading mb-4">Quick Links</h2>
+                  <ul class="list-unstyled">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'services' %}">Services</a></li>
+                    <li><a href="{% url 'quote' %}">Request Quote</a></li>
+                    <li><a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
+                      {% if request.user.is_authenticated %}Dashboard{% else %}Admin Login{% endif %}
+                    </a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h2 class="footer-heading mb-4">Solutions</h2>
+                  <ul class="list-unstyled">
+                    <li><a href="{% url 'services' %}">Supply Chain</a></li>
+                    <li><a href="{% url 'services' %}">Warehousing</a></li>
+                    <li><a href="{% url 'services' %}">Freight</a></li>
+                    <li><a href="{% url 'services' %}">Procurement</a></li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h2 class="footer-heading mb-4">Office</h2>
+                  <ul class="list-unstyled">
+                    <li><a href="tel:+256749676580">+256 749 676 580</a></li>
+                    <li><a href="mailto:nasilsupplyandlogistics@gmail.com">Email Us</a></li>
+                    <li>French Plaza</li>
+                    <li>Kampala, Uganda</li>
+                  </ul>
+                </div>
+                <div class="col-md-3">
+                  <h2 class="footer-heading mb-4">Follow Us</h2>
+                  <a href="https://www.facebook.com" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
+                  <a href="https://www.twitter.com" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
+                  <a href="https://www.instagram.com" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
+                  <a href="https://www.linkedin.com" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <h2 class="footer-heading mb-4">Request a Quote</h2>
+              <form action="{% url 'quote' %}" method="get">
+                <div class="input-group mb-3">
+                  <input type="text" name="fq_email" class="form-control border-secondary text-white bg-transparent" placeholder="Enter Email" aria-label="Email" aria-describedby="button-addon2">
+                  <div class="input-group-append">
+                    <button class="btn btn-primary text-white" type="submit" id="button-addon2">Send</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row pt-5 mt-5 text-center">
+            <div class="col-md-12">
+              <div class="border-top pt-5">
+                <p>
+                  Copyright &copy;<script>document.write(new Date().getFullYear());</script> Nasil Supply & Logistics Ltd. All rights reserved.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
 
-            // Close menu when clicking on a link
-            navMenu.querySelectorAll('.nav-link, .login-btn').forEach(link => {
-                link.addEventListener('click', () => {
-                    if (window.innerWidth <= 991) {
-                        navMenu.style.display = 'none';
-                    }
-                });
-            });
-
-            // Close menu on window resize if expanding to desktop
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 991) {
-                    navMenu.style.display = 'flex';
-                }
-            });
-        }
-    </script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+    <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/aos.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
-</body>
+  </body>
 </html>
 

@@ -5,23 +5,33 @@
 {% block extra_css %}
 <style>
     .hero-section {
-        background: linear-gradient(135deg, #0f172e 0%, #1a2a4a 100%);
+        background: linear-gradient(120deg, #f2c5a6 0%, #e7b598 28%, #d99d7d 58%, #ebc7aa 100%);
         color: white;
-        padding: 40px 30px;
-        border-radius: 16px;
+        padding: 42px 34px;
+        border-radius: 20px;
         margin-bottom: 40px;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 18px 40px rgba(97, 64, 46, 0.12);
     }
 
     .hero-section::before {
         content: '';
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background: linear-gradient(180deg, #ff6b5b, #ff5245);
+        inset: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+        pointer-events: none;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        right: -40px;
+        top: -50px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
     }
 
     .hero-section-content {
@@ -33,26 +43,28 @@
         font-size: 32px;
         font-weight: 700;
         margin-bottom: 12px;
+        letter-spacing: -0.02em;
     }
 
     .hero-section p {
         font-size: 15px;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.84);
         margin-bottom: 24px;
-        max-width: 600px;
+        max-width: 640px;
     }
 
     .hero-stats {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
+        gap: 18px;
         margin-top: 24px;
     }
 
     .hero-stat {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 16px;
-        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.11);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 16px 18px;
+        border-radius: 14px;
         backdrop-filter: blur(10px);
     }
 
@@ -61,13 +73,14 @@
         font-weight: 700;
         display: block;
         margin-bottom: 4px;
+        color: #fff;
     }
 
     .hero-stat-label {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.7);
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.75);
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.08em;
     }
 
     @media (max-width: 768px) {
