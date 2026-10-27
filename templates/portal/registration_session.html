@@ -1,0 +1,7 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Create customer account{% endblock %}
+{% block portal_label %}CUSTOMER REGISTRATION{% endblock %}
+{% block card_title %}You're already signed in{% endblock %}
+{% block login_intro %}<p>Customer accounts are separate from staff accounts. Sign out to create a customer account, or use a private/incognito window to keep this session open.</p>{% endblock %}
+{% block main_form %}<form method="post" action="{% if staff_session %}{% url 'logout' %}{% else %}{% url 'portal_logout' %}{% endif %}">{% csrf_token %}<button type="submit" class="login-submit">Sign out</button></form>{% endblock %}
+{% block login_note %}After signing out, return to <a href="{% url 'portal_register' %}">Create account</a>.{% endblock %}

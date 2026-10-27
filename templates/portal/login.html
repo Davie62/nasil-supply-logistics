@@ -1,0 +1,8 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Customer login{% endblock %}
+{% block portal_label %}CUSTOMER PORTAL{% endblock %}
+{% block login_intro %}<p>Don't have an account? <a href="{% url 'portal_register' %}">Create account</a></p>{% endblock %}
+{% block login_errors %}{% if form.non_field_errors %}<div class="login-alert" role="alert">{{ form.non_field_errors }}</div>{% endif %}{% endblock %}
+{% block login_fields %}{% include "auth/login_fields.html" with username_value=form.username.value username_errors=form.username.errors password_errors=form.password.errors %}{% endblock %}
+{% block login_help %}<a href="{% url 'portal_password_reset' %}">Forgot password?</a>{% endblock %}
+{% block login_note %}NASIL team member? <a href="{% url 'login' %}">Staff login</a>{% endblock %}

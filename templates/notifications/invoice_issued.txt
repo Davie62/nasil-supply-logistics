@@ -1,0 +1,1 @@
+Invoice {{ reference }} is available: {{ currency }} {{ amount }}. Sign in to review the invoice and due date.

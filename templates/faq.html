@@ -1,216 +1,114 @@
-{% extends 'base.html' %}
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Frequently Asked Questions | Nasil Supply & Logistics{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/faq.css' %}">
+{% endblock %}
 
 {% block content %}
-
-<!-- ================= HERO SECTION ================= -->
-<section class="hero-section">
-    <div class="container">
-        <div class="hero-content">
-            <h1>Frequently Asked Questions</h1>
-            <p>Find answers to common questions about our logistics services and how we can help your business.</p>
+<div class="faq-page">
+    <section class="site-blocks-cover inner-page-cover overlay faq-hero" style="background-image: url('{% static 'images/hero_bg_1.jpg' %}');" aria-labelledby="faq-title">
+        <div class="container">
+            <div class="row align-items-center justify-content-center text-center">
+                <div class="col-lg-9">
+                    <h1 id="faq-title" class="text-white text-uppercase font-weight-bold">Frequently Asked Questions</h1>
+                    <p class="faq-hero-description">Practical answers. Clear guidance. A smoother journey for your business.</p>
+                    <nav class="breadcrumb-custom" aria-label="Breadcrumb">
+                        <a href="{% url 'home' %}">Home</a><span aria-hidden="true">/</span><span aria-current="page">FAQ</span>
+                    </nav>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ================= FAQ SECTION ================= -->
-<section>
-    <div class="container">
-        <div style="max-width: 800px; margin: 0 auto;">
+    <section class="site-section faq-main" aria-labelledby="faq-intro-title">
+        <div class="container">
+            <div class="faq-intro">
+                <span class="faq-eyebrow">HELP &amp; SUPPORT</span>
+                <h2 id="faq-intro-title">Answers to your logistics questions.</h2>
+                <p>From your first quotation to delivery updates, find the information you need to plan your next shipment.</p>
+            </div>
 
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">What logistics services do you offer?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>We provide comprehensive transportation, warehousing, freight forwarding, supply chain management, and distribution services tailored to your business needs. From procurement to last-mile delivery, we handle it all.</p>
+            <div class="faq-layout">
+                <aside class="faq-sidebar" aria-label="FAQ topics and support">
+                    <nav class="faq-topics" aria-labelledby="faq-topics-title">
+                        <h3 id="faq-topics-title">Explore by topic</h3>
+                        <a href="#services-coverage"><span aria-hidden="true">01</span>Services &amp; coverage<i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                        <a href="#quotes-bookings"><span aria-hidden="true">02</span>Quotes &amp; bookings<i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                        <a href="#shipment-support"><span aria-hidden="true">03</span>Shipment support<i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                    </nav>
+                    <div class="faq-help-card">
+                        <span class="faq-help-icon"><i class="bi bi-headset" aria-hidden="true"></i></span>
+                        <h3>Prefer to talk it through?</h3>
+                        <p>Share your requirements with our team for guidance specific to your cargo and route.</p>
+                        <a href="{% url 'contact' %}" class="faq-help-link">Contact our team<i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                        <a href="tel:+256749676580" class="faq-phone"><i class="bi bi-telephone" aria-hidden="true"></i>+256 749 676 580</a>
+                    </div>
+                </aside>
+
+                <div class="faq-groups">
+                    <section id="services-coverage" class="faq-group" aria-labelledby="services-heading">
+                        <div class="faq-group-heading"><span class="faq-group-icon"><i class="bi bi-box-seam" aria-hidden="true"></i></span><div><h3 id="services-heading">Services &amp; coverage</h3><p>What we do and how we can support your business.</p></div></div>
+                        <div class="faq-accordion">
+                            <details class="faq-item" name="nasil-faq" open>
+                                <summary>What logistics services do you offer?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>We support businesses with procurement, supply, transport coordination, warehousing, storage, and distribution. Our team can help you plan a service around your goods, route, and delivery requirements.</p><p>Explore our <a href="{% url 'services' %}">services</a> or tell us what you need when requesting a quotation.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>Which areas do you serve?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>We support supply and logistics requirements in Uganda and coordinate regional movements through our partners. Share your pickup point and destination so our team can confirm availability for your specific route.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>Can you handle specialized cargo?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Tell us about any fragile, perishable, high-value, oversized, or other goods that need special handling. Include the cargo type, dimensions, weight, and any handling requirements so we can assess the right transport and storage arrangements before booking.</p></div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section id="quotes-bookings" class="faq-group" aria-labelledby="quotes-heading">
+                        <div class="faq-group-heading"><span class="faq-group-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span><div><h3 id="quotes-heading">Quotes &amp; bookings</h3><p>Everything you need to get your shipment started.</p></div></div>
+                        <div class="faq-accordion">
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>How do I request a quotation?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Complete our <a href="{% url 'quote' %}">Request Quote form</a> with your contact details, pickup location, destination, cargo description, and estimated weight. Add any special instructions to help us understand your requirements.</p><p>Your request receives a reference number, and our team will follow up to discuss the details and pricing.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>How quickly can you arrange a pickup?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Pickup timing depends on your location, cargo, route, and transport availability. Let us know your preferred date and whether the shipment is urgent. Our team will confirm a practical pickup schedule before you book.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>Can I arrange insurance for my shipment?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Please discuss insurance when requesting your quotation. Share the cargo type and declared value so our team can confirm available cover, applicable terms, and any additional cost before the shipment is arranged.</p></div>
+                            </details>
+                        </div>
+                    </section>
+
+                    <section id="shipment-support" class="faq-group" aria-labelledby="support-heading">
+                        <div class="faq-group-heading"><span class="faq-group-icon"><i class="bi bi-truck" aria-hidden="true"></i></span><div><h3 id="support-heading">Shipment support</h3><p>Delivery updates, handling requirements, and payments.</p></div></div>
+                        <div class="faq-accordion">
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>Is online shipment tracking available?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Public online tracking is not available yet. For an update, <a href="{% url 'contact' %}">contact our team</a> with your shipment or quotation reference. We will help you confirm the latest recorded status and next steps.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>Can you arrange temperature-controlled transport?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>If your goods require temperature control, include the required temperature range, cargo type, packaging, and delivery schedule in your enquiry. Our team will confirm whether suitable arrangements are available for your route before accepting the booking.</p></div>
+                            </details>
+                            <details class="faq-item" name="nasil-faq">
+                                <summary>What payment methods do you accept?<span class="faq-indicator" aria-hidden="true"></span></summary>
+                                <div class="faq-answer"><p>Our team will confirm the available payment methods, payment instructions, and agreed terms with your quotation or invoice. Contact us if your organization has specific billing requirements.</p><p>Online payment through this website is not currently available.</p></div>
+                            </details>
+                        </div>
+                    </section>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">Which areas do you serve?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>We currently operate throughout Uganda with established routes and partnerships. We're actively expanding our services across East Africa to better serve our growing client base. Contact us to inquire about specific service areas.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">How do I request a quotation?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>You can request a quote through our <a href="{% url 'quote' %}" style="color: var(--accent); text-decoration: none; font-weight: 600;">Request Quote form</a>, or contact our customer service team directly via phone or email. We'll provide a customized quote within 24 hours.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">Is online shipment tracking available?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>Our advanced shipment tracking system is currently under development and will be available soon. In the meantime, our customer service team can provide real-time updates on your shipments upon request.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">Do you offer insurance for shipments?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>Yes, we offer comprehensive insurance coverage for most shipments to protect your cargo during transit. Insurance rates vary based on cargo type and value. Please discuss your insurance needs when requesting a quote.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">What payment methods do you accept?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>We accept bank transfers, mobile money, and credit/debit cards. For large contracts, we also offer flexible payment terms. Contact our billing department to discuss payment options that work best for your organization.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">How quickly can you arrange a pickup?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>We can often arrange pickups within 24 hours in major urban areas. For urgent shipments, we offer expedited service with same-day or next-morning pickup. The exact timing depends on your location and current demand.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">Can you handle specialized cargo?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>Yes! We specialize in handling various cargo types including fragile items, perishables, electronics, medical supplies, construction materials, and hazardous goods. Our trained team ensures proper handling and compliance with all regulations.</p>
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <button class="faq-toggle" onclick="toggleFAQ(this)">
-                    <span class="faq-question">Do you have temperature-controlled transport?</span>
-                    <span class="faq-icon"><i class="bi bi-plus-lg"></i></span>
-                </button>
-                <div class="faq-answer">
-                    <p>Yes, we have a fleet of temperature-controlled vehicles for perishable goods, medical supplies, and temperature-sensitive items. We maintain strict temperature monitoring throughout the delivery process to ensure cargo integrity.</p>
-                </div>
-            </div>
-
+            <section class="faq-cta" aria-labelledby="faq-cta-title">
+                <div><span class="faq-eyebrow">LET'S GET THINGS MOVING</span><h2 id="faq-cta-title">Ready to plan your next shipment?</h2><p>Tell us what you need. We'll help you work out the next step.</p></div>
+                <div class="faq-cta-actions"><a href="{% url 'quote' %}" class="btn btn-primary">Request a quote<i class="bi bi-arrow-right" aria-hidden="true"></i></a><a href="{% url 'contact' %}" class="faq-cta-contact">Talk to our team</a></div>
+            </section>
         </div>
-    </div>
-</section>
-
-<!-- ================= CTA SECTION ================= -->
-<section class="cta-section">
-    <div class="container">
-        <div class="cta-box">
-            <h2>Still Have Questions?</h2>
-            <p>Our expert team is ready to assist you. Reach out today for personalized support.</p>
-            <a href="{% url 'contact' %}" class="btn-primary-hero" style="background: var(--white); color: var(--accent);">Get in Touch</a>
-        </div>
-    </div>
-</section>
-
-<style>
-    .faq-item {
-        background: var(--white);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        margin-bottom: 16px;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-
-    .faq-item:hover {
-        box-shadow: var(--shadow-md);
-    }
-
-    .faq-toggle {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--primary);
-        font-size: 16px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .faq-toggle:hover {
-        background: var(--background);
-        color: var(--accent);
-    }
-
-    .faq-toggle.active {
-        background: var(--background);
-        color: var(--accent);
-    }
-
-    .faq-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        font-size: 18px;
-        transition: transform 0.3s ease;
-        flex-shrink: 0;
-    }
-
-    .faq-toggle.active .faq-icon {
-        transform: rotate(45deg);
-    }
-
-    .faq-answer {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-    }
-
-    .faq-answer.show {
-        max-height: 500px;
-    }
-
-    .faq-answer p {
-        padding: 0 20px 20px;
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin: 0;
-    }
-</style>
-
-<script>
-    function toggleFAQ(button) {
-        const answer = button.nextElementSibling;
-        button.classList.toggle('active');
-        answer.classList.toggle('show');
-
-        // Close other FAQs
-        const allItems = document.querySelectorAll('.faq-item');
-        allItems.forEach(item => {
-            const btn = item.querySelector('.faq-toggle');
-            const ans = item.querySelector('.faq-answer');
-            if (btn !== button) {
-                btn.classList.remove('active');
-                ans.classList.remove('show');
-            }
-        });
-    }
-</script>
-
+    </section>
+</div>
 {% endblock %}

@@ -22,3 +22,8 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
+# Local verification artifacts and database snapshots
+backups/
+output/playwright/
+output/
+.playwright-cli/

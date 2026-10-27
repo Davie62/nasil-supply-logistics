@@ -1197,3 +1197,134 @@ input, textarea, select {
         padding: 16px;
     }
 }
+
+.workflow-page {
+    padding: 0;
+}
+
+.workflow-header {
+    align-items: center;
+}
+
+.workflow-header h2 {
+    margin: 8px 0;
+    font-size: 24px;
+}
+
+.workflow-header p {
+    color: var(--text-light);
+}
+
+.workflow-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+}
+
+.workflow-button.secondary {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+.workflow-table-wrap {
+    overflow-x: auto;
+}
+
+.workflow-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.workflow-table th,
+.workflow-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-light);
+    text-align: left;
+}
+
+.workflow-table th {
+    color: var(--text-light);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.workflow-table td:first-child a {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.workflow-empty {
+    color: var(--text-light);
+    text-align: center !important;
+}
+
+.workflow-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    padding: 24px;
+}
+
+.workflow-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.workflow-field label {
+    font-weight: 600;
+}
+
+.workflow-field input,
+.workflow-field select,
+.workflow-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+}
+
+.workflow-form > button {
+    justify-self: start;
+}
+
+.workflow-error {
+    color: var(--danger, #c0392b);
+}
+
+.workflow-message {
+    margin: 20px 24px 0;
+    padding: 12px 16px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 6px;
+}
+
+.message-detail {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 14px 20px;
+    padding: 24px;
+}
+
+.message-detail dt {
+    font-weight: 700;
+}
+
+@media (max-width: 700px) {
+    .workflow-form {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-header {
+        gap: 16px;
+    }
+}
+
+.status-dot.cancelled { background: var(--text-light); }

@@ -1,0 +1,76 @@
+/* Shared staff/customer entry points, using the public site's NASIL orange. */
+:root { --login-orange:#f89d13; --login-orange-hover:#e58a04; --login-ink:#24272b; --login-muted:#65707b; --login-link:#a64708; }
+* { box-sizing:border-box; }
+body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; color:var(--login-ink); background:#ededed; font:15px/1.55 "Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+.nasil-login a { color:var(--login-link); text-underline-offset:3px; }
+.nasil-login a:hover { color:#743003; }
+.nasil-login input,.nasil-login button { font:inherit; }
+.nasil-login :focus-visible { outline:3px solid #9c4800; outline-offset:4px; }
+.login-skip { position:absolute; left:20px; top:-80px; z-index:5; background:white; padding:12px; border-radius:6px; }
+.login-skip:focus { top:12px; }
+.login-header { min-height:80px; padding:16px clamp(24px,4vw,72px); background:var(--login-orange); display:flex; align-items:center; justify-content:space-between; gap:24px; }
+.nasil-login .login-brand { display:flex; align-items:center; gap:12px; color:var(--login-ink); text-decoration:none; font-size:28px; font-weight:800; letter-spacing:-.7px; line-height:1; }
+.login-brand-mark { width:43px; height:43px; display:grid; place-items:center; border:2px solid currentColor; border-radius:9px 9px 9px 2px; font-size:28px; font-weight:700; }
+.login-brand small { display:block; margin-top:6px; font-size:10px; letter-spacing:.5px; font-weight:600; }
+.login-header nav { display:flex; align-items:center; gap:25px; font-size:12px; font-weight:600; }
+.login-header nav a { color:var(--login-ink); text-decoration:none; }
+.login-header nav a:hover { text-decoration:underline; }
+.login-header nav a span { margin-left:6px; font-size:16px; }
+.login-header-divider { height:20px; width:1px; background:#24272b33; }
+.login-language { white-space:nowrap; }
+.login-language span { padding-inline:8px; opacity:.5; }
+.login-stage { flex:1; position:relative; isolation:isolate; display:flex; justify-content:center; align-items:center; padding:56px 24px; background:#2b3439 url('../images/hero_bg_4.jpg') center 58% / cover no-repeat; }
+.login-stage::before { content:""; position:absolute; inset:0; background:rgba(17,23,28,.58); z-index:-1; }
+.login-card { width:100%; max-width:600px; background:#fff; border-radius:12px; padding:42px 48px 30px; box-shadow:0 18px 60px #00000026; }
+.login-eyebrow { display:block; font-size:10px; letter-spacing:1.6px; font-weight:700; color:#936018; margin-bottom:10px; }
+.login-card h1 { font-size:32px; line-height:1.25; letter-spacing:-.8px; font-weight:750; margin:0 0 20px; }
+.login-intro { color:#505860; font-size:14px; margin-bottom:27px; }
+.login-intro p { margin:0; }
+.login-form { display:grid; gap:19px; }
+.login-field { position:relative; border:1px solid #9a9da1; border-radius:12px; background:white; transition:border-color .15s,box-shadow .15s; }
+.login-field:focus-within { border-color:#b05b00; box-shadow:0 0 0 3px #f89d1326; }
+.login-field label { position:absolute; left:16px; top:8px; font-size:11px; line-height:1.4; font-weight:600; color:#60666c; pointer-events:none; }
+.login-field label span { color:#a64708; }
+.login-field input { width:100%; height:65px; border:0; border-radius:12px; padding:26px 16px 8px; font-size:15px; color:var(--login-ink); background:transparent; }
+.login-field input::placeholder { color:#777d83; opacity:1; }
+.login-field input:focus { outline:none; }
+.login-password-field input { padding-right:58px; }
+.login-password-toggle { position:absolute; right:9px; top:12px; width:40px; height:40px; display:grid; place-items:center; border:0; border-radius:7px; background:transparent; color:#4b5055; cursor:pointer; }
+.login-password-toggle[hidden] { display:none; }
+.login-password-toggle:hover { background:#fff3e2; }
+.login-password-toggle svg { width:23px; height:23px; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+.login-eye-slash { display:none; }
+.login-password-toggle[aria-pressed=true] .login-eye-slash { display:block; }
+.login-options { display:flex; justify-content:space-between; align-items:center; gap:15px; margin:8px 0 10px; font-size:13px; }
+.login-options>a { font-weight:600; }
+.login-remember { display:flex; align-items:center; gap:10px; cursor:pointer; }
+.login-remember input { width:23px; height:23px; accent-color:#b45b00; margin:0; cursor:pointer; }
+.login-submit { width:100%; min-height:56px; border:1px solid var(--login-orange); border-radius:12px; background:var(--login-orange); color:var(--login-ink); font-weight:700 !important; font-size:16px !important; cursor:pointer; transition:background .15s; }
+.login-submit:hover { background:var(--login-orange-hover); border-color:var(--login-orange-hover); }
+.login-note { font-size:11px; line-height:1.9; color:var(--login-muted); margin:19px 0 0; text-align:center; }
+.login-note a { font-weight:600; }
+.login-footer { min-height:86px; display:flex; align-items:center; flex-wrap:wrap; gap:30px; padding:22px clamp(24px,4vw,72px); font-size:11px; background:#ededed; }
+.nasil-login .login-footer-brand { color:var(--login-ink); font-size:23px; font-weight:800; letter-spacing:-.6px; line-height:1; text-decoration:none; }
+.login-footer-brand span { display:block; margin-top:5px; font-size:8px; font-weight:500; letter-spacing:.2px; }
+.login-footer>a:not(.login-footer-brand) { color:var(--login-ink); font-weight:600; }
+.login-copyright { margin-left:auto; color:#535960; }
+.login-alert { padding:12px 15px; border:1px solid #efb3a5; background:#fff4f0; color:#96311d; font-size:12px; border-radius:8px; margin:0 0 20px; }
+.login-alert p,.login-alert ul { margin:0; }
+.login-alert ul,.login-field-errors ul { list-style:none; padding:0; }
+.login-field-errors { color:#96311d; font-size:12px; margin-top:6px; }
+.login-field-errors ul { margin:0; }
+.registration-form label { display:block; font-size:12px; font-weight:600; margin-bottom:7px; }
+.registration-form input { width:100%; min-width:0; height:48px; border:1px solid #9a9da1; border-radius:9px; padding:11px 13px; color:var(--login-ink); background:#fff; }
+.registration-form input:focus { outline:2px solid #b05b00; outline-offset:1px; }
+.registration-form .workflow-help,.registration-help { display:block; font-size:11px; color:var(--login-muted); margin:6px 0 0; }
+.registration-form .workflow-error,.registration-form .form-errors { color:#96311d; font-size:12px; }
+.registration-form .errorlist { padding:0; list-style:none; }
+.registration-preview { background:#fff3e2; border:1px solid #f4d2a0; border-radius:9px; padding:14px; font-size:12px; margin-bottom:22px; }
+.registration-preview p { margin:6px 0; }
+.registration-resend { text-align:center; margin-top:18px; }
+.registration-resend button { border:0; padding:8px; background:transparent; color:var(--login-link); text-decoration:underline; text-underline-offset:3px; font-size:13px; cursor:pointer; }
+@media(max-width:767px) { .registration-form input { font-size:16px; } }
+@media(min-width:1600px) { .login-card { max-width:640px; padding:45px 50px 32px; } .login-card h1 { font-size:36px; } .login-stage { padding-block:70px; } }
+@media(max-width:767px) { .login-header { padding:16px 22px; min-height:76px; } .login-brand-mark { width:36px; height:36px; font-size:24px; } .nasil-login .login-brand { font-size:23px; gap:9px; } .login-brand small { font-size:8px; } .login-language,.login-header-divider { display:none; } .login-header nav { font-size:11px; } .login-stage { padding:35px 20px; } .login-card { max-width:520px; padding:32px 27px 26px; } .login-card h1 { font-size:28px; } .login-intro { font-size:13px; } .login-field input { font-size:16px; } .login-footer { gap:18px; padding:21px 24px; } .login-copyright { margin-left:0; flex-basis:100%; font-size:10px; } }
+@media(max-width:380px) { .login-stage { padding:25px 14px; } .login-card { padding:28px 21px 24px; } .login-card h1 { font-size:25px; } .login-options { font-size:11px; gap:10px; } .login-remember { gap:7px; } .login-header { padding-inline:18px; } }
+@media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; } }

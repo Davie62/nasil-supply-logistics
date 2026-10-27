@@ -1,0 +1,24 @@
+{% extends "dashboard/base_dashboard.html" %}
+
+{% block title %}Contact message{% endblock %}
+
+{% block content %}
+<section class="dashboard-card workflow-page">
+    <div class="card-header workflow-header">
+        <div><span class="eyebrow">CUSTOMER COMMUNICATION</span><h2>{{ message.subject }}</h2></div>
+        <a class="workflow-button secondary" href="{% url 'contact_message_list' %}"><i class="bi bi-arrow-left"></i>Back</a>
+    </div>
+    <dl class="message-detail">
+        <dt>From</dt><dd>{{ message.name }} &lt;{{ message.email }}&gt;</dd>
+        <dt>Phone</dt><dd>{{ message.phone|default:"-" }}</dd>
+        <dt>Received</dt><dd>{{ message.created_at }}</dd>
+        <dt>Message</dt><dd>{{ message.message|linebreaks }}</dd>
+    </dl>
+    {% if perms.core.change_contactmessage and not message.is_read %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="workflow-button">Mark as read</button>
+    </form>
+    {% endif %}
+</section>
+{% endblock %}

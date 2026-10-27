@@ -1,0 +1,12 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block page_name %}{{ title }}{% endblock %}
+{% block content %}
+<section class="card workflow-page">
+    <div class="card-header workflow-header"><div><span class="eyebrow">{{ eyebrow }}</span><h1>{{ title }}</h1><p>{{ description }}</p></div>{% if create_url %}<a class="workflow-button" href="{% url create_url %}"><i class="bi bi-plus-lg" aria-hidden="true"></i>{{ create_label }}</a>{% endif %}</div>
+    {% if active_filter %}<div class="active-filter"><span><i class="bi bi-funnel" aria-hidden="true"></i>{{ active_filter }}</span><a href="{% url clear_filter_url %}">Clear filter<i class="bi bi-x" aria-hidden="true"></i></a></div>{% endif %}
+    {% include "operations/components/search.html" %}
+    {% include "operations/components/table.html" %}
+    {% include "operations/components/pagination.html" %}
+</section>
+{% endblock %}

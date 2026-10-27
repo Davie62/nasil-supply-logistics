@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import Group
+from accounts.roles import seed_role_permissions
 
 from organization.models import (
     Company,
@@ -32,7 +32,7 @@ class Command(BaseCommand):
             },
         )
 
-        self.stdout.write(self.style.SUCCESS("✓ Company ready"))
+        self.stdout.write(self.style.SUCCESS("âœ“ Company ready"))
 
         # ------------------------------------------------------------------
         # BRANCH
@@ -51,7 +51,7 @@ class Command(BaseCommand):
             },
         )
 
-        self.stdout.write(self.style.SUCCESS("✓ Head Office ready"))
+        self.stdout.write(self.style.SUCCESS("âœ“ Head Office ready"))
 
         # ------------------------------------------------------------------
         # DEPARTMENTS
@@ -78,7 +78,7 @@ class Command(BaseCommand):
                 },
             )
 
-        self.stdout.write(self.style.SUCCESS("✓ Departments ready"))
+        self.stdout.write(self.style.SUCCESS("âœ“ Departments ready"))
 
         # ------------------------------------------------------------------
         # WAREHOUSE
@@ -94,27 +94,15 @@ class Command(BaseCommand):
             },
         )
 
-        self.stdout.write(self.style.SUCCESS("✓ Warehouse ready"))
+        self.stdout.write(self.style.SUCCESS("âœ“ Warehouse ready"))
 
         # ------------------------------------------------------------------
         # DJANGO GROUPS
         # ------------------------------------------------------------------
 
-        groups = [
-            "Administrator",
-            "Operations Manager",
-            "Dispatcher",
-            "Finance Officer",
-            "Warehouse Officer",
-            "Sales Officer",
-            "HR Officer",
-            "IT Support",
-        ]
+        seed_role_permissions()
 
-        for group in groups:
-            Group.objects.get_or_create(name=group)
-
-        self.stdout.write(self.style.SUCCESS("✓ Security Groups ready"))
+        self.stdout.write(self.style.SUCCESS("âœ“ Security Groups ready"))
 
         self.stdout.write(
             self.style.SUCCESS("\nSystem successfully seeded.\n")

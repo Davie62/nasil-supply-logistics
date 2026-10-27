@@ -1,0 +1,1 @@
+Signed delivery evidence is now available for shipment {{ reference }}. Sign in to view it securely.

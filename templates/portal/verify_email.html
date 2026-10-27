@@ -1,0 +1,14 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Verify your email{% endblock %}
+{% block portal_label %}EMAIL VERIFICATION{% endblock %}
+{% block card_title %}Check your email{% endblock %}
+{% block login_intro %}<p>Enter the six-digit code sent to <strong>{{ masked_email }}</strong>. The code expires in 10 minutes.</p>{% endblock %}
+{% block main_form %}
+{% if development_code %}<aside class="registration-preview"><strong>Local development preview</strong><p>Email delivery is disabled. Your verification code is <strong>{{ development_code }}</strong>.</p><small>This preview is only available in development.</small></aside>{% endif %}
+<form method="post" class="login-form registration-form">{% csrf_token %}
+  {% include "operations/components/form_fields.html" %}
+  <button class="login-submit" type="submit">Verify and continue</button>
+</form>
+<form method="post" class="registration-resend">{% csrf_token %}<button type="submit" name="action" value="resend">Send a new code</button></form>
+{% endblock %}
+{% block login_note %}Need a different email? <a href="{% url 'portal_register' %}">Start again</a><br>Returning later? Sign in with your chosen username and password to finish verification.{% endblock %}

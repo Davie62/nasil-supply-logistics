@@ -1,0 +1,8 @@
+/* Native glyphs replace the missing legacy Icomoon bundle. */
+.icon-menu::before { content: "\2630"; }
+.icon-close2::before { content: "\00d7"; }
+.icon-arrow_back::before, .icon-keyboard_arrow_left::before { content: "\2190"; }
+.icon-arrow_forward::before, .icon-keyboard_arrow_right::before { content: "\2192"; }
+.ul-check li::before { font-family: inherit; content: "\2713"; }
+.site-navbar .site-navigation .site-menu .has-children > a::before,
+.site-mobile-menu .site-nav-wrap .arrow-collapse::before { font-family: inherit; content: "\2304"; }

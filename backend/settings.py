@@ -11,28 +11,41 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
-import secrets
+import json
+from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# NASIL policy: above these totals, only Administrator approval is accepted.
+try:
+    QUOTATION_APPROVAL_THRESHOLDS = json.loads(os.environ.get("QUOTATION_APPROVAL_THRESHOLDS", '{"UGX":"50000000.00","USD":"15000.00"}'))
+except json.JSONDecodeError as error:
+    raise ImproperlyConfigured("QUOTATION_APPROVAL_THRESHOLDS must be a JSON object.") from error
+if not isinstance(QUOTATION_APPROVAL_THRESHOLDS, dict):
+    raise ImproperlyConfigured("QUOTATION_APPROVAL_THRESHOLDS must be a JSON object.")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    SECRET_KEY = secrets.token_urlsafe(50)
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
+# Local development explicitly opts in to DEBUG; deployment defaults fail closed.
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
+if not SECRET_KEY and DEBUG:
+    SECRET_KEY = "django-insecure-local-development-only-do-not-deploy-nasil"
+if not SECRET_KEY or (not DEBUG and (len(SECRET_KEY) < 50 or SECRET_KEY.startswith("django-insecure-"))):
+    raise ImproperlyConfigured("Set DJANGO_SECRET_KEY to a private random value of at least 50 characters, or explicitly set DJANGO_DEBUG=true for local development.")
 
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get(
-    "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"
+    "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else ""
 ).split(",") if host.strip()]
-
+if not DEBUG and (not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS):
+    raise ImproperlyConfigured("Set DJANGO_ALLOWED_HOSTS to explicit production hostnames.")
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get(
+    "DJANGO_CSRF_TRUSTED_ORIGINS", ""
+).split(",") if origin.strip()]
 
 # Application definition
 
@@ -55,7 +68,10 @@ INSTALLED_APPS = [
     "quotations",
     "payments",
     "customers",
-    
+    "operations",
+    "finance", "inventory", "orders.apps.OrdersConfig", "procurement", "fleet", "integrations",
+    "customer_services",
+
 ]
 
 MIDDLEWARE = [
@@ -80,6 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dashboard.context_processors.dashboard_shell',
             ],
         },
     },
@@ -91,13 +108,25 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
+DB_ENGINE = os.environ.get("DJANGO_DB_ENGINE", "sqlite" if DEBUG else "postgresql")
+if DB_ENGINE == "sqlite":
+    if not DEBUG:
+        raise ImproperlyConfigured("Production requires PostgreSQL; SQLite is for local development only.")
+    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.environ.get("DJANGO_SQLITE_PATH", BASE_DIR / "db.sqlite3")}}
+elif DB_ENGINE == "postgresql":
+    required = ("POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_HOST")
+    if any(not os.environ.get(key) for key in required):
+        raise ImproperlyConfigured("Set POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD and POSTGRES_HOST.")
+    DATABASES = {"default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["POSTGRES_DB"], "USER": os.environ["POSTGRES_USER"],
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"], "HOST": os.environ["POSTGRES_HOST"],
+        "PORT": os.environ.get("POSTGRES_PORT", "5432"),
+        "CONN_MAX_AGE": 60,
+        "OPTIONS": {"sslmode": os.environ.get("POSTGRES_SSLMODE", "verify-full")},
+    }}
+else:
+    raise ImproperlyConfigured("DJANGO_DB_ENGINE must be sqlite or postgresql.")
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -123,7 +152,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Kampala'
 
 USE_I18N = True
 
@@ -133,19 +162,64 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",    
+    BASE_DIR / "static",
 ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Customer services: providers are opt-in; development never sends real messages.
+PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "http://127.0.0.1:8000" if DEBUG else "").rstrip("/")
+NOTIFICATIONS_DELIVERY_ENABLED = os.environ.get("NOTIFICATIONS_DELIVERY_ENABLED", "false").lower() == "true"
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN", "")
+TWILIO_FROM_NUMBER = os.environ.get("TWILIO_FROM_NUMBER", "")
+TWILIO_MESSAGING_SERVICE_SID = os.environ.get("TWILIO_MESSAGING_SERVICE_SID", "")
+AFRICASTALKING_USERNAME = os.environ.get("AFRICASTALKING_USERNAME", "")
+AFRICASTALKING_API_KEY = os.environ.get("AFRICASTALKING_API_KEY", "")
+AFRICASTALKING_SENDER_ID = os.environ.get("AFRICASTALKING_SENDER_ID", "")
+AFRICASTALKING_SANDBOX = os.environ.get("AFRICASTALKING_SANDBOX", "false").lower() == "true"
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = None
+CELERY_TASK_IGNORE_RESULT = True
+PASSWORD_RESET_TIMEOUT = 3600
+CELERY_TASK_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_TASK_PUBLISH_RETRY = False
+CELERY_BROKER_CONNECTION_TIMEOUT = 3
+CELERY_BEAT_SCHEDULE = {"dispatch-customer-outbox": {"task": "customer_services.tasks.dispatch_due", "schedule": 60.0}}
+if NOTIFICATIONS_DELIVERY_ENABLED:
+    from urllib.parse import urlsplit
+    public_url = urlsplit(PUBLIC_SITE_URL)
+    if public_url.scheme not in {"http", "https"} or not public_url.hostname or public_url.username or public_url.password or public_url.query or public_url.fragment or public_url.path not in ("", "/") or (not DEBUG and public_url.scheme != "https"):
+        raise ImproperlyConfigured("Set PUBLIC_SITE_URL to the canonical HTTPS origin before enabling customer notifications.")
+
 # Custom User Model
 AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_URL = "login"
+
+# Commercial provider traffic is explicitly enabled per environment.
+INTEGRATIONS_DELIVERY_ENABLED = os.environ.get("INTEGRATIONS_DELIVERY_ENABLED", "false").lower() == "true"
+INTEGRATIONS_SERVICE_USER_ID = os.environ.get("INTEGRATIONS_SERVICE_USER_ID") or None
+ODOO_BASE_URL = os.environ.get("ODOO_BASE_URL", "")
+PAWAPAY_BASE_URL = os.environ.get("PAWAPAY_BASE_URL", "https://api.sandbox.pawapay.io")
+PAWAPAY_PROVIDERS = [value.strip() for value in os.environ.get("PAWAPAY_PROVIDERS", "").split(",") if value.strip()]
+PAWAPAY_CURRENCIES = [value.strip() for value in os.environ.get("PAWAPAY_CURRENCIES", "UGX").split(",") if value.strip()]
+INTEGRATIONS_ALLOWED_HOSTS = [value.strip() for value in os.environ.get("INTEGRATIONS_ALLOWED_HOSTS", "api.flutterwave.com,api.sandbox.pawapay.io,api.pawapay.io").split(",") if value.strip()]
+CELERY_BEAT_SCHEDULE["dispatch-commercial-integrations"] = {"task": "integrations.tasks.dispatch_jobs", "schedule": 60.0}
+if INTEGRATIONS_DELIVERY_ENABLED:
+    from urllib.parse import urlsplit
+    commercial_origin = urlsplit(PUBLIC_SITE_URL)
+    if commercial_origin.scheme != "https" or not commercial_origin.hostname or commercial_origin.username or commercial_origin.password or commercial_origin.query or commercial_origin.fragment or commercial_origin.path not in {"", "/"}:
+        raise ImproperlyConfigured("Set PUBLIC_SITE_URL to the canonical HTTPS origin before enabling provider integrations.")
 
 LOGIN_REDIRECT_URL = "dashboard"
 
@@ -162,9 +236,19 @@ CSRF_COOKIE_SAMESITE = "Lax"
 X_FRAME_OPTIONS = "DENY"
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+
 SECURE_SSL_REDIRECT = not DEBUG
 SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
 SECURE_REFERRER_POLICY = "same-origin"
+# Enable only when the trusted proxy strips incoming forwarded-proto headers.
+if os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+LOGGING = {
+    "version": 1, "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": os.environ.get("DJANGO_LOG_LEVEL", "INFO")},
+    "loggers": {"django": {"handlers": ["console"], "level": os.environ.get("DJANGO_LOG_LEVEL", "INFO"), "propagate": False}},
+}

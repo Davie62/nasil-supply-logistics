@@ -12,7 +12,7 @@ from core.constants import ACCOUNT_LOCK_MINUTES, MAX_LOGIN_ATTEMPTS
 def login_view(request):
     # If already logged in
     if request.user.is_authenticated:
-        return redirect("dashboard")
+        return redirect("dashboard" if request.user.is_staff else "portal_dashboard")
 
     if request.method == "POST":
 
@@ -20,6 +20,8 @@ def login_view(request):
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
+        if user is not None and not user.is_staff:
+            user = None
 
         if user is not None and user.locked_until and user.locked_until > timezone.now():
             user = None

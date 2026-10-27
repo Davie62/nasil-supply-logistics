@@ -1,0 +1,8 @@
+{{ title }}
+
+{{ body }}
+{% if url %}
+Open securely: {{ url }}
+{% endif %}
+NASIL Supply & Logistics
+Notification reference: {{ reference }}

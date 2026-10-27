@@ -8,17 +8,17 @@
     <meta name="description" content="Nasil Supply & Logistics provides reliable procurement, supply and logistics solutions in Uganda and East Africa.">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
-    <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
     <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
-    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/font/flaticon.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'css/aos.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icon-fallbacks.css' %}">
 
     {% block extra_css %}{% endblock %}
   </head>
@@ -42,7 +42,7 @@
             <div class="col-12 col-md-10 d-none d-xl-block">
               <nav class="site-navigation position-relative text-right" role="navigation">
                 <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
-                  <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                  <li{% if request.resolver_match.url_name == 'home' %} class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
                   <li><a href="{% url 'about' %}">About Us</a></li>
                   <li class="has-children">
                     <a href="{% url 'services' %}">Services</a>
@@ -54,12 +54,8 @@
                     </ul>
                   </li>
                   <li><a href="{% url 'quote' %}">Request Quote</a></li>
-                  <li>
-                    <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
-                      {% if request.user.is_authenticated %}Dashboard{% else %}Admin Login{% endif %}
-                    </a>
-                  </li>
-                  <li><a href="{% url 'faq' %}">FAQ</a></li>
+                  <li class="has-children"><a href="{% url 'portal_login' %}">Customer portal</a><ul class="dropdown"><li><a href="{% url 'portal_login' %}">Customer login</a></li><li><a href="{% url 'public_tracking' %}">Track a shipment</a></li><li><a href="{% url 'login' %}">Staff login</a></li></ul></li>
+                  <li{% if request.resolver_match.url_name == 'faq' %} class="active"{% endif %}><a href="{% url 'faq' %}"{% if request.resolver_match.url_name == 'faq' %} aria-current="page"{% endif %}>FAQ</a></li>
                   <li><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
               </nav>
@@ -85,6 +81,8 @@
                     <li><a href="{% url 'about' %}">About Us</a></li>
                     <li><a href="{% url 'services' %}">Services</a></li>
                     <li><a href="{% url 'quote' %}">Request Quote</a></li>
+                    <li><a href="{% url 'portal_login' %}">Customer portal</a></li>
+                    <li><a href="{% url 'public_tracking' %}">Track shipment</a></li>
                     <li><a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
                       {% if request.user.is_authenticated %}Dashboard{% else %}Admin Login{% endif %}
                     </a></li>
@@ -104,18 +102,15 @@
                   <h2 class="footer-heading mb-4">Office</h2>
                   <ul class="list-unstyled">
                     <li><a href="tel:+256749676580">+256 749 676 580</a></li>
-                    <li><a href="mailto:nasilsupplyandlogistics@gmail.com">Email Us</a></li>
-                    <li>French Plaza</li>
-                    <li>Kampala, Uganda</li>
+                    <li><a href="tel:+256776988267">+256 776 988 267</a></li>
+                    <li><a href="tel:+256706820374">+256 706 820 374</a></li>
+                    <li><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></li>
+                    <li><a href="{% url 'contact' %}">French Plaza</a></li>
+                    <li><a href="{% url 'contact' %}">Shop T55</a></li>
+                    <li><a href="{% url 'contact' %}">Kampala, Uganda</a></li>
                   </ul>
                 </div>
-                <div class="col-md-3">
-                  <h2 class="footer-heading mb-4">Follow Us</h2>
-                  <a href="https://www.facebook.com" class="pl-0 pr-3"><span class="icon-facebook"></span></a>
-                  <a href="https://www.twitter.com" class="pl-3 pr-3"><span class="icon-twitter"></span></a>
-                  <a href="https://www.instagram.com" class="pl-3 pr-3"><span class="icon-instagram"></span></a>
-                  <a href="https://www.linkedin.com" class="pl-3 pr-3"><span class="icon-linkedin"></span></a>
-                </div>
+
               </div>
             </div>
             <div class="col-md-3">
@@ -158,4 +153,3 @@
     {% block extra_js %}{% endblock %}
   </body>
 </html>
-

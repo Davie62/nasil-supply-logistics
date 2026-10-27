@@ -18,6 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path("integrations/", include("integrations.urls")),
+    path("finance/", include("finance.urls")),
+    path("inventory/", include("inventory.urls")),
+    path("orders/", include("orders.urls")),
+    path("procurement/", include("procurement.urls")),
+    path("fleet/", include("fleet.urls")),
+    path("portal/", include("customer_services.urls")),
+    path("customer-services/", include("customer_services.staff_urls")),
     path("admin/", admin.site.urls),
 
     # Main website
@@ -37,4 +45,10 @@ urlpatterns = [
 
     # Payments
     path("payments/", include("payments.urls")),
+    path("customers/", include("customers.urls")),
+    path("messages/", include("core.urls")),
+    path("operations/", include("operations.urls")),
 ]
+
+from customer_services.views import public_tracking
+urlpatterns += [path("track/", public_tracking, name="public_tracking"), path("track/<str:tracking_number>/", public_tracking, name="public_tracking_result")]

@@ -1,0 +1,13 @@
+{% extends "portal/base.html" %}
+{% block content %}
+<section class="portal-card portal-auth">
+  <span class="portal-eyebrow">CUSTOMER INVITATION</span>
+  <h1>{{ title }}</h1>
+  <p>You are already signed in{% if staff_session %} as staff{% endif %}. This invitation creates a separate customer account.</p>
+  <p>Copy this invitation's address into a private or incognito window to activate it without changing your current session.</p>
+  <p>Alternatively, sign out below, then reopen this invitation link.</p>
+  <form method="post" action="{% if staff_session %}{% url 'logout' %}{% else %}{% url 'portal_logout' %}{% endif %}">
+    {% csrf_token %}<button class="btn btn-primary" type="submit">Sign out</button>
+  </form>
+</section>
+{% endblock %}

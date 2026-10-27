@@ -1,0 +1,1 @@
+{% load operations_ui %}<dl class="row g-4 p-4 mb-0">{% for label,value in fields %}<div class="col-12 col-md-6"><dt class="small text-secondary mb-1">{{ label }}</dt><dd class="mb-0 text-break">{{ value|display_value|linebreaksbr }}</dd></div>{% endfor %}</dl>

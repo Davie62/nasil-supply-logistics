@@ -1,66 +1,43 @@
-from datetime import datetime
 from django.db import transaction
-from core.constants import COMPANY_PREFIX
+from django.db.models import F
+from django.utils import timezone
 
-from .models import User, EmployeeProfile
-from organization.models import Branch, Department
+from core.constants import COMPANY_PREFIX
+from organization.models import Department
+from .models import EmployeeIDSequence, EmployeeProfile
+
+
+class OrganizationNotConfigured(ValueError):
+    pass
 
 
 class EmployeeService:
-    """
-    Handles all employee-related business logic.
-    """
-
     @staticmethod
+    @transaction.atomic
     def generate_employee_id():
-        """
-        Generates IDs like:
-
-        NSL-2026-00001
-        """
-
-        year = datetime.now().year
-
-        last_employee = (
-            EmployeeProfile.objects
-            .order_by("-created_at")
-            .first()
-        )
-
-        if last_employee:
-            try:
-                last_number = int(
-                    last_employee.employee_id.split("-")[-1]
-                )
-            except Exception:
-                last_number = 0
-        else:
-            last_number = 0
-
-        
-            return f"{COMPANY_PREFIX}-{year}-{last_number + 1:05d}"
+        year = timezone.localdate().year
+        sequence, _ = EmployeeIDSequence.objects.get_or_create(year=year)
+        # UPDATE serializes concurrent allocations on PostgreSQL until commit.
+        EmployeeIDSequence.objects.filter(pk=year).update(last_number=F("last_number") + 1)
+        sequence.refresh_from_db()
+        return f"{COMPANY_PREFIX}-{year}-{sequence.last_number:05d}"
 
     @staticmethod
     @transaction.atomic
     def create_employee_profile(user):
-
-        branch = Branch.objects.first()
-        department = Department.objects.first()
-
-        if not branch:
-            raise ValueError(
-                "No Branch exists."
-            )
-
-        if not department:
-            raise ValueError(
-                "No Department exists."
-            )
-
+        department = Department.objects.select_related("branch").filter(
+            branch__is_active=True, branch__is_deleted=False,
+        ).first()
+        if department is None:
+            raise OrganizationNotConfigured("Create an active branch and department first.")
+        type(user).objects.select_for_update().get(pk=user.pk)
+        profile = EmployeeProfile.objects.filter(user=user).first()
+        if profile is not None:
+            return profile
         return EmployeeProfile.objects.create(
             user=user,
             employee_id=EmployeeService.generate_employee_id(),
-            branch=branch,
+            branch=department.branch,
             department=department,
             position="Employee",
         )

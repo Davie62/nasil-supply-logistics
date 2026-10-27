@@ -82,3 +82,43 @@ class ContactMessage(models.Model):
 
     def __str__(self):
         return f"{self.subject} - {self.name}"
+
+
+class AuditQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValueError("Audit records are append-only.")
+
+    def delete(self):
+        raise ValueError("Audit records are append-only.")
+
+    def bulk_update(self, *args, **kwargs):
+        raise ValueError("Audit records are append-only.")
+
+
+class AuditRecord(models.Model):
+    """Business change history; linked records cannot be deleted underneath it."""
+    quote = models.ForeignKey("quotations.Quote", on_delete=models.PROTECT, null=True, blank=True, related_name="audit_records")
+    shipment = models.ForeignKey("shipments.Shipment", on_delete=models.PROTECT, null=True, blank=True, related_name="history")
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    actor_label = models.CharField(max_length=255, blank=True)
+    action = models.CharField(max_length=40)
+    from_status = models.CharField(max_length=20, blank=True)
+    to_status = models.CharField(max_length=20)
+    reason = models.TextField(blank=True)
+    changes = models.JSONField(default=dict)
+    object_version = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    objects = AuditQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+        default_permissions = ("view",)
+        constraints = [models.CheckConstraint(condition=models.Q(quote__isnull=False) | models.Q(shipment__isnull=False), name="audit_has_business_record")]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding:
+            raise ValueError("Audit records are append-only.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValueError("Audit records are append-only.")

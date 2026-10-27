@@ -1,0 +1,1 @@
+<ol class="portal-timeline">{% for item in tracking.events %}<li><span class="portal-status-dot" aria-hidden="true"></span><strong>{{ item.label }}</strong><time>{{ item.at|date:"d M Y, H:i T" }}</time></li>{% endfor %}</ol>{% if tracking.legacy_history %}<p class="small text-secondary">Earlier transition details were not recorded in this system.</p>{% endif %}

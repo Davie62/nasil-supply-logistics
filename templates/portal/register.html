@@ -1,0 +1,13 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Create customer account{% endblock %}
+{% block portal_label %}CUSTOMER REGISTRATION{% endblock %}
+{% block card_title %}Create your NASIL account{% endblock %}
+{% block login_intro %}<p>Manage quotations, follow shipments and access your delivery documents.</p>{% endblock %}
+{% block main_form %}
+<form method="post" class="login-form registration-form">{% csrf_token %}
+  {% include "operations/components/form_fields.html" %}
+  <p class="registration-help">We'll verify your email with a six-digit code before giving access to customer records.</p>
+  <button class="login-submit" type="submit">Create account</button>
+</form>
+{% endblock %}
+{% block login_note %}Already have an account? <a href="{% url 'portal_login' %}">Log in</a><br>Can't finish an earlier registration? <a href="{% url 'portal_password_reset' %}">Recover your account</a>{% endblock %}

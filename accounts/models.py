@@ -56,7 +56,9 @@ class EmployeeProfile(models.Model):
     phone_number = models.CharField(
         max_length=20,
         unique=True,
-        blank=True
+        blank=True,
+        null=True,
+        default=None,
     )
 
     department = models.ForeignKey(
@@ -107,3 +109,13 @@ class EmployeeProfile(models.Model):
     def __str__(self):
         full_name = self.user.get_full_name() or self.user.username
         return f"{self.employee_id} - {full_name}"
+
+    def save(self, *args, **kwargs):
+        self.phone_number = self.phone_number or None
+        super().save(*args, **kwargs)
+
+
+class EmployeeIDSequence(models.Model):
+    """A database-serialized counter, scoped to the employee ID year."""
+    year = models.PositiveIntegerField(primary_key=True)
+    last_number = models.PositiveIntegerField(default=0)

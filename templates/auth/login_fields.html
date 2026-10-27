@@ -1,0 +1,15 @@
+<div class="login-field-wrap">
+    <div class="login-field">
+        <label for="username">Username <span aria-hidden="true">*</span></label>
+        <input type="text" id="username" name="username" value="{{ username_value|default:'' }}" placeholder="Enter your username" maxlength="150" autocomplete="username" autocapitalize="none" spellcheck="false" required{% if username_errors %} aria-invalid="true" aria-describedby="username-errors"{% endif %}>
+    </div>
+    {% if username_errors %}<div class="login-field-errors" id="username-errors" role="alert">{{ username_errors }}</div>{% endif %}
+</div>
+<div class="login-field-wrap">
+    <div class="login-field login-password-field">
+        <label for="password">Password <span aria-hidden="true">*</span></label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required{% if password_errors %} aria-invalid="true" aria-describedby="password-errors"{% endif %}>
+        <button class="login-password-toggle" type="button" aria-label="Show password" aria-controls="password" aria-pressed="false" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path class="login-eye-slash" d="m4 4 16 16"/></svg></button>
+    </div>
+    {% if password_errors %}<div class="login-field-errors" id="password-errors" role="alert">{{ password_errors }}</div>{% endif %}
+</div>

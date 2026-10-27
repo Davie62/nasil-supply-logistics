@@ -31,80 +31,16 @@
                     </div>
                     {% endif %}
 
-                    <div class="row form-group">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label class="text-black" for="full_name">Full Name *</label>
-                            <input type="text" id="full_name" name="full_name" class="form-control" placeholder="Your name" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-black" for="company_name">Company Name</label>
-                            <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Your company">
-                        </div>
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label_tag }}{% if field.field.required %} *{% endif %}
+                        {{ field }}
+                        {% for error in field.errors %}<div class="text-danger" role="alert">{{ error }}</div>{% endfor %}
                     </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label class="text-black" for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+256 ..." required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-black" for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="your.email@example.com" required>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label class="text-black" for="pickup_location">Pickup Location *</label>
-                            <input type="text" id="pickup_location" name="pickup_location" class="form-control" placeholder="Where is the shipment coming from?" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-black" for="destination">Delivery Destination *</label>
-                            <input type="text" id="destination" name="destination" class="form-control" placeholder="Where should it go?" required>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <label class="text-black" for="cargo_description">Cargo Type *</label>
-                            <select id="cargo_description" name="cargo_description" class="form-control" required>
-                                <option value="">Select Cargo Type</option>
-                                <option value="general">General Goods</option>
-                                <option value="fragile">Fragile Goods</option>
-                                <option value="perishable">Perishable Goods</option>
-                                <option value="electronics">Electronics</option>
-                                <option value="construction">Construction Materials</option>
-                                <option value="medical">Medical &amp; Healthcare Supplies</option>
-                                <option value="office">Office Supplies</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="text-black" for="weight">Estimated Weight (kg) *</label>
-                            <input type="number" id="weight" name="weight" class="form-control" placeholder="0" step="0.01" required>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <label class="text-black" for="transport_mode">Preferred Transport Mode</label>
-                            <input type="text" id="transport_mode" name="transport_mode" class="form-control" placeholder="E.g., Air, Sea, Road">
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <label class="text-black" for="special_instructions">Additional Information / Special Instructions</label>
-                            <textarea name="special_instructions" id="special_instructions" cols="30" rows="7" class="form-control" placeholder="Provide any additional details about your shipment, special requirements, or handling instructions..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary py-2 px-4 text-white">Request Quote</button>
-                        </div>
-                    </div>
-                </form>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary py-2 px-4 text-white">Request Quote</button>
+</form>
             </div>
 
             <div class="col-md-5">
@@ -224,7 +160,7 @@
         line-height: 1.7;
     }
     .template-check-list li::before {
-        content: "✓";
+        content: "\2713";
         position: absolute;
         left: 0;
         top: 0;

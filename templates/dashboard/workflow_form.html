@@ -1,0 +1,23 @@
+{% extends "dashboard/base_dashboard.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block page_name %}{{ title }}{% endblock %}
+{% block content %}
+<section class="card workflow-page workflow-form-page">
+    <div class="card-header workflow-header"><div><span class="eyebrow">{{ eyebrow }}</span><h1>{{ title }}</h1><p>Complete the details below. Fields marked * are required.</p></div><a class="workflow-button secondary" href="{% url back_url %}"><i class="bi bi-arrow-left" aria-hidden="true"></i>Back</a></div>
+    <form method="post" class="workflow-form"{% if multipart %} enctype="multipart/form-data"{% endif %}>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors alert alert-danger" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}{% if field.is_hidden %}{{ field }}{% for error in field.errors %}<p class="workflow-error">{{ error }}</p>{% endfor %}{% else %}<div class="workflow-field{% if field.field.widget.input_type != 'checkbox' and field.field.widget.attrs.rows %} workflow-field-wide{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span aria-hidden="true">*</span>{% endif %}</label>{{ field }}{% if field.help_text %}<small class="workflow-help" id="{{ field.auto_id }}_helptext">{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small class="workflow-error" role="alert">{{ error }}</small>{% endfor %}</div>{% endif %}{% endfor %}
+        {% if not read_only %}<button class="workflow-button" type="submit"><i class="bi bi-check-lg" aria-hidden="true"></i>Save changes</button>{% else %}<p class="workflow-help">This record is read-only. Use an available workflow action below to change its status.</p>{% endif %}
+    </form>
+</section>
+{% if workflow_record %}
+<section class="card workflow-page mt-4">
+    <div class="card-header workflow-header"><div><span class="eyebrow">WORKFLOW</span><h2>{{ workflow_record.get_status_display }}</h2>{% if workflow_record.currency %}<p>{{ workflow_record.currency }} {{ workflow_record.total_amount }} · Subtotal {{ workflow_record.subtotal }} · Tax {{ workflow_record.tax_amount }} · Valid until {{ workflow_record.valid_until|default:"Not set" }}</p>{% endif %}</div></div>
+    {% if workflow_errors %}<div class="alert alert-danger m-3" role="alert">{% for error in workflow_errors %}<p>{{ error }}</p>{% endfor %}</div>{% endif %}
+    {% if workflow_actions %}<form method="post" class="workflow-form">{% csrf_token %}<input type="hidden" name="record_version" value="{{ workflow_record.version }}"><div class="workflow-field workflow-field-wide"><label for="workflow-reason">Reason</label><textarea id="workflow-reason" name="reason" rows="2" class="form-control" aria-describedby="reason-help"></textarea><small id="reason-help">Required for rejection or reopening. Approval requires a valid price and expiry date, and a different approver from the preparer.</small></div><div class="d-flex flex-wrap gap-2">{% for action in workflow_actions %}<button type="submit" class="workflow-button secondary" name="workflow_action" value="{{ action }}">Move to {{ action|title }}</button>{% endfor %}</div></form>{% endif %}
+    {% if conversion_url %}<div class="p-4"><a class="workflow-button" href="{% url conversion_url %}?quote={{ workflow_record.pk }}">Convert to shipment</a></div>{% endif %}
+</section>
+<section class="card workflow-page mt-4"><div class="card-header workflow-header"><div><span class="eyebrow">TRACEABILITY</span><h2>Recent audit history</h2><p>Latest 50 events. Full history is retained in the audit register.</p></div></div><div class="table-responsive"><table class="table"><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Transition / reason</th></tr></thead><tbody>{% for event in audit_records %}<tr><td>{{ event.created_at|date:"d M Y H:i" }}</td><td>{{ event.actor_label }}</td><td>{{ event.action }}</td><td>{{ event.from_status|default:"New" }} → {{ event.to_status }}{% if event.reason %}<p>{{ event.reason }}</p>{% endif %}<details><summary>Changed fields</summary><dl>{% for field, values in event.changes.items %}<dt>{{ field }}</dt><dd>{{ values.before|default_if_none:"—" }} → {{ values.after|default_if_none:"—" }}</dd>{% endfor %}</dl></details></td></tr>{% empty %}<tr><td colspan="4">No events recorded.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endif %}
+{% endblock %}
