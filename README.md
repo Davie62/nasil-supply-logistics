@@ -32,10 +32,11 @@ See BUSINESS_RULES.md for policy, Django model examples, reusable validation and
 See INTERNAL_OPERATIONS.md for internal screens, permissions, reports, upload handling and export examples.
 See CUSTOMER_SERVICES.md for portal access, notification configuration, workers and Django examples.
 See COMMERCIAL_OPERATIONS.md for commercial workflows, integration configuration, examples and live setup requirements.
+See SECURITY_IMPLEMENTATION.md for MFA enrollment, session controls, encrypted secrets, validation, security logging and production requirements.
 
 ## Planned
 
-Provider sandbox acceptance and live payment configuration, refunds, MFA, complete audit coverage, quotation line items/customer acceptance,
+Provider sandbox acceptance and live payment configuration, refunds, complete audit coverage, quotation line items/customer acceptance,
 individual quotation PDFs, notification delivery receipts and a REST API remain pending.
 Provider adapters need credentials and live staging verification. See ROADMAP.md for the
 phased implementation plan and REMEDIATION.md for the current verified baseline.
@@ -45,7 +46,7 @@ phased implementation plan and REMEDIATION.md for the current verified baseline.
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+pip install -r requirements-development.txt
 $env:DJANGO_DEBUG = 'true'
 python manage.py migrate
 python manage.py seed_roles
@@ -57,6 +58,11 @@ Open http://127.0.0.1:8000/. The explicit local DEBUG setting is required for ev
 new terminal session. Local development uses SQLite and a stable development-only
 signing key; supply a private DJANGO_SECRET_KEY for any shared environment.
 Django does not load `.env` files automatically.
+
+`requirements.txt` contains application runtime dependencies. Linux deployments
+that use Gunicorn should install `requirements-production.txt`; the Vercel Django
+build uses the runtime file. Security/development tooling is in
+`requirements-security.txt` and `requirements-development.txt`.
 
 `seed_system` additionally creates sample company/branch/department/warehouse
 records. Use it only for a new development installation. On existing installations,

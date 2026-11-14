@@ -21,16 +21,6 @@
                 <form method="POST" action="{% url 'quote' %}" class="p-5 bg-white quote-form-template">
                     {% csrf_token %}
 
-                    {% if messages %}
-                    <div class="quote-messages">
-                        {% for message in messages %}
-                        <div class="quote-msg {% if message.tags %}quote-msg-{{ message.tags }}{% endif %}">
-                            {{ message }}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
                     {{ form.non_field_errors }}
                     {% for field in form %}
                     <div class="form-group">
@@ -45,7 +35,7 @@
 
             <div class="col-md-5">
                 <div class="p-4 mb-3 bg-white">
-                    <img src="{% static 'images/img_4.jpg' %}" alt="Logistics support" class="img-fluid rounded mb-3">
+                    <img decoding="async" width="700" height="799" src="{% static 'images/img_4.jpg' %}" alt="Logistics support" class="img-fluid rounded mb-3">
                     <h3 class="h5 text-black mb-3">Fast Response</h3>
                     <p>Need a quick answer? We help businesses plan shipments, transport, and supply schedules with clear, practical support.</p>
                 </div>

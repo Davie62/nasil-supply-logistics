@@ -11,82 +11,23 @@ jQuery(document).ready(function($) {
 	
 
 	var siteMenuClone = function() {
-
-		$('.js-clone-nav').each(function() {
-			var $this = $(this);
-			$this.clone().attr('class', 'site-nav-wrap').appendTo('.site-mobile-menu-body');
-		});
-
-
-		setTimeout(function() {
-			
-			var counter = 0;
-      $('.site-mobile-menu .has-children').each(function(){
-        var $this = $(this);
-        
-        $this.prepend('<span class="arrow-collapse collapsed">');
-
-        $this.find('.arrow-collapse').attr({
-          'data-toggle' : 'collapse',
-          'data-target' : '#collapseItem' + counter,
+        $('.js-clone-nav').each(function() {
+            $(this).clone().attr('class', 'site-nav-wrap').appendTo('.site-mobile-menu-body');
         });
-
-        $this.find('> ul').attr({
-          'class' : 'collapse',
-          'id' : 'collapseItem' + counter,
+        $('.site-mobile-menu .has-children').each(function(index) {
+            var group = $(this), submenu = group.children('ul');
+            var id = 'site-submenu-' + index;
+            submenu.attr('id', id).prop('hidden', true).removeClass('dropdown');
+            var toggle = $('<button type="button" class="arrow-collapse"></button>');
+            toggle.attr({'aria-controls': id, 'aria-expanded': 'false', 'aria-label': 'Expand ' + group.children('a').first().text()});
+            toggle.text('+'); group.prepend(toggle);
+            toggle.on('click', function() {
+                var open = toggle.attr('aria-expanded') !== 'true';
+                toggle.attr('aria-expanded', String(open)).text(open ? '\u2212' : '+');
+                submenu.prop('hidden', !open);
+            });
         });
-
-        counter++;
-
-      });
-
-    }, 1000);
-
-		$('body').on('click', '.arrow-collapse', function(e) {
-      var $this = $(this);
-      if ( $this.closest('li').find('.collapse').hasClass('show') ) {
-        $this.removeClass('active');
-      } else {
-        $this.addClass('active');
-      }
-      e.preventDefault();  
-      
-    });
-
-		$(window).resize(function() {
-			var $this = $(this),
-				w = $this.width();
-
-			if ( w > 768 ) {
-				if ( $('body').hasClass('offcanvas-menu') ) {
-					$('body').removeClass('offcanvas-menu');
-				}
-			}
-		})
-
-		$('body').on('click', '.js-menu-toggle', function(e) {
-			var $this = $(this);
-			e.preventDefault();
-
-			if ( $('body').hasClass('offcanvas-menu') ) {
-				$('body').removeClass('offcanvas-menu');
-				$this.removeClass('active');
-			} else {
-				$('body').addClass('offcanvas-menu');
-				$this.addClass('active');
-			}
-		}) 
-
-		// click outisde offcanvas
-		$(document).mouseup(function(e) {
-	    var container = $(".site-mobile-menu");
-	    if (!container.is(e.target) && container.has(e.target).length === 0) {
-	      if ( $('body').hasClass('offcanvas-menu') ) {
-					$('body').removeClass('offcanvas-menu');
-				}
-	    }
-		});
-	}; 
+    };
 	siteMenuClone();
 
 

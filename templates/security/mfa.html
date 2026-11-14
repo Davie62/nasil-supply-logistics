@@ -1,0 +1,7 @@
+{% extends "auth/login_base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block portal_label %}ACCOUNT SECURITY{% endblock %}
+{% block card_title %}{{ title }}{% endblock %}
+{% block login_intro %}{% if enrolling %}<p>Scan this QR code with your authenticator app, then enter its six-digit code.</p><img src="{% url 'security_mfa_qr' %}" width="230" height="230" alt="Scan to configure your NASIL authenticator"><p>Manual setup key: <code class="security-secret">{{ secret }}</code></p>{% else %}<p>Enter a fresh code from your authenticator app or one of your saved recovery codes.</p>{% endif %}{% endblock %}
+{% block main_form %}<form method="post" class="login-form">{% csrf_token %}{{ form.as_p }}<button class="login-submit" type="submit">Verify code</button></form><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="security-signout" type="submit">Sign out</button></form>{% endblock %}
+{% block login_note %}Keep your setup key and recovery codes private. NASIL support will never ask you for a verification code.{% endblock %}

@@ -8,4 +8,5 @@
   {% if can_export %}<div class="d-flex gap-2 px-4 pb-4"><a class="workflow-button secondary" href="?{% querystring format='csv' page=None %}">Export CSV</a><a class="workflow-button secondary" href="?{% querystring format='pdf' page=None %}">Export PDF</a></div>{% endif %}
   {% include "operations/components/table.html" %}{% include "operations/components/pagination.html" %}
 </section>
+{% include "ui/fab.html" %}
 {% endblock %}

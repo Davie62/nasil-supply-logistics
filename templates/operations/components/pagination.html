@@ -1,2 +1,15 @@
 {% load operations_ui %}
-{% if page_obj %}<nav class="d-flex flex-wrap align-items-center justify-content-between gap-3 p-4" aria-label="Pagination"><span class="small text-secondary">{{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} records · Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span><div class="d-flex gap-2">{% if page_obj.has_previous %}<a class="workflow-button secondary" href="?{% querystring page=page_obj.previous_page_number %}" rel="prev">Previous</a>{% endif %}{% if page_obj.has_next %}<a class="workflow-button secondary" href="?{% querystring page=page_obj.next_page_number %}" rel="next">Next</a>{% endif %}</div></nav>{% endif %}
+{% if page_obj %}
+<nav class="ui-pagination" aria-label="Pagination">
+  <p class="ui-pagination-summary">{{ page_obj.start_index }}&ndash;{{ page_obj.end_index }} of {{ page_obj.paginator.count }} records</p>
+  {% if page_obj.paginator.num_pages > 1 %}
+  {% pagination_range page_obj as pages %}
+  <ul class="ui-pagination-pages">
+    <li>{% if page_obj.has_previous %}<a class="ui-page-link ui-page-edge" href="?{% querystring page=1 %}" aria-label="First page">&laquo;</a>{% else %}<span class="ui-page-disabled" aria-disabled="true" aria-label="First page">&laquo;</span>{% endif %}</li>
+    <li>{% if page_obj.has_previous %}<a class="ui-page-link ui-page-edge" href="?{% querystring page=page_obj.previous_page_number %}" rel="prev" aria-label="Previous page">&lsaquo;</a>{% else %}<span class="ui-page-disabled" aria-disabled="true" aria-label="Previous page">&lsaquo;</span>{% endif %}</li>
+    {% for page in pages %}{% if page == page_obj.paginator.ELLIPSIS %}<li class="ui-page-gap" aria-hidden="true">&hellip;</li>{% else %}<li class="ui-page-number"><a class="ui-page-link" href="?{% querystring page=page %}" aria-label="Page {{ page }}"{% if page == page_obj.number %} aria-current="page"{% endif %}>{{ page }}</a></li>{% endif %}{% endfor %}
+    <li class="ui-page-mobile" aria-label="Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</li>
+    <li>{% if page_obj.has_next %}<a class="ui-page-link ui-page-edge" href="?{% querystring page=page_obj.next_page_number %}" rel="next" aria-label="Next page">&rsaquo;</a>{% else %}<span class="ui-page-disabled" aria-disabled="true" aria-label="Next page">&rsaquo;</span>{% endif %}</li>
+    <li>{% if page_obj.has_next %}<a class="ui-page-link ui-page-edge" href="?{% querystring page=page_obj.paginator.num_pages %}" aria-label="Last page">&raquo;</a>{% else %}<span class="ui-page-disabled" aria-disabled="true" aria-label="Last page">&raquo;</span>{% endif %}</li>
+  </ul>{% endif %}
+</nav>{% endif %}

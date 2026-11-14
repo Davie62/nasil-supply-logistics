@@ -7,8 +7,12 @@ from django.utils import timezone
 from datetime import timedelta
 
 from core.constants import ACCOUNT_LOCK_MINUTES, MAX_LOGIN_ATTEMPTS
+from django.views.decorators.debug import sensitive_post_parameters
+from django.views.decorators.http import require_http_methods
 
 
+@require_http_methods(["GET", "POST"])
+@sensitive_post_parameters("password")
 def login_view(request):
     # If already logged in
     if request.user.is_authenticated:
@@ -23,30 +27,9 @@ def login_view(request):
         if user is not None and not user.is_staff:
             user = None
 
-        if user is not None and user.locked_until and user.locked_until > timezone.now():
-            user = None
-
         if user is not None:
-            user.failed_login_attempts = 0
-            user.locked_until = None
-            user.save(update_fields=["failed_login_attempts", "locked_until"])
             login(request, user)
-
-            if request.POST.get("remember_me"):
-                request.session.set_expiry(60 * 60 * 24 * 30)  # 30 days
-            else:
-                request.session.set_expiry(0)  # Browser closes
-
             return redirect("dashboard")
-
-        if username:
-            from .models import User
-            existing_user = User.objects.filter(username=username).first()
-            if existing_user:
-                existing_user.failed_login_attempts += 1
-                if existing_user.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
-                    existing_user.locked_until = timezone.now() + timedelta(minutes=ACCOUNT_LOCK_MINUTES)
-                existing_user.save(update_fields=["failed_login_attempts", "locked_until"])
         messages.error(request, "Invalid username or password.")
 
     return render(request, "accounts/login.html")

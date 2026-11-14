@@ -1,0 +1,12 @@
+{% with route=request.resolver_match.url_name namespace=request.resolver_match.namespace %}
+<nav class="ui-workspace-nav" aria-label="Primary workspace navigation">
+  <a href="{% url 'dashboard' %}"{% if route == 'dashboard' %} aria-current="page"{% endif %}>Dashboard</a>
+  {% if perms.shipments.view_shipment %}<a href="{% url 'shipment_list' %}"{% if 'shipment' in route %} aria-current="page"{% endif %}>Shipments</a>{% endif %}
+  {% if perms.orders.view_order %}<a href="{% url 'orders:home' %}"{% if namespace == 'orders' %} aria-current="page"{% endif %}>Orders</a>{% endif %}
+  {% if perms.operations.view_inventoryitem %}<a href="{% url 'inventory_list' %}"{% if 'inventory' in route or namespace == 'inventory' %} aria-current="page"{% endif %}>Inventory</a>{% endif %}
+  {% if perms.customers.view_customer %}<a href="{% url 'customer_list' %}"{% if 'customer' in route %} aria-current="page"{% endif %}>Customers</a>{% endif %}
+  {% if perms.finance.view_payment %}<a href="{% url 'finance:home' %}"{% if namespace == 'finance' %} aria-current="page"{% endif %}>Finance</a>{% endif %}
+  {% if perms.operations.view_reports %}<a href="{% url 'operations_reports' %}"{% if route == 'operations_reports' %} aria-current="page"{% endif %}>Reports</a>{% endif %}
+  {% if perms.operations.view_businesssettings %}<a href="{% url 'operations_settings' %}"{% if route == 'operations_settings' %} aria-current="page"{% endif %}>Settings</a>{% endif %}
+</nav>
+{% endwith %}

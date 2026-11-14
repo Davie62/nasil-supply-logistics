@@ -14,6 +14,8 @@ try:
     print(f"User 'testuser' already exists")
 except User.DoesNotExist:
     password = os.environ.get('DJANGO_TESTUSER_PASSWORD') or getpass.getpass('Password for testuser: ')
+    from django.contrib.auth.password_validation import validate_password
+    validate_password(password, User(username='testuser', email='testuser@example.com'))
     # Create test user
     user = User.objects.create_superuser(
         username='testuser',

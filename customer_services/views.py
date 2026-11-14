@@ -11,6 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST, require_http_methods
+from django.views.decorators.debug import sensitive_post_parameters
 from operations.exports import export_pdf
 from operations.models import DeliveryProof
 from operations.querysets import paginate, search
@@ -33,6 +34,7 @@ def limited():
 
 
 @require_http_methods(["GET", "POST"])
+@sensitive_post_parameters("password")
 def portal_login(request):
     if request.user.is_authenticated:
         return redirect("dashboard" if request.user.is_staff else "portal_dashboard")
@@ -47,7 +49,6 @@ def portal_login(request):
                     request.session["registration_id"] = user.registration_verification.pk
                     return redirect("portal_verify_email")
                 login(request, user)
-                request.session.set_expiry(60 * 60 * 24 * 30 if request.POST.get("remember_me") else 0)
                 target = request.GET.get("next", "")
                 if not target.startswith("/portal/") or not url_has_allowed_host_and_scheme(target, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
                     target = reverse("portal_dashboard")
@@ -76,7 +77,7 @@ def activate(request, token):
         except (ValidationError, IntegrityError) as error:
             form.add_error(None, error.messages if isinstance(error, ValidationError) else "Unable to activate this invitation. Contact NASIL.")
         else:
-            login(request, access.user, backend="django.contrib.auth.backends.ModelBackend")
+            login(request, access.user, backend="security_controls.backends.GuardedModelBackend")
             return redirect("portal_dashboard")
     return private_response(render(request, "portal/auth.html", {"title": "Activate your customer portal", "form": form}))
 

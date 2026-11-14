@@ -11,6 +11,9 @@ Install `requirements-production.txt`. Export the environment variables shown in
 automatically. DEBUG defaults to false. Startup rejects missing/short development
 secrets, absent/wildcard hosts, SQLite in production, and missing database credentials.
 Use a unique random secret with at least 50 characters. Never reuse the local key.
+Also supply a separate SECURITY_ENCRYPTION_KEYS key ring and a rediss:// broker.
+Production staff MFA and verified PostgreSQL/broker TLS are enforced at startup.
+See SECURITY_IMPLEMENTATION.md for enrollment, key rotation and incident recovery.
 
 The default PostgreSQL TLS mode is `verify-full`. Configure the server CA using
 libpq's `PGSSLROOTCERT` when necessary. A private local database may use an explicitly
@@ -47,6 +50,9 @@ Set DJANGO_TRUST_PROXY=true only when your trusted proxy overwrites incoming
 X-Forwarded-Proto and clients cannot bypass the proxy to access the application port.
 The example nginx does both when deployed with a loopback-only application listener.
 Use DJANGO_CSRF_TRUSTED_ORIGINS for the actual HTTPS origins where required.
+Set SECURITY_TRUSTED_PROXY_NETWORKS to the proxy's actual peer networks (for the
+loopback example: 127.0.0.1/32,::1/128). X-Real-IP is trusted only from those peers.
+HSTS is opt-in after real HTTPS validation; decide its scope before enabling it.
 
 ## Backups and monitoring
 

@@ -1,1 +1,28 @@
-{% load static %}<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{% block title %}{{ title }}{% endblock %} | NASIL</title><link rel="stylesheet" href="{% static 'vendor/bootstrap5/bootstrap.min.css' %}"><link rel="stylesheet" href="{% static 'css/portal.css' %}">{% block extra_head %}{% endblock %}</head><body><a class="visually-hidden-focusable" href="#portal-main">Skip to main content</a><header class="portal-header"><div class="portal-wrap portal-brand-row"><a class="portal-brand" href="{% url 'home' %}"><span class="portal-mark">N</span><span>NASIL<small>Supply &amp; Logistics</small></span></a><div class="portal-account">{% if request.customer %}<span>{{ request.customer.full_name }}</span><form action="{% url 'portal_logout' %}" method="post">{% csrf_token %}<button class="btn btn-outline-secondary btn-sm" type="submit">Sign out</button></form>{% else %}<a href="{% url 'portal_login' %}">Customer login</a><a href="{% url 'public_tracking' %}">Track a shipment</a>{% endif %}</div></div>{% if request.customer %}<nav class="portal-wrap portal-nav" aria-label="Customer portal"><a href="{% url 'portal_dashboard' %}">Overview</a><a href="{% url 'portal_quotes' %}">Quotations</a><a href="{% url 'portal_shipments' %}">Shipments</a><a href="{% url 'portal_invoices' %}">Invoices</a><a href="{% url 'portal_notifications' %}">Notifications</a><a href="{% url 'portal_preferences' %}">Preferences</a></nav>{% endif %}</header><main class="portal-wrap portal-main" id="portal-main">{% if messages %}{% for message in messages %}<div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="status">{{ message }}</div>{% endfor %}{% endif %}{% block content %}{% endblock %}</main><footer class="portal-wrap portal-footer"><span>&copy; {% now 'Y' %} NASIL Supply &amp; Logistics</span><a href="{% url 'contact' %}">Contact support</a></footer></body></html>
+{% load static %}
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{% block title %}{{ title }}{% endblock %} | NASIL</title>
+<link rel="stylesheet" href="{% static 'vendor/bootstrap5/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/portal.css' %}">
+<link rel="stylesheet" href="{% static 'css/app-ui.css' %}">
+{% block extra_head %}{% endblock %}
+<script src="{% static 'js/app-ui.js' %}" defer></script>
+</head><body class="portal-app">
+<a class="visually-hidden-focusable" href="#portal-main">Skip to main content</a>
+<header class="portal-header"><div class="portal-wrap portal-brand-row">
+<a class="portal-brand" href="{% url 'home' %}"><span class="portal-mark" aria-hidden="true">N</span><span>NASIL<small>Supply &amp; Logistics</small></span></a>
+<div class="portal-account">{% if request.customer %}<span>{{ request.customer.full_name }}</span><form action="{% url 'portal_logout' %}" method="post">{% csrf_token %}<button class="btn btn-outline-secondary btn-sm" type="submit">Sign out</button></form><button class="portal-menu-toggle" type="button" data-portal-menu aria-controls="portal-navigation" aria-expanded="false" hidden>Menu <span aria-hidden="true">&#9776;</span></button>{% else %}<a href="{% url 'portal_login' %}">Customer login</a><a href="{% url 'public_tracking' %}">Track a shipment</a>{% endif %}</div></div>
+{% if request.customer %}{% with route=request.resolver_match.url_name %}
+<nav class="portal-wrap portal-nav" id="portal-navigation" aria-label="Customer portal">
+<a href="{% url 'portal_dashboard' %}"{% if route == 'portal_dashboard' %} aria-current="page"{% endif %}>Overview</a>
+<a href="{% url 'portal_quotes' %}"{% if route == 'portal_quotes' or route == 'portal_quote' %} aria-current="page"{% endif %}>Quotations</a>
+<a href="{% url 'portal_shipments' %}"{% if route == 'portal_shipments' or route == 'portal_shipment' %} aria-current="page"{% endif %}>Shipments</a>
+<a href="{% url 'portal_invoices' %}"{% if route == 'portal_invoices' or route == 'portal_invoice' or route == 'portal_payment' %} aria-current="page"{% endif %}>Invoices</a>
+<a href="{% url 'portal_notifications' %}"{% if route == 'portal_notifications' %} aria-current="page"{% endif %}>Notifications</a>
+<a href="{% url 'portal_preferences' %}"{% if route == 'portal_preferences' %} aria-current="page"{% endif %}>Preferences</a>
+</nav>{% endwith %}{% endif %}</header>
+{% include "ui/toasts.html" %}
+<main class="portal-wrap portal-main" id="portal-main" data-enhance-pages tabindex="-1">
+<div data-page-content>{% block content %}{% endblock %}</div>{% include "ui/skeleton.html" %}</main>
+<footer class="portal-wrap portal-footer"><span>&copy; {% now 'Y' %} NASIL Supply &amp; Logistics</span><a href="{% url 'contact' %}">Contact support</a></footer>
+{% include "ui/confirm.html" %}</body></html>

@@ -1,0 +1,6 @@
+<div class="ui-empty">
+  <span class="ui-empty-icon" aria-hidden="true">{% if empty_symbol %}{{ empty_symbol }}{% else %}&#9633;{% endif %}</span>
+  <h3>{{ empty_title|default:"No records to show" }}</h3>
+  <p>{{ empty_description|default:"Try a different search or clear your filters to see more results." }}</p>
+  {% if create_url %}<a class="workflow-button ui-button" href="{% url create_url %}">{{ create_label|default:"Create a record" }}</a>{% elif empty_url %}<a class="ui-button ui-button-secondary" href="{{ empty_url }}">{{ empty_action|default:"Clear filters" }}</a>{% endif %}
+</div>

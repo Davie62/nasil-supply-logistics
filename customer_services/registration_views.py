@@ -65,7 +65,7 @@ def verify_email(request):
             else:
                 request.session.pop("registration_id", None)
                 request.session.pop("registration_code_preview", None)
-                login(request, access.user, backend="django.contrib.auth.backends.ModelBackend")
+                login(request, access.user, backend="security_controls.backends.GuardedModelBackend")
                 request.session.set_expiry(0)
                 messages.success(request, "Your customer account is ready. Welcome to NASIL.")
                 return redirect("portal_dashboard")

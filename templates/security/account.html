@@ -1,0 +1,7 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Account security{% endblock %}
+{% block portal_label %}ACCOUNT SECURITY{% endblock %}
+{% block card_title %}Protect your account{% endblock %}
+{% block login_intro %}<p>Two-step verification: <strong>{% if mfa_enabled %}Enabled{% else %}Not configured{% endif %}</strong>.</p>{% if not mfa_enabled %}<p><a href="{% url 'security_mfa_setup' %}">Set up an authenticator app</a></p>{% endif %}<p>To sign out all devices, confirm your current password. This also signs you out here.</p>{% endblock %}
+{% block main_form %}<form method="post" class="login-form">{% csrf_token %}{{ form.as_p }}<button class="login-submit" type="submit">Sign out all devices</button></form>{% endblock %}
+{% block login_note %}<a href="{% if request.user.is_staff %}{% url 'dashboard' %}{% else %}{% url 'portal_dashboard' %}{% endif %}">Back to your workspace</a>{% endblock %}

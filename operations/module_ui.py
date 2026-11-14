@@ -76,6 +76,9 @@ def resource_urls(*, model, slug, form_class=None, save=None, columns, fields, s
     @require_GET
     def listing(request):
         require_permission(request.user, permission)
+        from django.http import HttpResponseBadRequest
+        if set(request.GET)-{"q", "date_from", "date_to", "status", "staff", "page", "format", "low"}:
+            return HttpResponseBadRequest("Unsupported report filter.")
         filters = FilterForm(request.GET)
         records = query()
         if model._meta.label_lower == "inventory.stocklevel" and request.GET.get("low") == "1":

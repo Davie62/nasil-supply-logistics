@@ -19,6 +19,8 @@ class DeploymentConfigurationTests(SimpleTestCase):
             "DJANGO_ALLOWED_HOSTS": "logistics.example.com",
             "POSTGRES_DB": "nasil", "POSTGRES_USER": "nasil",
             "POSTGRES_PASSWORD": "test-only", "POSTGRES_HOST": "db.example.com",
+            "SECURITY_ENCRYPTION_KEYS": "dGVzdC1vbmx5LW5vdC1hLXByb2R1Y3Rpb24ta2V5ISE=",
+            "CELERY_BROKER_URL": "rediss://redis.example.com:6379/0",
         }
 
     def test_no_environment_fails_closed(self):
@@ -55,11 +57,38 @@ class DeploymentConfigurationTests(SimpleTestCase):
             {"DJANGO_ALLOWED_HOSTS": ""}, {"DJANGO_ALLOWED_HOSTS": "*"},
             {"POSTGRES_PASSWORD": ""}, {"DJANGO_DB_ENGINE": "sqlite"},
             {"DJANGO_DB_ENGINE": "unsupported"},
+            {"SECURITY_ENCRYPTION_KEYS": ""}, {"SECURITY_ENCRYPTION_KEYS": "invalid"},
+            {"SECURITY_REQUIRE_STAFF_MFA": "false"}, {"CELERY_BROKER_URL": "redis://redis.example.com:6379/0"},
+            {"POSTGRES_SSLMODE": "disable"}, {"SECURITY_TRUSTED_PROXY_NETWORKS": "invalid"},
         ):
             with self.subTest(change=change):
                 with self.assertRaises(ImproperlyConfigured):
                     self.settings(**{**self.production_environment(), **change})
 
     def test_forwarded_headers_require_explicit_trust(self):
-        settings = self.settings(**{**self.production_environment(), "DJANGO_TRUST_PROXY": "true"})
+        settings = self.settings(**{**self.production_environment(), "DJANGO_TRUST_PROXY": "true", "SECURITY_TRUSTED_PROXY_NETWORKS": "127.0.0.1/32"})
         self.assertEqual(settings["SECURE_PROXY_SSL_HEADER"], ("HTTP_X_FORWARDED_PROTO", "https"))
+
+    def test_vercel_trusts_only_platform_deployment_hostnames(self):
+        environment = {**self.production_environment(), "VERCEL": "1",
+                       "DJANGO_ALLOWED_HOSTS": "", "VERCEL_URL": "nasil-demo-abc.vercel.app",
+                       "VERCEL_BRANCH_URL": "https://invalid.vercel.app",
+                       "VERCEL_PROJECT_PRODUCTION_URL": "nasil-supply-logistics.vercel.app"}
+        settings = self.settings(**environment)
+        self.assertEqual(settings["ALLOWED_HOSTS"], ["nasil-demo-abc.vercel.app", "nasil-supply-logistics.vercel.app"])
+        self.assertIn("https://nasil-demo-abc.vercel.app", settings["CSRF_TRUSTED_ORIGINS"])
+        self.assertNotIn(".vercel.app", settings["ALLOWED_HOSTS"])
+        self.assertEqual(settings["SECURE_PROXY_SSL_HEADER"], ("HTTP_X_FORWARDED_PROTO", "https"))
+        self.assertEqual(settings["DATABASES"]["default"]["CONN_MAX_AGE"], 0)
+        self.assertTrue(settings["DATABASES"]["default"]["DISABLE_SERVER_SIDE_CURSORS"])
+
+    def test_vercel_metadata_is_ignored_outside_platform(self):
+        settings = self.settings(**{**self.production_environment(), "VERCEL_URL": "foreign.vercel.app"})
+        self.assertNotIn("foreign.vercel.app", settings["ALLOWED_HOSTS"])
+        self.assertNotIn("SECURE_PROXY_SSL_HEADER", settings)
+
+    def test_neon_database_name_alias(self):
+        environment = self.production_environment()
+        environment.pop("POSTGRES_DB")
+        settings = self.settings(**{**environment, "POSTGRES_DATABASE": "neondb"})
+        self.assertEqual(settings["DATABASES"]["default"]["NAME"], "neondb")

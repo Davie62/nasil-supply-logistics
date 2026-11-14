@@ -1,0 +1,8 @@
+<section class="ui-toasts" aria-label="Notifications" data-toast-region>
+  {% for message in messages %}
+  <div class="ui-toast" data-toast data-tone="{% if 'error' in message.tags %}error{% elif 'warning' in message.tags %}warning{% elif 'success' in message.tags %}success{% else %}info{% endif %}" role="{% if 'error' in message.tags %}alert{% else %}status{% endif %}">
+    <span class="ui-toast-mark" aria-hidden="true"></span><p>{{ message }}</p>
+    <button type="button" class="ui-icon-control" data-toast-dismiss aria-label="Dismiss notification">&times;</button>
+  </div>
+  {% endfor %}
+</section>

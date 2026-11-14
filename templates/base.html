@@ -21,13 +21,16 @@
     <link rel="stylesheet" href="{% static 'css/icon-fallbacks.css' %}">
 
     {% block extra_css %}{% endblock %}
-  </head>
-  <body>
+  <link rel="stylesheet" href="{% static 'css/app-ui.css' %}">
+<script src="{% static 'js/app-ui.js' %}" defer></script>
+</head>
+  <body class="website-app">
+    <a class="skip-link" href="#website-main">Skip to main content</a>
     <div class="site-wrap">
-      <div class="site-mobile-menu">
+      <div class="site-mobile-menu" id="website-menu">
         <div class="site-mobile-menu-header">
           <div class="site-mobile-menu-close mt-3">
-            <span class="icon-close2 js-menu-toggle"></span>
+            <button type="button" class="ui-icon-control js-menu-toggle" aria-label="Close navigation">&times;</button>
           </div>
         </div>
         <div class="site-mobile-menu-body"></div>
@@ -37,7 +40,7 @@
         <div class="container">
           <div class="row align-items-center">
             <div class="col-11 col-xl-2">
-              <h1 class="mb-0"><a href="{% url 'home' %}" class="text-white h2 mb-0">Nasil</a></h1>
+              <div class="mb-0"><a href="{% url 'home' %}" class="text-white h2 mb-0">Nasil</a></div>
             </div>
             <div class="col-12 col-md-10 d-none d-xl-block">
               <nav class="site-navigation position-relative text-right" role="navigation">
@@ -62,13 +65,13 @@
             </div>
 
             <div class="d-inline-block d-xl-none ml-md-0 mr-auto py-3" style="position: relative; top: 3px;">
-              <a href="#" class="site-menu-toggle js-menu-toggle text-white"><span class="icon-menu h3"></span></a>
+              <button type="button" class="site-menu-toggle js-menu-toggle text-white" aria-label="Open navigation" aria-controls="website-menu" aria-expanded="false"><span class="icon-menu h3" aria-hidden="true"></span></button>
             </div>
           </div>
         </div>
       </header>
 
-      {% block content %}{% endblock %}
+      <main id="website-main" tabindex="-1">{% block content %}{% endblock %}</main>
 
       <footer class="site-footer">
         <div class="container">
@@ -129,7 +132,7 @@
             <div class="col-md-12">
               <div class="border-top pt-5">
                 <p>
-                  Copyright &copy;<script>document.write(new Date().getFullYear());</script> Nasil Supply & Logistics Ltd. All rights reserved.
+                  Copyright &copy;{% now 'Y' %} Nasil Supply & Logistics Ltd. All rights reserved.
                 </p>
               </div>
             </div>
@@ -138,11 +141,10 @@
       </footer>
     </div>
 
-    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'vendor/public/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'vendor/public/jquery-migrate-3.6.0.min.js' %}"></script>
+    <script src="{% static 'vendor/public/jquery-ui-1.14.2.min.js' %}"></script>
+    <script src="{% static 'vendor/public/bootstrap-4.6.2.bundle.min.js' %}"></script>
     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
     <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
@@ -151,5 +153,6 @@
     <script src="{% static 'js/aos.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
-  </body>
+  {% include "ui/toasts.html" %}
+</body>
 </html>

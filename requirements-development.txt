@@ -1,0 +1,3 @@
+# Local development and CI checks; application dependencies remain shared.
+-r requirements.txt
+-r requirements-security.txt

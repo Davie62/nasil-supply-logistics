@@ -74,3 +74,11 @@ body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; 
 @media(max-width:767px) { .login-header { padding:16px 22px; min-height:76px; } .login-brand-mark { width:36px; height:36px; font-size:24px; } .nasil-login .login-brand { font-size:23px; gap:9px; } .login-brand small { font-size:8px; } .login-language,.login-header-divider { display:none; } .login-header nav { font-size:11px; } .login-stage { padding:35px 20px; } .login-card { max-width:520px; padding:32px 27px 26px; } .login-card h1 { font-size:28px; } .login-intro { font-size:13px; } .login-field input { font-size:16px; } .login-footer { gap:18px; padding:21px 24px; } .login-copyright { margin-left:0; flex-basis:100%; font-size:10px; } }
 @media(max-width:380px) { .login-stage { padding:25px 14px; } .login-card { padding:28px 21px 24px; } .login-card h1 { font-size:25px; } .login-options { font-size:11px; gap:10px; } .login-remember { gap:7px; } .login-header { padding-inline:18px; } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; } }
+.security-secret { overflow-wrap: anywhere; }
+.security-recovery-codes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0; list-style: none; }
+.security-recovery-codes code { overflow-wrap: anywhere; }
+@media (max-width: 400px) { .security-recovery-codes { grid-template-columns: 1fr; } }
+.security-signout { margin-top: 16px; border: 0; background: none; color: #9c4700; text-decoration: underline; }
+.nasil-login .login-form p label { display: block; margin-bottom: 8px; font-weight: 600; }
+.nasil-login .login-form p input { box-sizing: border-box; width: 100%; padding: 14px; border: 1px solid #ccd0d6; border-radius: 10px; font-size: 16px; }
+.nasil-login .errorlist { padding-left: 20px; color: #a42624; }

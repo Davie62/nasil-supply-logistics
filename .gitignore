@@ -4,6 +4,7 @@ __pycache__/
 
 # Virtual environment
 venv/
+.venv/
 
 # Django
 db.sqlite3
@@ -12,6 +13,7 @@ staticfiles/
 
 # Environment variables
 .env
+
 
 # VS Code
 .vscode/
@@ -27,3 +29,11 @@ backups/
 output/playwright/
 output/
 .playwright-cli/
+.local/
+.vercel/
+.env.*.local
+.vercel
+.env*
+# Skill packages are local agent tooling, not application source.
+.agents/skills/
+skills-lock.json

@@ -1,6 +1,6 @@
 # NASIL implementation roadmap
 
-Updated 27 October 2026 against the working code. This supersedes the original
+Updated 14 November 2026 against the working code. This supersedes the original
 phase-completion claims. See REMEDIATION.md for evidence and DEPLOYMENT.md for
 configuration and launch operations. No calendar estimates are assigned until
 business rules and the hosting target are agreed.
@@ -13,11 +13,12 @@ are implemented. Customer accounts, public tracking, invoice documents and queue
 provider notifications are now implemented; see CUSTOMER_SERVICES.md. Commercial
 orders, procurement, fleet, catalogue inventory, payment verification and Odoo
 adapters are implemented locally; see COMMERCIAL_OPERATIONS.md. Provider sandbox
-acceptance, production enablement, a public REST API and MFA remain pending.
+acceptance, production enablement and a public REST API remain pending.
 
 ## Phase 0 - Priority defect remediation
 
-Status: implemented and verified locally.
+Status: implemented and verified locally; dependency and cross-platform package
+release blockers have also been corrected.
 
 - Fix employee ID allocation, optional phone uniqueness, repeated provisioning,
   department/branch consistency and required email on admin user creation.
@@ -29,6 +30,9 @@ Status: implemented and verified locally.
   use real shipment chart proportions and clearly mark planned modules.
 - Guard production secrets, DEBUG, hosts and database settings; add production
   dependencies, static configuration, logging and example server configuration.
+- Split runtime, deployment and development/security requirements; align the
+  Linux Gunicorn pin and normalize the dashboard package path for case-sensitive
+  deployments.
 - Back up and migrate the local database; preserve existing business records and
   user memberships. Add regression coverage and perform browser checks.
 

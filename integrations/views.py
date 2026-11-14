@@ -15,6 +15,7 @@ from payments.models import Invoice
 from .forms import IntentForm
 from .models import GatewayIntent, Connection
 from .services import create_intent, queue_verification
+from security_controls.validators import strict_json
 
 
 @customer_required
@@ -55,11 +56,11 @@ def flutterwave_webhook(request):
     if len(request.body) > 65536:
         return HttpResponse(status=413)
     try:
-        data = json.loads(request.body).get("data", {})
+        data = strict_json(request.body).get("data", {})
         reference = data.get("tx_ref")
         from uuid import UUID
         reference = UUID(reference)
-    except (ValueError, TypeError, AttributeError):
+    except (ValueError, TypeError, AttributeError, ValidationError):
         return HttpResponse(status=400)
     with transaction.atomic():
         intent = GatewayIntent.objects.select_for_update().filter(reference=reference, connection__code="flutterwave", connection__is_active=True, status="pending").first()

@@ -1,8 +1,12 @@
-asgiref==3.12.1
-Django==6.0.7
-pillow==12.3.0
-sqlparse==0.5.5
-tzdata==2026.3
+# Application runtime dependencies. Keep development and security tooling out of
+# the serverless/runtime install; requirements-production.txt adds the WSGI server.
+Django==6.1.2
+Pillow==13.0.0
+celery==5.6.3
+certifi==2026.10.23
+cryptography==50.0.2
+psycopg[binary]==3.3.6
+PyOTP==2.10.0
+qrcode==8.2
+redis==6.4.0
 reportlab==5.1.0
-pypdf==6.21.2
-celery[redis]==5.6.3

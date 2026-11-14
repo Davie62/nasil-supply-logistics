@@ -26,3 +26,9 @@ def querystring(context, **changes):
         else:
             query[key] = value
     return query.urlencode()
+
+
+@register.simple_tag
+def pagination_range(page_obj):
+    """A bounded page window even for very large querysets."""
+    return page_obj.paginator.get_elided_page_range(page_obj.number, on_each_side=1, on_ends=1)

@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 import json
+import ipaddress
+import re
+import secrets
+import ssl
+import certifi
+from cryptography.fernet import Fernet
 from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
@@ -33,19 +39,34 @@ if not isinstance(QUOTATION_APPROVAL_THRESHOLDS, dict):
 # Local development explicitly opts in to DEBUG; deployment defaults fail closed.
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
+
 if not SECRET_KEY and DEBUG:
-    SECRET_KEY = "django-insecure-local-development-only-do-not-deploy-nasil"
+    from security_controls.config import local_key
+    SECRET_KEY = local_key(BASE_DIR, "django-secret.key", lambda: secrets.token_urlsafe(64))
 if not SECRET_KEY or (not DEBUG and (len(SECRET_KEY) < 50 or SECRET_KEY.startswith("django-insecure-"))):
     raise ImproperlyConfigured("Set DJANGO_SECRET_KEY to a private random value of at least 50 characters, or explicitly set DJANGO_DEBUG=true for local development.")
 
-ALLOWED_HOSTS = [host.strip() for host in os.environ.get(
+ALLOWED_HOSTS =[host.strip() for host in os.environ.get(
     "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else ""
 ).split(",") if host.strip()]
+# Trust only this deployment's platform-supplied names, never all *.vercel.app.
+VERCEL_DEPLOYMENT_HOSTS = []
+if os.environ.get("VERCEL") == "1":
+    for variable in ("VERCEL_URL", "VERCEL_BRANCH_URL", "VERCEL_PROJECT_PRODUCTION_URL"):
+        hostname = os.environ.get(variable, "").lower()
+        if re.fullmatch(r"[a-z0-9][a-z0-9.-]*\.vercel\.app", hostname):
+            VERCEL_DEPLOYMENT_HOSTS.append(hostname)
+    ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS + VERCEL_DEPLOYMENT_HOSTS))
 if not DEBUG and (not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS):
     raise ImproperlyConfigured("Set DJANGO_ALLOWED_HOSTS to explicit production hostnames.")
-CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get(
-    "DJANGO_CSRF_TRUSTED_ORIGINS", ""
-).split(",") if origin.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip() for origin in os.environ.get(
+        "DJANGO_CSRF_TRUSTED_ORIGINS", ""
+    ).split(",") if origin.strip()
+]
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(
+    CSRF_TRUSTED_ORIGINS + [f"https://{host}" for host in VERCEL_DEPLOYMENT_HOSTS]
+))
 
 # Application definition
 
@@ -71,15 +92,18 @@ INSTALLED_APPS = [
     "operations",
     "finance", "inventory", "orders.apps.OrdersConfig", "procurement", "fleet", "integrations",
     "customer_services",
+    "security_controls.apps.SecurityControlsConfig",
 
 ]
 
 MIDDLEWARE = [
+    'security_controls.middleware.RequestGuardMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'security_controls.middleware.AuthenticationGuardMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -97,6 +121,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'dashboard.context_processors.dashboard_shell',
+                'security_controls.context_processors.security_context',
             ],
         },
     },
@@ -114,16 +139,22 @@ if DB_ENGINE == "sqlite":
         raise ImproperlyConfigured("Production requires PostgreSQL; SQLite is for local development only.")
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": os.environ.get("DJANGO_SQLITE_PATH", BASE_DIR / "db.sqlite3")}}
 elif DB_ENGINE == "postgresql":
-    required = ("POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_HOST")
-    if any(not os.environ.get(key) for key in required):
+    postgres_database = os.environ.get("POSTGRES_DB") or os.environ.get("POSTGRES_DATABASE")
+    required = ("POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_HOST")
+    if not postgres_database or any(not os.environ.get(key) for key in required):
         raise ImproperlyConfigured("Set POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD and POSTGRES_HOST.")
     DATABASES = {"default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["POSTGRES_DB"], "USER": os.environ["POSTGRES_USER"],
+        "NAME": postgres_database, "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"], "HOST": os.environ["POSTGRES_HOST"],
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        "CONN_MAX_AGE": 60,
-        "OPTIONS": {"sslmode": os.environ.get("POSTGRES_SSLMODE", "verify-full")},
+        "CONN_MAX_AGE": 0 if os.environ.get("VERCEL") == "1" else 60,
+        "CONN_HEALTH_CHECKS": True,
+        "DISABLE_SERVER_SIDE_CURSORS": os.environ.get("VERCEL") == "1",
+        "OPTIONS": {
+            "sslmode": os.environ.get("POSTGRES_SSLMODE", "verify-full"),
+            "sslrootcert": os.environ.get("PGSSLROOTCERT") or certifi.where(),
+        },
     }}
 else:
     raise ImproperlyConfigured("DJANGO_DB_ENGINE must be sqlite or postgresql.")
@@ -137,6 +168,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 12},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -186,6 +218,12 @@ AFRICASTALKING_API_KEY = os.environ.get("AFRICASTALKING_API_KEY", "")
 AFRICASTALKING_SENDER_ID = os.environ.get("AFRICASTALKING_SENDER_ID", "")
 AFRICASTALKING_SANDBOX = os.environ.get("AFRICASTALKING_SANDBOX", "false").lower() == "true"
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
+if not DEBUG and not CELERY_BROKER_URL.startswith("rediss://"):
+    raise ImproperlyConfigured("Production requires a TLS-protected Redis broker (rediss://).")
+if CELERY_BROKER_URL.startswith("rediss://"):
+    CELERY_BROKER_USE_SSL = {"ssl_cert_reqs": ssl.CERT_REQUIRED, "ssl_check_hostname": True}
+if not DEBUG and os.environ.get("POSTGRES_SSLMODE", "verify-full") != "verify-full":
+    raise ImproperlyConfigured("Production PostgreSQL connections must verify TLS certificates and hostnames.")
 CELERY_RESULT_BACKEND = None
 CELERY_TASK_IGNORE_RESULT = True
 PASSWORD_RESET_TIMEOUT = 3600
@@ -203,6 +241,36 @@ if NOTIFICATIONS_DELIVERY_ENABLED:
 
 # Custom User Model
 AUTH_USER_MODEL = "accounts.User"
+AUTHENTICATION_BACKENDS = ["security_controls.backends.GuardedModelBackend"]
+CSRF_FAILURE_VIEW = "security_controls.views.csrf_failure"
+
+# Passwords remain irreversibly hashed; decryptable MFA secrets use a separate key.
+SECURITY_ENCRYPTION_KEYS = [key.strip() for key in os.environ.get("SECURITY_ENCRYPTION_KEYS", "").split(",") if key.strip()]
+if not SECURITY_ENCRYPTION_KEYS and DEBUG:
+    from security_controls.config import local_key
+    SECURITY_ENCRYPTION_KEYS = [local_key(BASE_DIR, "encryption.key", lambda: Fernet.generate_key().decode())]
+if not SECURITY_ENCRYPTION_KEYS:
+    raise ImproperlyConfigured("Set SECURITY_ENCRYPTION_KEYS from protected environment storage.")
+try:
+    for key in SECURITY_ENCRYPTION_KEYS:
+        Fernet(key.encode())
+except (ValueError, TypeError):
+    raise ImproperlyConfigured("SECURITY_ENCRYPTION_KEYS must contain valid Fernet keys.") from None
+SECURITY_REQUIRE_STAFF_MFA = os.environ.get("SECURITY_REQUIRE_STAFF_MFA", "false" if DEBUG else "true").lower() == "true"
+if not DEBUG and not SECURITY_REQUIRE_STAFF_MFA:
+    raise ImproperlyConfigured("Staff MFA is required in production.")
+SECURITY_STAFF_SESSION_SECONDS = 28800
+SECURITY_CUSTOMER_SESSION_SECONDS = 86400
+SECURITY_STAFF_IDLE_SECONDS = 1800
+SECURITY_CUSTOMER_IDLE_SECONDS = 3600
+SECURITY_TRUSTED_PROXY_NETWORKS = [value.strip() for value in os.environ.get("SECURITY_TRUSTED_PROXY_NETWORKS", "").split(",") if value.strip()]
+try:
+    for network in SECURITY_TRUSTED_PROXY_NETWORKS:
+        ipaddress.ip_network(network)
+except ValueError:
+    raise ImproperlyConfigured("SECURITY_TRUSTED_PROXY_NETWORKS must contain explicit IP networks.") from None
+if not DEBUG and os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true" and not SECURITY_TRUSTED_PROXY_NETWORKS:
+    raise ImproperlyConfigured("Declare trusted proxy networks when enabling the production proxy.")
 
 LOGIN_URL = "login"
 
@@ -238,12 +306,16 @@ X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 SECURE_SSL_REDIRECT = not DEBUG
-SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
-SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
-SECURE_HSTS_PRELOAD = not DEBUG
+# Operators opt in only after verifying HTTPS on the real domain/subdomains.
+SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_HSTS_SECONDS", "0")) if not DEBUG else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.environ.get("DJANGO_HSTS_INCLUDE_SUBDOMAINS", "false").lower() == "true" and not DEBUG
+SECURE_HSTS_PRELOAD = os.environ.get("DJANGO_HSTS_PRELOAD", "false").lower() == "true" and not DEBUG
 SECURE_REFERRER_POLICY = "same-origin"
 # Enable only when the trusted proxy strips incoming forwarded-proto headers.
 if os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# Vercel terminates TLS and supplies the original protocol to its function runtime.
+if os.environ.get("VERCEL") == "1":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 LOGGING = {
@@ -252,3 +324,8 @@ LOGGING = {
     "root": {"handlers": ["console"], "level": os.environ.get("DJANGO_LOG_LEVEL", "INFO")},
     "loggers": {"django": {"handlers": ["console"], "level": os.environ.get("DJANGO_LOG_LEVEL", "INFO"), "propagate": False}},
 }
+LOGGING["formatters"] = {"security_json": {"()": "security_controls.logging.SafeJSONFormatter"}}
+LOGGING["handlers"]["security_console"] = {"class": "logging.StreamHandler", "formatter": "security_json"}
+LOGGING["loggers"]["nasil.security"] = {"handlers": ["security_console"], "level": "INFO", "propagate": False}
+if not DEBUG:
+    LOGGING["handlers"]["console"]["formatter"] = "security_json"

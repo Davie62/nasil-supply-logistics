@@ -41,7 +41,8 @@ def private_response(response):
 def allow_request(request, scope, limit, seconds):
     now = timezone.now()
     window = int(now.timestamp()) // seconds
-    identity = request.META.get("REMOTE_ADDR", "unknown")[:100]
+    from security_controls.network import client_ip
+    identity = client_ip(request)
     key = salted_hmac("customer-services-rate", f"{scope}:{identity}:{window}").hexdigest()
     bucket, _ = RateBucket.objects.get_or_create(key=key, defaults={"expires_at": now + timedelta(seconds=seconds * 2)})
     return bool(RateBucket.objects.filter(pk=bucket.pk, count__lt=limit).update(count=F("count") + 1))
@@ -49,21 +50,13 @@ def allow_request(request, scope, limit, seconds):
 
 @transaction.atomic
 def authenticate_portal(request, username, password):
-    existing = User.objects.select_for_update().filter(username=username).first()
     user = authenticate(request, username=username, password=password)
     valid = user and not user.is_staff and (
         (user.is_verified and CustomerAccess.objects.filter(user=user, enabled=True).exists()) or
         (not user.is_verified and RegistrationVerification.objects.filter(user=user, completed_at__isnull=True).exists()))
-    if existing and existing.locked_until and existing.locked_until > timezone.now():
-        valid = False
     if valid:
-        user.failed_login_attempts = 0
-        user.locked_until = None
-        user.save(update_fields=["failed_login_attempts", "locked_until"])
         return user
-    if existing:
-        existing.failed_login_attempts += 1
-        if existing.failed_login_attempts >= MAX_LOGIN_ATTEMPTS:
-            existing.locked_until = timezone.now() + timedelta(minutes=ACCOUNT_LOCK_MINUTES)
-        existing.save(update_fields=["failed_login_attempts", "locked_until"])
+    if user:
+        from security_controls.events import security_event
+        security_event("portal_access_denied", request=request, level="warning")
     return None

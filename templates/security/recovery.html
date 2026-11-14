@@ -1,0 +1,7 @@
+{% extends "auth/login_base.html" %}
+{% block title %}Save recovery codes{% endblock %}
+{% block portal_label %}ACCOUNT SECURITY{% endblock %}
+{% block card_title %}Save your recovery codes{% endblock %}
+{% block login_intro %}<p>Each code works once if you lose access to your authenticator. Store these codes securely before continuing.</p>{% endblock %}
+{% block main_form %}<ul class="security-recovery-codes">{% for code in codes %}<li><code>{{ code }}</code></li>{% endfor %}</ul><form method="post" class="login-form">{% csrf_token %}<button class="login-submit" type="submit">I have saved my codes</button></form>{% endblock %}
+{% block login_note %}This page is available only until you continue. Losing both your authenticator and recovery codes requires administrator-assisted recovery.{% endblock %}

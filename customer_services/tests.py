@@ -111,7 +111,7 @@ class CustomerServicesTests(TestCase):
         response = self.client.post(reverse("portal_login"), {**credentials, "remember_me": "on"})
         self.assertEqual(response.status_code, 302)
         self.assertFalse(self.client.session.get_expire_at_browser_close())
-        self.assertEqual(self.client.session.get_expiry_age(), 30 * 24 * 60 * 60)
+        self.assertEqual(self.client.session.get_expiry_age(), 24 * 60 * 60)
         self.client.logout()
         response = self.client.post(reverse("portal_login"), credentials)
         self.assertEqual(response.status_code, 302)

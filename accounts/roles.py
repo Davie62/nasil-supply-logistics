@@ -69,6 +69,7 @@ ROLE_PERMISSIONS["Dispatcher"] |= model_permissions(FLEET_MODELS + ORDER_MODELS,
 ROLE_PERMISSIONS["Finance Officer"] |= model_permissions(FINANCE_MODELS, ("view", "add", "change")) | model_permissions(PURCHASING_MODELS, ("view",)) | {
     "integrations.view_connection", "integrations.view_integrationjob", "integrations.view_gatewayintent", "integrations.add_integrationjob", "integrations.add_gatewayintent"}
 ROLE_PERMISSIONS["Procurement Officer"] = model_permissions(PURCHASING_MODELS, ("view", "add", "change")) | model_permissions(CATALOG_MODELS + ORDER_MODELS, ("view",)) | {"operations.view_reports", "operations.export_reports"}
+ROLE_PERMISSIONS["Administrator"] |= {"security_controls.view_securityevent", "security_controls.view_securityalert"}
 
 
 def seed_role_permissions():
