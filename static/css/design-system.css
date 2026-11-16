@@ -6,29 +6,29 @@
 
     /* Brand */
 
-    --primary:#0EA5E9;
-    --primary-dark:#0284C7;
-    --primary-light:#E0F7FF;
+    --primary:#114D84;
+    --primary-dark:#661216;
+    --primary-light:#1389CA;
 
     /* Surfaces */
 
-    --background:#F4F8FC;
+    --background:#FFFFFF;
     --surface:#FFFFFF;
 
     /* Typography */
 
-    --text:#1E293B;
-    --text-light:#64748B;
+    --text:#231F20;
+    --text-light:#36383E;
 
     /* Status */
 
     --success:#22C55E;
-    --warning:#F59E0B;
+    --warning:#EEAF1E;
     --danger:#EF4444;
 
     /* Borders */
 
-    --border:#E2E8F0;
+    --border:#D1D3D4;
 
     /* Radius */
 

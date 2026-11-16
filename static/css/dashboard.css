@@ -5,23 +5,23 @@
 
 :root {
 
-    --primary: #18aee8;
-    --primary-dark: #0798d3;
-    --primary-light: #eaf8ff;
+    --primary: #114D84;
+    --primary-dark: #661216;
+    --primary-light: rgba(19,137,202,.10);
 
-    --text: #102a43;
-    --text-dark: #0b2239;
-    --muted: #71839b;
+    --text: #231F20;
+    --text-dark: #114D84;
+    --muted: #36383E;
 
-    --background: #f5f9fd;
+    --background: #FFFFFF;
     --white: #ffffff;
 
-    --border: #e4edf5;
+    --border: #D1D3D4;
 
-    --green: #16b47a;
-    --orange: #f5a000;
-    --red: #ef4444;
-    --purple: #6f8ff7;
+    --green: #1389CA;
+    --gold: #EEAF1E;
+    --red: #661216;
+    --purple: #114D84;
 
     --sidebar-width: 313px;
 
@@ -146,7 +146,7 @@ input {
 
     border-radius: 14px;
 
-    background: #f0f9ff;
+    background: rgba(19,137,202,.10);
 
     display: flex;
 
@@ -1424,7 +1424,7 @@ input {
 
 .status-dot.pending {
 
-    background: var(--orange);
+    background: var(--gold);
 
 }
 

@@ -10,7 +10,7 @@
 <div class="section-heading"><h2>Business snapshot</h2><span>All-time overview</span></div>
 <section class="kpi-grid" aria-label="Key performance indicators">
     {% if perms.shipments.view_shipment %}{% include "dashboard/components/kpi_card.html" with label="Total shipments" value=shipment_count description="All recorded consignments" tone="amber" icon="truck" badge="Recorded" %}{% endif %}
-    {% if perms.quotations.view_quote %}{% include "dashboard/components/kpi_card.html" with label="Pending quotations" value=pending_quotes description="Customer requests awaiting review" tone="orange" icon="file-earmark-text" badge="To review" %}{% endif %}
+    {% if perms.quotations.view_quote %}{% include "dashboard/components/kpi_card.html" with label="Pending quotations" value=pending_quotes description="Customer requests awaiting review" tone="blue" icon="file-earmark-text" badge="To review" %}{% endif %}
     {% if perms.customers.view_customer %}{% include "dashboard/components/kpi_card.html" with label="Customers" value=customer_count description="Registered business contacts" tone="blue" icon="people" badge="Contacts" %}{% endif %}
     {% if perms.shipments.view_shipment %}{% include "dashboard/components/kpi_card.html" with label="Delivery completion" value=delivery_rate suffix="%" description="Delivered / all recorded shipments" tone="slate" icon="box-seam" badge="All time" %}{% elif perms.accounts.view_employeeprofile %}{% include "dashboard/components/kpi_card.html" with label="Employees" value=employee_count description="Active employee profiles" tone="slate" icon="person-badge" badge="Team" %}{% endif %}
 </section>

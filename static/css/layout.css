@@ -81,7 +81,7 @@
 }
 
 .sidebar-nav a.active {
-    background: linear-gradient(105deg, #0ea5e9, #38bdf8);
+    background: linear-gradient(105deg, #114D84, #1389CA);
     box-shadow: 0 8px 18px rgba(14, 165, 233, 0.19);
     color: #fff;
 }
@@ -104,7 +104,7 @@
     height: 42px;
     border: 3px solid #fff;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), #38bdf8);
+    background: linear-gradient(135deg, var(--primary), #1389CA);
     box-shadow: 0 4px 10px rgba(14, 165, 233, 0.22);
     color: #fff;
     font-size: 14px;

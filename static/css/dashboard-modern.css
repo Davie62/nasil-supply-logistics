@@ -5,23 +5,23 @@
 
 :root {
     /* Primary Colors */
-    --primary: #0d1c2d;
-    --primary-light: #142d46;
-    --primary-dark: #081521;
+    --primary: #114D84;
+    --primary-light: #1389CA;
+    --primary-dark: #661216;
     
     /* Accent Colors */
-    --accent: #f06b3d;
-    --accent-light: #fff0ea;
-    --accent-hover: #df5b2d;
+    --accent: #661216;
+    --accent-light: rgba(102, 18, 22, .10);
+    --accent-hover: #114D84;
     
     /* Secondary */
-    --secondary: #1ca7d8;
-    --secondary-light: #eaf7ff;
+    --secondary: #1389CA;
+    --secondary-light: rgba(19, 137, 202, .10);
     
     /* Neutrals */
-    --text: #1a1f36;
-    --text-secondary: #5f6d7d;
-    --text-light: #9aa7b5;
+    --text: #231F20;
+    --text-secondary: #36383E;
+    --text-light: #D1D3D4;
     --background: #f4f5f7;
     --white: #ffffff;
     
@@ -31,7 +31,7 @@
     
     /* Status Colors */
     --success: #10b981;
-    --warning: #f59e0b;
+    --warning: #EEAF1E;
     --danger: #ef4444;
     --info: #0891b2;
     
@@ -991,7 +991,7 @@ input, textarea, select {
 }
 
 .quick-action-icon.orange {
-    background: rgba(245, 158, 0, 0.1);
+    background: rgba(238, 175, 30, 0.14);
     color: var(--warning);
 }
 
