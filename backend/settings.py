@@ -19,10 +19,15 @@ import ssl
 import certifi
 from cryptography.fernet import Fernet
 from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load a local .env when present. Real environment variables always win, so
+# CI/production configuration is never overridden by a stray file.
+load_dotenv(BASE_DIR / ".env", override=False)
 
 # NASIL policy: above these totals, only Administrator approval is accepted.
 try:
@@ -271,6 +276,10 @@ except ValueError:
     raise ImproperlyConfigured("SECURITY_TRUSTED_PROXY_NETWORKS must contain explicit IP networks.") from None
 if not DEBUG and os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true" and not SECURITY_TRUSTED_PROXY_NETWORKS:
     raise ImproperlyConfigured("Declare trusted proxy networks when enabling the production proxy.")
+
+# Readiness probe: broker checks default on in production and off in DEBUG so a
+# local probe does not fail when Redis is intentionally not running.
+HEALTHCHECK_BROKER = os.environ.get("HEALTHCHECK_BROKER", "false" if DEBUG else "true").lower() == "true"
 
 LOGIN_URL = "login"
 

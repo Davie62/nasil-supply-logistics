@@ -11,5 +11,6 @@ qrcode==8.2
 redis==6.4.0
 reportlab==5.1.0
 pypdf==6.21.2
+python-dotenv==1.2.4
 # Windows has no system IANA timezone database; zoneinfo needs this for Africa/Kampala.
 tzdata==2026.3; sys_platform == "win32"

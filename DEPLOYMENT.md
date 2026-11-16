@@ -7,8 +7,9 @@ restore drills, and external monitoring still require an actual hosting environm
 ## Configuration
 
 Install `requirements-production.txt`. Export the environment variables shown in
-`.env.example` using the hosting platform's secret manager; the file is not loaded
-automatically. DEBUG defaults to false. Startup rejects missing/short development
+`.env.example` using the hosting platform's secret manager. A local `.env` is
+loaded automatically when present, but real environment variables always win.
+DEBUG defaults to false. Startup rejects missing/short development
 secrets, absent/wildcard hosts, SQLite in production, and missing database credentials.
 Use a unique random secret with at least 50 characters. Never reuse the local key.
 Also supply a separate SECURITY_ENCRYPTION_KEYS key ring and a rediss:// broker.
@@ -39,6 +40,14 @@ and changes blank phone numbers to NULL. Multiple employees can omit phone numbe
 Take a database backup before applying it; restoring that backup is the safe rollback
 if the previous schema cannot represent multiple missing phone numbers.
 
+## Container image
+
+`Dockerfile` builds the production image (Gunicorn, non-root user) from
+`requirements-production.txt`. `docker-compose.yml` is a local development stack
+only: it runs with `DJANGO_DEBUG=true` and plain HTTP. Do not deploy the compose
+file as-is; run the image with the production environment variables and a
+TLS-terminating reverse proxy.
+
 ## Static files, uploads, and proxies
 
 STATIC_ROOT is `staticfiles/`; nginx serves collected assets. The example blocks
@@ -66,8 +75,8 @@ SQLite backups alone do not verify PostgreSQL disaster recovery.
 Django and Gunicorn write errors/access logs to stderr/stdout for collection by the
 hosting platform. Set log retention and alert on 5xx rates, failed health probes,
 database availability, storage capacity and failed/overdue backups. An external
-HTTPS probe of `/accounts/login/` confirms web serving; use a restricted application
-probe that reads the database to verify database readiness. Logging is not an immutable
+HTTPS probe of `/healthz` confirms web serving; `/readyz` checks the database and,
+when `HEALTHCHECK_BROKER=true`, the broker. Logging is not an immutable
 business audit trail and no external monitoring service is configured by this patch.
 
 ## Permission rollout

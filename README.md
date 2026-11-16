@@ -55,14 +55,24 @@ python manage.py runserver
 ```
 
 Open http://127.0.0.1:8000/. The explicit local DEBUG setting is required for every
-new terminal session. Local development uses SQLite and a stable development-only
-signing key; supply a private DJANGO_SECRET_KEY for any shared environment.
-Django does not load `.env` files automatically.
+new terminal session unless you copy `.env.example` to `.env`: Django loads `.env`
+automatically and real environment variables always take precedence. Local
+development uses SQLite and a stable development-only signing key; supply a private
+DJANGO_SECRET_KEY for any shared environment.
 
 `requirements.txt` contains application runtime dependencies. Linux deployments
 that use Gunicorn should install `requirements-production.txt`; the Vercel Django
 build uses the runtime file. Security/development tooling is in
 `requirements-security.txt` and `requirements-development.txt`.
+
+## Docker development stack
+
+`docker compose up --build` starts PostgreSQL, Redis, a migration job, Django on
+http://localhost:8000, a Celery worker and beat. The stack runs with
+`DJANGO_DEBUG=true` over plain HTTP; it is not a production configuration. On
+first use run `docker compose run --rm web python manage.py seed_roles` and create
+a superuser. Health probes are `GET /healthz` (liveness) and `GET /readyz`
+(database and, when enabled, broker readiness).
 
 `seed_system` additionally creates sample company/branch/department/warehouse
 records. Use it only for a new development installation. On existing installations,
@@ -87,7 +97,11 @@ $env:DJANGO_DEBUG = 'true'
 python manage.py test
 python manage.py check
 python manage.py makemigrations --check --dry-run
+python -m ruff check .
 ```
+
+`python -m pytest` is available as an optional runner using the configuration in
+`pyproject.toml`; `manage.py test` remains the canonical suite.
 
 The PostgreSQL concurrency tests skip on SQLite. Run the same suite against a
 separate PostgreSQL test database before production; the database user needs

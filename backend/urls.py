@@ -17,7 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from core.views import healthz, readyz
+
 urlpatterns = [
+    # Unauthenticated infrastructure probes (no business data exposed).
+    path("healthz", healthz, name="healthz"),
+    path("readyz", readyz, name="readyz"),
     path("security/", include("security_controls.urls")),
     path("integrations/", include("integrations.urls")),
     path("finance/", include("finance.urls")),

@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.db import connection
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods
 
 from .models import ContactMessage
 from .permissions import staff_permission_required
@@ -37,3 +40,37 @@ def contact_message_read(request, pk):
         message.save(update_fields=["is_read"])
         return redirect("contact_message_read", pk=pk)
     return render(request, "dashboard/message_detail.html", {"message": message})
+
+
+@require_GET
+def healthz(request):
+    """Liveness probe: the process is up and routing works. No dependency calls."""
+    return JsonResponse({"status": "ok"})
+
+
+@require_GET
+def readyz(request):
+    """Readiness probe: dependencies required to serve traffic are reachable."""
+    checks = {}
+    ready = True
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+        checks["database"] = "ok"
+    except Exception:
+        checks["database"] = "error"
+        ready = False
+    if settings.HEALTHCHECK_BROKER:
+        from backend.celery import app as celery_app
+        try:
+            with celery_app.connection_for_read(connect_timeout=1) as broker_connection:
+                broker_connection.ensure_connection(max_retries=0)
+            checks["broker"] = "ok"
+        except Exception:
+            checks["broker"] = "error"
+            ready = False
+    return JsonResponse(
+        {"status": "ok" if ready else "unavailable", "checks": checks},
+        status=200 if ready else 503,
+    )

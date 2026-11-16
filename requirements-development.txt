@@ -1,3 +1,13 @@
 # Local development and CI checks; application dependencies remain shared.
 -r requirements.txt
 -r requirements-security.txt
+
+# Linting and formatting (see pyproject.toml).
+ruff==0.17.5
+black==26.10.1
+
+# Optional pytest runner; the canonical suite remains `manage.py test`.
+pytest==9.2.0
+pytest-django==4.14.0
+pytest-env==1.8.5
+coverage==7.17.3

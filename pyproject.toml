@@ -1,0 +1,92 @@
+# Tooling configuration for the NASIL Django monolith.
+# Application dependencies live in requirements*.txt; this file configures
+# linting, formatting, tests and coverage only.
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+extend-exclude = [
+    "venv",
+    ".venv",
+    "migrations",
+    "staticfiles",
+    "media",
+    "output",
+    "backups",
+    ".agents",
+]
+
+[tool.ruff.lint]
+# Conservative baseline: catch real errors (syntax, undefined names, bad
+# comparisons). Import sorting/unused-import cleanup is tracked for a later
+# dedicated pass rather than mixed into feature work.
+select = ["E9", "F63", "F7", "F82"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "accounts",
+    "backend",
+    "core",
+    "customer_services",
+    "customers",
+    "dashboard",
+    "finance",
+    "fleet",
+    "integrations",
+    "inventory",
+    "logistics",
+    "operations",
+    "orders",
+    "organization",
+    "payments",
+    "procurement",
+    "quotations",
+    "security_controls",
+    "shipments",
+]
+
+[tool.black]
+line-length = 120
+target-version = ["py313"]
+extend-exclude = '''
+/(
+    venv|\.venv|migrations|staticfiles|media|output|backups|\.agents
+)/
+'''
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "backend.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+norecursedirs = [
+    "venv",
+    ".venv",
+    "staticfiles",
+    "media",
+    "output",
+    "backups",
+    ".agents",
+    "node_modules",
+]
+# pytest-env: tests always run with the explicit local DEBUG setting.
+env = ["DJANGO_DEBUG=true"]
+
+[tool.coverage.run]
+source = ["."]
+omit = [
+    "venv/*",
+    ".venv/*",
+    "*/migrations/*",
+    "*/tests.py",
+    "*/test_*.py",
+    "output/*",
+    "backups/*",
+    "staticfiles/*",
+    "manage.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
