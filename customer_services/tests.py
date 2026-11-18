@@ -165,9 +165,14 @@ class CustomerServicesTests(TestCase):
         self.assertEqual(self.client.post(reverse("public_tracking"), {"tracking_number": "bad"}).status_code, 400)
         self.assertEqual(self.client.get(reverse("public_tracking_result", args=["TRK-NOTFOUND"])).status_code, 404)
         RateBucket.objects.all().delete()
-        for _ in range(60):
-            self.assertEqual(self.client.get(reverse("public_tracking")).status_code, 200)
-        self.assertEqual(self.client.get(reverse("public_tracking")).status_code, 429)
+        # allow_request buckets by fixed wall-clock windows. Freezing the clock
+        # keeps a window boundary from resetting the counter mid-loop, which
+        # otherwise makes this assertion intermittently fail.
+        frozen = timezone.now()
+        with patch("customer_services.security.timezone.now", return_value=frozen):
+            for _ in range(60):
+                self.assertEqual(self.client.get(reverse("public_tracking")).status_code, 200)
+            self.assertEqual(self.client.get(reverse("public_tracking")).status_code, 429)
 
     def test_access_revocation_applies_to_existing_session_and_delivery(self):
         notification = self.notification()

@@ -90,3 +90,7 @@ omit = [
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
+# Regression gate. The clean baseline measured on 2026-11-18 was 87%
+# (5303/6109). The floor sits two points below that so incidental churn does
+# not block unrelated work, while a real coverage regression fails CI.
+fail_under = 85

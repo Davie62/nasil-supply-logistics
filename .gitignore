@@ -34,6 +34,10 @@ output/
 .env.*.local
 .vercel
 .env*
+# Coverage data and HTML reports are build artifacts.
+.coverage
+.coverage.*
+htmlcov/
 # Skill packages are local agent tooling, not application source.
 .agents/skills/
 skills-lock.json
