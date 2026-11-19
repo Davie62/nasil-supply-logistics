@@ -6,7 +6,7 @@
 | --- | --- |
 | Document ID | NASIL-TST-2026-11-16 |
 | Title | Test Execution and Security Assurance Log |
-| Version | 1.5 |
+| Version | 1.6 |
 | Status | Phase 3 complete (operational readiness); remote CI green; awaiting engineering sign-off |
 | Date of record | 2026-11-16 (initial), 2026-11-18 (rerun), 2026-11-19 (Phase 3, final verification and remote CI remediation) |
 | Classification | Internal — Engineering |
@@ -14,7 +14,7 @@
 | Branch | `development` |
 | Baseline commit | `2055a73` (Phase 2) plus the Phase 3 change set recorded in §11.2 |
 | Application | NASIL supply, logistics, commercial and finance monolith |
-| Test framework | Django 6.0 test runner (`manage.py test`) |
+| Test framework | Django 6.1.2 test runner (`manage.py test`) |
 | Assurance tooling | `coverage.py` 7.17.3, `ruff` 0.17.5, `moto` 5.2.5, Django system checks, migration drift check |
 | Continuous integration | GitHub Actions — `.github/workflows/security.yml` |
 | Prepared by | QA / application-security review (AI-assisted) |
@@ -745,6 +745,7 @@ objective.
 
 | Date | Version | Change | Author |
 | --- | --- | --- | --- |
+| 2026-11-19 | 1.6 | Corrected a factual error in document control: test framework was recorded as Django 6.0; installed and pinned version is 6.1.2 (documentation only) | QA / security review |
 | 2026-11-19 | 1.5 | Remote CI confirmation recorded: workflow run `44538891111` — `security` and `linux` jobs both success on `c392370`; release blocker cleared (documentation only) | QA / security review |
 | 2026-11-19 | 1.4 | Remote CI remediation: F-10 (thread-local connection leak blocked PostgreSQL test-DB teardown) and F-11 (`pypdf` CVEs) closed; full suite green on PostgreSQL 17.10 (327 passed, 0 skipped), 87% (5639/6510), `pip_audit` clean, static checks clean | QA / security review |
 | 2026-11-19 | 1.3 | Final verification after F-09: live-database refusal added to PostgreSQL/SQLite restore; 63 focused tests, 327 full tests (323 passed, 4 skipped), 87% (5632/6510); static checks clean | QA / security review |
