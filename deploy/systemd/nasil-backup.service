@@ -1,0 +1,31 @@
+# One-shot encrypted database backup. Install to /etc/systemd/system/nasil-backup.service
+# and enable nasil-backup.timer rather than this unit directly.
+[Unit]
+Description=NASIL encrypted database backup
+Documentation=file:///srv/nasil/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=nasil
+Group=nasil
+WorkingDirectory=/srv/nasil
+EnvironmentFile=/etc/nasil/nasil.env
+ExecStart=/srv/nasil/venv/bin/python manage.py backup_database
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+# Must match BACKUP_DIRECTORY and BACKUP_RETENTION_COUNT in nasil.env.
+ReadWritePaths=/var/backups/nasil

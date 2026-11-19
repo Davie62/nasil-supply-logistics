@@ -1,0 +1,19 @@
+# Daily encrypted database backup. Install to /etc/systemd/system/nasil-backup.timer.
+#
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now nasil-backup.timer
+#   systemctl list-timers nasil-backup.timer
+#
+# Persistent=true runs a missed backup after downtime. The randomized delay
+# avoids a thundering herd when several instances share a storage backend.
+[Unit]
+Description=Daily NASIL encrypted database backup
+
+[Timer]
+OnCalendar=*-*-* 01:15:00 UTC
+Persistent=true
+RandomizedDelaySec=15m
+Unit=nasil-backup.service
+
+[Install]
+WantedBy=timers.target

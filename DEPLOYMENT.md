@@ -1,8 +1,10 @@
 # Deployment baseline
 
 This repository provides guarded configuration and example server configuration.
-A live production deployment, PostgreSQL migration from SQLite, scheduled backups,
-restore drills, and external monitoring still require an actual hosting environment.
+A live production deployment, PostgreSQL migration from SQLite, and external
+monitoring still require an actual hosting environment. Encrypted backup/restore
+commands, health probes and systemd units are included, but their schedules and
+restore drills must be exercised on the real host.
 
 ## Configuration
 
@@ -50,10 +52,20 @@ TLS-terminating reverse proxy.
 
 ## Static files, uploads, and proxies
 
-STATIC_ROOT is `staticfiles/`; nginx serves collected assets. The example blocks
-public media access because employee photographs may be private. An authenticated
-media delivery design is still required before exposing uploads. Never allow uploaded
-content to execute. Persist media independently of an application release.
+STATIC_ROOT is `staticfiles/`; nginx serves collected assets. Uploaded media
+(employee photographs and company logos) is private, so production uses S3 through
+`django-storages` and serves files only through short-lived presigned URLs. The
+storage backend never sets a public ACL and never overwrites an existing object.
+Set `AWS_STORAGE_BUCKET_NAME`, `AWS_S3_REGION_NAME` and, for S3-compatible services,
+`AWS_S3_ENDPOINT_URL`. Prefer an instance role over static access keys. Keep the
+bucket private and block public access at the account level. `AWS_QUERYSTRING_EXPIRE`
+defaults to 300 seconds and must stay between 60 and 3600.
+
+`MEDIA_STORAGE_BACKEND=filesystem` is the development default. Outside DEBUG it is
+rejected unless `MEDIA_STORAGE_ALLOW_EPHEMERAL=true` is also set; that combination
+is only for a disposable demo and loses uploads when the release is replaced.
+Never allow uploaded content to execute. Persist media independently of an
+application release and include the bucket in the backup policy.
 
 Set DJANGO_TRUST_PROXY=true only when your trusted proxy overwrites incoming
 X-Forwarded-Proto and clients cannot bypass the proxy to access the application port.
@@ -65,19 +77,48 @@ HSTS is opt-in after real HTTPS validation; decide its scope before enabling it.
 
 ## Backups and monitoring
 
-Configure scheduled PostgreSQL custom-format dumps (`pg_dump --format=custom`)
-using credentials from a protected service account. Store encrypted, access-controlled,
-off-site copies with a retention policy. Include uploaded media and necessary recovery
-configuration. Validate restoration with `pg_restore` into an isolated database before
-launch and periodically afterwards; never test a restore against the live database.
-SQLite backups alone do not verify PostgreSQL disaster recovery.
+Backups are produced by `python manage.py backup_database`. The command uses
+`pg_dump --format=custom`, encrypts the dump with the `SECURITY_ENCRYPTION_KEYS`
+ring, writes a SHA-256 manifest next to it, and prunes copies beyond
+`BACKUP_RETENTION_COUNT`. Set `BACKUP_DIRECTORY` to a durable, access-controlled
+path outside the release directory (for example `/var/backups/nasil`) and copy
+it off-site. The key ring is required to read the backup: losing every key makes
+the archives unrecoverable, so escrow the keys separately from the backups.
 
-Django and Gunicorn write errors/access logs to stderr/stdout for collection by the
-hosting platform. Set log retention and alert on 5xx rates, failed health probes,
-database availability, storage capacity and failed/overdue backups. An external
-HTTPS probe of `/healthz` confirms web serving; `/readyz` checks the database and,
-when `HEALTHCHECK_BROKER=true`, the broker. Logging is not an immutable
-business audit trail and no external monitoring service is configured by this patch.
+`deploy/systemd/nasil-backup.service` and `nasil-backup.timer` run the command
+daily at 01:15 UTC with a randomised delay and `Persistent=true`. Confirm with
+`systemctl list-timers nasil-backup.timer`.
+
+Restore drills use `python manage.py restore_database <file> --target-database
+<isolated-db> --confirm`, which verifies the manifest checksum, decrypts into a
+temporary file and refuses to touch the live database. Restore into a separate
+database or SQLite file, start the application against it, run
+`manage.py check` and the regression suite, and compare record counts before
+promoting. Never test a restore against the live database. A backup that has
+never been restored is an assumption, not a recovery plan.
+
+Django and Gunicorn write errors/access logs to stderr/stdout for collection by
+the hosting platform. Set log retention and alert on 5xx rates, failed health
+probes, database availability, storage capacity and failed/overdue backups. An
+external HTTPS probe of `/healthz` confirms web serving; `/readyz` checks the
+database and, when `HEALTHCHECK_BROKER=true`, the broker.
+`python manage.py check_operational_health --strict` additionally checks
+unapplied migrations, media-storage write/read access, broker connectivity and
+backup freshness (`BACKUP_MAX_AGE_HOURS`). `nasil-health.timer` runs it every
+15 minutes; a failed unit is the alerting signal. Logging is not an immutable
+business audit trail and no external monitoring service is configured by this
+patch.
+
+## Process supervision
+
+Run exactly one `celery beat` process and one or more workers. Two schedulers
+duplicate every periodic task, including outbox delivery and provider dispatch.
+The units in `deploy/systemd/` supervise Gunicorn (`nasil-web`), the worker
+(`nasil-worker`) and beat (`nasil-beat`); beat keeps its schedule in
+`/var/lib/nasil/celerybeat-schedule` so a restart does not replay overdue tasks.
+Workers use `acks_late`, so stop them with SIGTERM and allow up to
+`TimeoutStopSec` for in-flight tasks. `docker-compose.yml` mirrors the same
+restart and persistence rules for local use.
 
 ## Permission rollout
 

@@ -6,16 +6,16 @@
 | --- | --- |
 | Document ID | NASIL-TST-2026-11-16 |
 | Title | Test Execution and Security Assurance Log |
-| Version | 1.1 |
-| Status | Phase 2 complete; awaiting engineering sign-off |
-| Date of record | 2026-11-16 (initial), 2026-11-18 (rerun) |
+| Version | 1.3 |
+| Status | Phase 3 complete (operational readiness); awaiting engineering sign-off |
+| Date of record | 2026-11-16 (initial), 2026-11-18 (rerun), 2026-11-19 (Phase 3 and final verification) |
 | Classification | Internal — Engineering |
 | Repository | `Davie62/nasil-supply-logistics` |
 | Branch | `development` |
-| Baseline commit | `1424dc7` (Phase 1) plus the Phase 2 change set recorded in §11 |
+| Baseline commit | `2055a73` (Phase 2) plus the Phase 3 change set recorded in §11.2 |
 | Application | NASIL supply, logistics, commercial and finance monolith |
 | Test framework | Django 6.0 test runner (`manage.py test`) |
-| Assurance tooling | `coverage.py` 7.17.3, `ruff` 0.17.5, Django system checks, migration drift check |
+| Assurance tooling | `coverage.py` 7.17.3, `ruff` 0.17.5, `moto` 5.2.5, Django system checks, migration drift check |
 | Continuous integration | GitHub Actions — `.github/workflows/security.yml` |
 | Prepared by | QA / application-security review (AI-assisted) |
 | Reviewed by | Engineering lead — **pending** |
@@ -31,8 +31,10 @@ rewritten except to correct a factual error, which is noted in the change log.
 
 This document records what was tested, how it was tested, what passed, what
 failed, and what residual risk remains. It supports the phased remediation of
-the architecture findings in `PROJECT_STATUS_REVIEW.md`, in particular the P2
-automation gap: *"PostgreSQL/browser CI coverage is incomplete."*
+the architecture findings in `PROJECT_STATUS_REVIEW.md`, covering the P2
+automation gap (*"PostgreSQL/browser CI coverage is incomplete"*) and the P1
+operational-readiness gaps (private media, supervised workers, backups and
+monitoring).
 
 The log is evidence of local and CI-configured regression testing. It is **not**
 a penetration-test report, a production acceptance certificate, or proof that
@@ -58,8 +60,24 @@ live provider integrations, infrastructure, or operational controls work.
 - Browser end-to-end journeys and visual/accessibility acceptance.
 - Load, stress, soak and performance testing.
 - Database migration rehearsal against production data.
-- Infrastructure, backup/restore, monitoring and incident-response testing.
+- Live infrastructure provisioning: a real S3 bucket, a real PostgreSQL
+  `pg_restore` target, systemd supervision and an external monitoring service.
 - Formal penetration testing or third-party security assessment.
+
+### 2.3 Phase 3 scope (added 2026-11-19)
+
+Phase 3 covers the operational-readiness controls that can be verified in code
+and in a disposable local environment:
+
+- Durable, private media storage: S3 backend selection, fail-closed production
+  configuration, presigned URLs, no public ACLs, no overwrite.
+- Worker and beat supervision: systemd units, compose restart/persistence,
+  schedule integrity.
+- Encrypted database backup and restore: streaming encryption, manifests,
+  checksums, retention, refusal to touch the live database.
+- Operational health probe: database, migrations, broker, media storage and
+  backup freshness.
+- A local backup/restore drill proving a byte-identical SQLite round trip.
 
 ---
 
@@ -74,6 +92,7 @@ live provider integrations, infrastructure, or operational controls work.
 | Broker | Not required for tests | Redis 7 (Linux) |
 | Test runner | `venv/Scripts/python.exe manage.py test` | `python manage.py test` |
 | Coverage | `coverage run manage.py test` | `coverage run` + `coverage report` (85% gate) |
+| Object storage | `moto` 5.2.5 in-process S3 mock | `moto` 5.2.5 in-process S3 mock |
 | Lint | `ruff check .` | `ruff check .` |
 
 The Linux CI job now provisions PostgreSQL 17 and Redis 7 as service
@@ -118,12 +137,15 @@ behaviour.
 
 ## 5. Test inventory
 
-Counts are test methods. "Result" reflects the 2026-11-16 full run.
+Counts are test methods. "Result" reflects the final 2026-11-19 verification run.
 
 | Suite | File | Tests | Primary controls | Result |
 | --- | --- | ---: | --- | --- |
 | Accounts (incl. concurrency) | `accounts/tests.py`, `accounts/test_concurrency.py` | 12 | Authentication, lockout, MFA, employee lifecycle, PostgreSQL row locks | Pass / 1 skipped on SQLite |
-| Backend configuration | `backend/test_settings.py` | 9 | Fail-closed settings, TLS, PostgreSQL requirement | Pass |
+| **Backend configuration (new)** | `backend/test_settings.py` | **17** | Fail-closed settings, TLS, PostgreSQL requirement, media/backup policy | **Pass** |
+| **Backend scheduling (new)** | `backend/test_celery.py` | **3** | Beat entries resolve to registered tasks, no duplicates, sane cadence | **Pass** |
+| **Core storage (new)** | `core/test_storage.py` | **5** | S3 private ACLs, presigned URLs, prefix, overwrite policy | **Pass** |
+| **Core backup (new)** | `core/test_backup.py` | **38** | Encryption, manifests, checksums, retention, backup/restore commands, health probe | **Pass** |
 | Core business rules | `core/test_business_rules.py`, `core/tests.py` | 34 | Pricing, approvals, workflow guards, audit | Pass |
 | Core health | `core/test_health.py` | 6 | `/healthz`, `/readyz`, broker probe | Pass |
 | Core workflow concurrency | `core/test_workflow_concurrency.py` | 2 | Version and lock behaviour | Pass / PostgreSQL-gated |
@@ -143,7 +165,7 @@ Counts are test methods. "Result" reflects the 2026-11-16 full run.
 | **Procurement (new)** | `procurement/tests.py` | **11** | Supplier audit gating, budgets, approvals, receipts, cancellation | **Pass** |
 | **Fleet (new)** | `fleet/tests.py` | **11** | Vehicle/driver readiness, exclusivity, checkpoints, maintenance | **Pass** |
 | **Finance (new)** | `finance/tests.py` | **12** | Payments, reversals, statements, matching, reconciliation | **Pass** |
-| **Total** | | **273** | | **269 passed, 4 skipped, 0 failed** |
+| **Total** | | **327** | | **323 passed, 4 skipped, 0 failed** |
 
 ---
 
@@ -227,6 +249,84 @@ Counts are test methods. "Result" reflects the 2026-11-16 full run.
 | 11 | Closed reconciliation rejects further matches | Pass |
 | 12 | Finance services reject unprivileged staff | Pass |
 
+### 6.6 Phase 3 — operational readiness (2026-11-19)
+
+#### 6.6.1 Durable private media (`core/test_storage.py`)
+
+Tests run against an in-process `moto` S3 mock with the same options the
+production settings pass to `S3Storage`.
+
+| # | Control under test | Result |
+| ---: | --- | --- |
+| 1 | Uploads are written under the configured `media/` prefix | Pass |
+| 2 | Uploaded objects have no AllUsers or AuthenticatedUsers grant | Pass |
+| 3 | `storage.url()` returns a SigV4 presigned URL, not a public URL | Pass |
+| 4 | Presigned lifetime follows `AWS_QUERYSTRING_EXPIRE` | Pass |
+| 5 | A second upload of the same name never overwrites the first object | Pass |
+
+`backend/test_settings.py` adds:
+
+| # | Control under test | Result |
+| ---: | --- | --- |
+| 1 | Development defaults to filesystem media | Pass |
+| 2 | Production without a bucket or region fails closed | Pass |
+| 3 | Production selects private S3 with presigned URLs and no custom domain | Pass |
+| 4 | Filesystem media outside DEBUG requires explicit ephemeral acknowledgement | Pass |
+| 5 | An unsupported media backend is rejected | Pass |
+| 6 | Presigned lifetime outside 60–3600 seconds is rejected | Pass |
+
+#### 6.6.2 Worker and beat supervision (`backend/test_celery.py`)
+
+| # | Control under test | Result |
+| ---: | --- | --- |
+| 1 | Every `CELERY_BEAT_SCHEDULE` entry resolves to a registered task | Pass |
+| 2 | No task is scheduled twice | Pass |
+| 3 | Every periodic interval is at least 30 seconds | Pass |
+
+Supervision artefacts are configuration, not executable tests:
+`deploy/systemd/nasil-web.service`, `nasil-worker.service`, `nasil-beat.service`,
+`nasil-backup.service/.timer`, `nasil-health.service/.timer`; compose adds
+`restart: unless-stopped`, a worker `inspect ping` healthcheck, a beat pidfile
+healthcheck and a `beatstate` volume for the scheduler clock.
+
+#### 6.6.3 Encrypted backup and restore (`core/test_backup.py`)
+
+| # | Control under test | Result |
+| ---: | --- | --- |
+| 1 | Chunked encryption round-trips a multi-megabyte payload | Pass |
+| 2 | A flipped ciphertext bit is rejected | Pass |
+| 3 | Decryption with a key outside the ring fails closed | Pass |
+| 4 | A non-NASIL file and a truncated block are rejected | Pass |
+| 5 | Manifest checksum verification accepts an intact backup | Pass |
+| 6 | A modified ciphertext is detected as a checksum mismatch | Pass |
+| 7 | Missing manifest and missing backup are rejected | Pass |
+| 8 | Backup names are sortable, labelled and validated | Pass |
+| 9 | Backup age is computed from the manifest timestamp | Pass |
+| 10 | Retention keeps the newest N backups and deletes their manifests | Pass |
+| 11 | Retention of zero is rejected | Pass |
+| 12 | `backup_database` writes an encrypted file plus manifest | Pass |
+| 13 | `backup_database` prunes old copies after writing | Pass |
+| 14 | `backup_database` rejects zero retention and dump failures | Pass |
+| 15 | `restore_database` refuses to run without `--confirm` | Pass |
+| 16 | `restore_database` restores into an isolated target | Pass |
+| 17 | `restore_database` refuses the live database | Pass |
+| 18 | `restore_database` refuses a tampered backup | Pass |
+| 19 | SQLite dump copies the database; a missing file is rejected | Pass |
+| 20 | PostgreSQL dump uses `pg_dump --format=custom` and keeps the password out of argv | Pass |
+| 21 | Missing `pg_dump`, dump failure and missing `pg_restore` target are reported | Pass |
+| 22 | PostgreSQL restore uses `pg_restore --clean --if-exists` | Pass |
+| 23 | SQLite restore refuses the live file | Pass |
+
+#### 6.6.4 Operational health probe (`core/test_backup.py`)
+
+| # | Control under test | Result |
+| ---: | --- | --- |
+| 1 | All-OK results report success | Pass |
+| 2 | Any failed probe exits non-zero | Pass |
+| 3 | Warnings fail only under `--strict` | Pass |
+| 4 | `--skip-storage` does not execute the write probe | Pass |
+| 5 | An unexpected probe exception is reported as a failure | Pass |
+
 ---
 
 ## 7. Execution record by date
@@ -291,6 +391,79 @@ full suite above passed.
 2026-11-16 figure was measured over a retained data file. §8 records the
 erased run.
 
+### 2026-11-19 — Phase 3 focused execution
+
+| Field | Value |
+| --- | --- |
+| Command | `DJANGO_DEBUG=true venv/Scripts/python.exe manage.py test backend.test_settings backend.test_celery core.test_storage core.test_backup --noinput` |
+| Result | **61 tests, 61 passed, 0 failed** |
+| Duration | 7.9 s |
+| Composition | 17 deployment-configuration tests, 3 scheduling tests, 5 S3 storage tests, 36 backup/restore/health tests |
+| Purpose | Validate the Phase 3 controls before the full regression |
+
+### 2026-11-19 — Phase 3 local operational drill
+
+The drill exercised the shipped commands against a disposable copy of the
+development SQLite database. It is evidence that the tooling works end to end,
+not evidence that PostgreSQL disaster recovery works.
+
+| Step | Command | Observed result |
+| ---: | --- | --- |
+| 1 | `manage.py check_operational_health` | database OK, migrations OK, broker SKIP (`HEALTHCHECK_BROKER=false`), storage OK, backup WARN (no backup present) |
+| 2 | `manage.py backup_database --output <tmp> --keep 2 --label smoke` | encrypted dump plus manifest written; `engine=sqlite`, 1 228 800 plaintext bytes, 1 638 613 ciphertext bytes |
+| 3 | `BACKUP_DIRECTORY=<tmp> manage.py check_operational_health --skip-storage --strict` | all probes OK; newest backup reported 0.0 h old; exit 0 |
+| 4 | `manage.py restore_database <backup> --target-path <tmp>/restored.sqlite3 --confirm` | restored into the isolated file |
+| 5 | `cmp db.sqlite3 <tmp>/restored.sqlite3` | **byte-identical** |
+| 6 | `manage.py restore_database <backup> --target-path <tmp>/restored2.sqlite3` (no `--confirm`) | refused with `CommandError`; no write performed |
+
+**Drill observations.** The first drill attempt exposed F-08 (a `WindowsPath`
+value in the manifest payload) after the ciphertext had been written. The
+command now stringifies the database name and deletes a partial ciphertext when
+manifest writing or pruning fails. A second defect was found in the same pass:
+`--output` pointing at an unwritable location raised an unhandled `OSError`; it
+now returns a `CommandError` naming the directory.
+
+### 2026-11-19 — Phase 3 full regression (clean coverage baseline)
+
+| Field | Value |
+| --- | --- |
+| Command | `coverage erase && DJANGO_DEBUG=true venv/Scripts/python.exe -m coverage run manage.py test --noinput` |
+| Result | **325 tests, 321 passed, 4 PostgreSQL-only skipped, 0 failed** |
+| Duration | 279 s (coverage instrumentation) |
+| Coverage | **87% (5637 of 6508 statements)**; `coverage report` exit 0 against the 85% gate |
+| Static checks | `ruff check .` clean; `manage.py check` clean; `makemigrations --check --dry-run` clean |
+| Change since Phase 2 | +52 tests, +399 measured statements, statement coverage held at 87% while the new operational modules were added |
+
+The 4 skips remain the PostgreSQL-only concurrency checks; they execute in the
+Linux CI job and are not a local failure.
+
+### 2026-11-19 — Phase 3 final verification (F-09 remediation)
+
+Final review found that the PostgreSQL restore branch did not refuse the live
+database, contrary to the command's documented guarantee (F-09). The guard was
+added to both the management command and the backup primitive, with regression
+tests for both database engines. The full suite was rerun from an erased
+coverage data file after the fix.
+
+| Field | Value |
+| --- | --- |
+| Focused command | `DJANGO_DEBUG=true venv/Scripts/python.exe manage.py test backend.test_settings backend.test_celery core.test_storage core.test_backup --noinput` |
+| Focused result | **63 tests, 63 passed, 0 failed** |
+| Full command | `coverage erase && DJANGO_DEBUG=true venv/Scripts/python.exe -m coverage run manage.py test --noinput` |
+| Full result | **327 tests, 323 passed, 4 PostgreSQL-only skipped, 0 failed** |
+| Duration | 311.8 s (coverage instrumentation) |
+| Coverage | **87% (5632 of 6510 statements)**; `coverage report` exit 0 against the 85% gate |
+| Static checks | `ruff check .` clean; `manage.py check` clean; `makemigrations --check --dry-run` clean |
+
+### 2026-11-19 — Phase 3 infrastructure configuration (not executed locally)
+
+| Field | Value |
+| --- | --- |
+| Change | systemd units and timers for web, worker, beat, backup and health probe; compose restart policies, worker `inspect ping` healthcheck, beat pidfile healthcheck and a `beatstate` volume |
+| Validation | Unit files reviewed for directive syntax; `docker-compose.yml` parsed with PyYAML — services `beat`, `db`, `migrate`, `redis`, `web`, `worker`; volumes `beatstate`, `pgdata`; worker `restart: unless-stopped`; beat command pins `--schedule=/var/lib/celery/celerybeat-schedule` |
+| Limitation | Docker is not installed in the local environment and no systemd host was available, so neither supervision path was started here |
+| Result | **Configured; host execution pending staging** |
+
 ---
 
 ## 8. Coverage assessment
@@ -301,19 +474,33 @@ excluded per `pyproject.toml`.
 
 | Metric | Value |
 | --- | --- |
-| Statements measured | 6109 |
-| Statements covered | 5303 |
-| Statements missed | 806 |
-| Overall statement coverage | **87% (86.8%)** |
+| Statements measured | 6510 |
+| Statements covered | 5632 |
+| Statements missed | 878 |
+| Overall statement coverage | **87% (86.5%)** |
 | CI gate | `coverage report` with `fail_under = 85` in `pyproject.toml` |
 
-The measurement is taken from the 2026-11-18 run, which reset the `.coverage`
-data file first (`coverage erase`). An earlier 2026-11-16 run did not reset the
-file, so its slightly higher figure is not used.
+The measurement is taken from the final 2026-11-19 verification run, which
+reset the `.coverage` data file first (`coverage erase`). The Phase 2 baseline
+was 5303 of 6109 statements; Phase 3 added 54 tests and 401 measured statements
+while holding the overall figure at 87%. An earlier 2026-11-16 run did not
+reset the file, so its slightly higher figure is not used.
 
 The threshold is set two percentage points below the measured baseline (87%)
 to prevent regressions without blocking unrelated feature work. It will be
 raised as the remaining untested modules gain suites.
+
+Phase 3 operational modules:
+
+| Module | Statements | Missed | Coverage |
+| --- | ---: | ---: | ---: |
+| `core/backup.py` | 196 | 21 | 89% |
+| `core/management/commands/backup_database.py` | 52 | 7 | 87% |
+| `backend/settings.py` | 203 | 9 | 96% |
+
+The uncovered lines in `core/backup.py` are defensive branches for unreadable
+manifests, malformed headers and short reads that require crafted corruption to
+reach; the command-level negative paths are covered.
 
 ### 8.1 Coverage by application (services layer)
 
@@ -347,10 +534,12 @@ Supporting modules in the same flow also moved: `operations/services.py` 90%,
 
 ## 9. Findings and observations
 
-No critical or high-severity product defects were identified in the Phase 2
-scope. Four low/informational observations (F-01 to F-04) and one
-test-reliability defect (F-05, medium, closed) were recorded. None blocks the
-Phase 2 objective.
+No critical or high-severity product defects were identified in the Phase 2 or
+Phase 3 scope. Phase 2 recorded four low/informational observations (F-01 to
+F-04) and one test-reliability defect (F-05, medium, closed). Phase 3 adds one
+test-validity defect (F-06, medium, closed) and two implementation defects found
+and fixed before completion (F-07, F-08, low, closed). None blocks the Phase 3
+objective.
 
 ### F-01 — Fleet checkpoint coordinate type handling
 
@@ -412,18 +601,69 @@ Phase 2 objective.
 | Recommendation | Freeze the clock while the burst is issued so the window cannot roll. |
 | Test disposition | The burst now runs inside `patch("customer_services.security.timezone.now", return_value=frozen)`. Verified by three consecutive isolated runs (all `OK`) and the full-suite rerun in §7. |
 
+### F-06 — Settings tests were not hermetic against a developer `.env`
+
+| Field | Value |
+| --- | --- |
+| Severity | Medium (test validity) |
+| Component | `backend/test_settings.py` — `DeploymentConfigurationTests.settings` |
+| Status | **Closed — fixed in Phase 3** |
+| Evidence | The helper cleared `os.environ` and then executed `settings.py`. `settings.py` calls `load_dotenv(BASE_DIR / ".env", override=False)`, so a developer `.env` created on 2026-11-19 refilled the environment and defeated the fail-closed assertions. Reverting the Phase 3 settings changes still produced 13 failures and 1 error on the unmodified suite. |
+| Impact | The configuration safety net silently stopped proving that production fails closed whenever a `.env` existed. This is a false-negative risk in the control that protects secrets, TLS and the database engine. |
+| Recommendation | Patch `dotenv.load_dotenv` while evaluating settings in tests, so only the test-supplied environment is visible. |
+| Test disposition | `settings()` now wraps the evaluation in `patch.dict(..., clear=True)` **and** `patch("dotenv.load_dotenv")`. All 17 settings tests pass, including the pre-existing production checks. |
+
+### F-07 — Empty S3 endpoint produced an invalid boto3 endpoint
+
+| Field | Value |
+| --- | --- |
+| Severity | Low (implementation defect, caught before merge) |
+| Component | `backend/settings.py` — `AWS_S3_ENDPOINT_URL` |
+| Status | **Closed — fixed in Phase 3** |
+| Evidence | The variable defaulted to `""`. Passing `endpoint_url=""` to `S3Storage` caused boto3 to raise `ValueError: Invalid endpoint: ` during storage initialisation, so the default AWS path failed even though no custom endpoint was configured. |
+| Impact | Any deployment that left `AWS_S3_ENDPOINT_URL` blank would fail to initialise media storage. |
+| Recommendation | Coerce an empty value to `None` and only add `endpoint_url` to the backend options when it is set. |
+| Test disposition | `core/test_storage.py` and `backend/test_settings.py` exercise the default AWS path; the option is omitted when unset. |
+
+### F-08 — Backup manifest could not serialise a `WindowsPath`
+
+| Field | Value |
+| --- | --- |
+| Severity | Low (implementation defect, caught by the local drill) |
+| Component | `core/management/commands/backup_database.py` — manifest payload |
+| Status | **Closed — fixed in Phase 3** |
+| Evidence | SQLite stores `DATABASES["default"]["NAME"]` as a `Path`. The manifest embedded it directly, so `json.dumps` raised `TypeError: Object of type WindowsPath is not JSON serializable` after the encrypted dump had already been written. |
+| Impact | A backup could fail after producing an orphaned ciphertext file. The command now converts the name to `str` and removes a partial file if manifest writing fails. |
+| Recommendation | Keep manifests JSON-primitive and clean up on failure. |
+| Test disposition | `core/test_backup.py` asserts the manifest contents and command failure handling; the local drill in §7 produced a valid manifest. |
+
+### F-09 — PostgreSQL restore did not refuse the live database
+
+| Field | Value |
+| --- | --- |
+| Severity | High (destructive-operation guard, caught in final review before release) |
+| Component | `core/backup.py` — `restore_database` |
+| Status | **Closed — fixed in Phase 3** |
+| Evidence | The command help promises that the live database is always refused, and the SQLite branch enforced that check. The PostgreSQL branch accepted any `--target-database`, including the live `DATABASES["default"]["NAME"]`, and would have run `pg_restore --clean --if-exists` against it. The SQLite guard also resolved the target path only when it already existed, so an absent path naming the live database could be selected. |
+| Impact | An operator error or a misconfigured automation could destroy the live database during a restore drill, despite the documented guarantee. |
+| Recommendation | Compare the PostgreSQL target name with the live database name, and resolve SQLite paths before the existence check; refuse on equality in both branches. |
+| Test disposition | `core/test_backup.py` now asserts that PostgreSQL refuses the live name and that SQLite refuses both an existing and an absent live path; 38 backup tests pass. |
+
 ---
 
 ## 10. Residual risk and limitations
 
 | Risk | Assessment | Mitigation / next step |
 | --- | --- | --- |
-| Docker unavailable locally | The PostgreSQL/Redis CI job was configured and YAML-validated but not executed in this environment. | Observe the first remote CI run on the Phase 2 push; treat a red run as a release blocker. |
+| Docker unavailable locally | The PostgreSQL/Redis CI job and the compose supervision changes were configured and YAML-validated but not executed in this environment. | Observe the first remote CI run; treat a red run as a release blocker. Run `docker compose up` on a Docker-capable host before the pilot. |
 | PostgreSQL-specific behaviour | Local runs use SQLite; four concurrency checks are skipped. | The Linux CI job runs the full suite on PostgreSQL 17. |
+| PostgreSQL restore drill | The local drill restored SQLite byte-for-byte. `pg_dump`/`pg_restore` argument construction is unit-tested with mocks, but no real PostgreSQL restore was executed. | Run `backup_database` then `restore_database --target-database <isolated>` on staging and compare counts. |
+| Live S3 bucket | Storage tests use the `moto` mock. Bucket policy, IAM role, lifecycle rules and presigned URL expiry against real AWS were not exercised. | Apply the documented bucket policy, verify an upload/presign/read cycle, and confirm public access is blocked at the account level. |
+| Systemd supervision | Unit and timer files are reviewed but not started; no host ran them. | Install on staging, confirm `systemctl list-timers`, kill the worker and beat to verify restart, and confirm beat does not replay overdue tasks. |
 | Live provider integrations | Not exercised. | Sandbox acceptance with SendGrid, Twilio, Africa's Talking, Odoo, Flutterwave and pawaPay remains outstanding. |
 | Browser and accessibility acceptance | Not exercised. | Add repeatable browser CI and a manual accessibility pass before release. |
 | Performance and load | Not exercised. | Run realistic concurrency/load tests during the operational pilot. |
-| Coverage threshold calibration | Threshold is conservative and based on one full run. | Re-measure after each phase and ratchet upward. |
+| Coverage threshold calibration | Threshold is conservative and based on one full run per phase. | Re-measure after each phase and ratchet upward. |
 | Findings F-01, F-02, F-04 | Low/informational; no production data impact. | Schedule in the next maintenance pass; add regression tests with the fixes. |
 
 ---
@@ -432,6 +672,8 @@ Phase 2 objective.
 
 | Date | Version | Change | Author |
 | --- | --- | --- | --- |
+| 2026-11-19 | 1.3 | Final verification after F-09: live-database refusal added to PostgreSQL/SQLite restore; 63 focused tests, 327 full tests (323 passed, 4 skipped), 87% (5632/6510); static checks clean | QA / security review |
+| 2026-11-19 | 1.2 | Phase 3 recorded: durable private S3 media, worker/beat supervision, encrypted backup/restore, operational health probe; 61 focused tests; full regression 325 tests, 321 passed, 4 skipped, 0 failed; 87% (5637/6508); byte-identical local restore drill; findings F-06–F-08 raised and closed | QA / security review |
 | 2026-11-18 | 1.1 | Rerun recorded: 273 tests, 269 passed, 4 skipped, 0 failed; clean coverage baseline 87% (5303/6109); F-05 raised and closed by freezing the clock in the public tracking rate-limit test; coverage gate set to `fail_under = 85` | QA / security review |
 | 2026-11-16 | 1.0 | Initial Phase 2 record: five new suites (53 tests), full regression, coverage gate, CI PostgreSQL/Redis services, findings F-01–F-04 | QA / security review |
 | 2026-11-16 | 1.0 | Phase 1 baseline recorded: 220 tests, 4 PostgreSQL-only skipped, static checks clean | QA / security review |
@@ -451,12 +693,34 @@ Phase 2 objective.
 | `customer_services/tests.py` | F-05 fix: freeze the clock during the public tracking rate-limit burst |
 | `TEST_AUDIT_LOG.md` | This document |
 
+### 11.2 Phase 3 change set
+
+| File | Change |
+| --- | --- |
+| `backend/settings.py` | `STORAGES` selection, private S3 backend options, `MEDIA_STORAGE_ALLOW_EPHEMERAL`, `BACKUP_*` settings and validation |
+| `backend/test_settings.py` | Hermetic settings evaluation; media, backup and presign tests |
+| `backend/test_celery.py` | Beat schedule integrity tests |
+| `core/backup.py` | Chunked Fernet encryption, manifests, checksums, retention, `pg_dump`/`pg_restore` helpers, live-target refusal (F-09) |
+| `core/management/commands/backup_database.py` | Encrypted backup command with pruning and cleanup on failure |
+| `core/management/commands/restore_database.py` | Confirmation-gated restore into an isolated target |
+| `core/management/commands/check_operational_health.py` | Database, migration, broker, storage and backup-age probe |
+| `core/test_backup.py` | 38 tests across encryption, manifests, retention, commands, restore safety and health checks |
+| `core/test_storage.py` | 5 `moto`-backed private-media tests |
+| `deploy/systemd/` | Web, worker, beat, backup and health units plus timers |
+| `docker-compose.yml` | Restart policies, worker/beat healthchecks, beat schedule persistence |
+| `requirements.txt` | `boto3`, `django-storages[s3]` |
+| `requirements-development.txt` | `moto[s3]` |
+| `.env.example`, `DEPLOYMENT.md` | Media, backup, restore-drill, monitoring and supervision documentation |
+| `TEST_AUDIT_LOG.md` | This document |
+
 ---
 
 ## 12. Sign-off
 
 | Role | Name | Decision | Date |
 | --- | --- | --- | --- |
+| QA / security review | AI-assisted review | Phase 3 final verification passed; F-05–F-09 closed before release, F-01/F-02/F-04 remain low/informational backlog; no open critical/high findings | 2026-11-19 |
+| QA / security review | AI-assisted review | Phase 3 objective met; no critical/high findings | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 2 test objective met; no critical/high findings | 2026-11-16 |
 | Engineering lead | — | **Pending review** | — |
 | Product owner | — | **Pending acceptance** | — |

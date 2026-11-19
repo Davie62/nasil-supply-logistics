@@ -2,9 +2,11 @@
 # the serverless/runtime install; requirements-production.txt adds the WSGI server.
 Django==6.1.2
 Pillow==13.0.0
+boto3==1.44.6
 celery==5.6.3
 certifi==2026.10.23
 cryptography==50.0.2
+django-storages[s3]==1.14.6
 psycopg[binary]==3.3.6
 PyOTP==2.10.0
 qrcode==8.2

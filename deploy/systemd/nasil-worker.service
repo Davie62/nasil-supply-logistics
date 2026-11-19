@@ -1,0 +1,47 @@
+# NASIL Celery worker. Install to /etc/systemd/system/nasil-worker.service.
+#
+# The worker executes customer outbox delivery and commercial integration jobs.
+# It must run under the same account and environment as the web process so both
+# read the same broker URL, encryption key ring and provider switches.
+#
+# Reload and enable with:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now nasil-worker.service
+[Unit]
+Description=NASIL Celery worker
+Documentation=file:///srv/nasil/DEPLOYMENT.md
+After=network-online.target redis-server.service
+Wants=network-online.target
+# Do not let the worker run without its broker for long; systemd retries.
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=nasil
+Group=nasil
+WorkingDirectory=/srv/nasil
+EnvironmentFile=/etc/nasil/nasil.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/srv/nasil/venv/bin/celery -A backend worker --loglevel=info --concurrency=4
+# SIGTERM lets Celery finish in-flight tasks. acks_late tasks are redelivered
+# only after the visibility timeout if the worker is killed mid-task.
+KillSignal=SIGTERM
+TimeoutStopSec=120
+Restart=always
+RestartSec=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/srv/nasil/logs
+
+[Install]
+WantedBy=multi-user.target

@@ -209,6 +209,60 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Durable private media. Uploaded evidence and employee photographs are private,
+# so the S3 backend issues short-lived presigned URLs and never uses object ACLs.
+# Local filesystem storage survives only in development, or in an explicitly
+# acknowledged ephemeral demo deployment.
+MEDIA_STORAGE_BACKEND = os.environ.get("MEDIA_STORAGE_BACKEND", "filesystem" if DEBUG else "s3").lower()
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", "")
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "")
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL") or None
+AWS_MEDIA_LOCATION = os.environ.get("AWS_MEDIA_LOCATION", "media").strip("/")
+try:
+    AWS_QUERYSTRING_EXPIRE = int(os.environ.get("AWS_QUERYSTRING_EXPIRE", "300"))
+except ValueError:
+    raise ImproperlyConfigured("AWS_QUERYSTRING_EXPIRE must be a whole number of seconds.")
+MEDIA_STORAGE_ALLOW_EPHEMERAL = os.environ.get("MEDIA_STORAGE_ALLOW_EPHEMERAL", "false").lower() == "true"
+
+STATICFILES_STORAGE_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
+
+if MEDIA_STORAGE_BACKEND == "s3":
+    for variable, value in (("AWS_STORAGE_BUCKET_NAME", AWS_STORAGE_BUCKET_NAME), ("AWS_S3_REGION_NAME", AWS_S3_REGION_NAME)):
+        if not value:
+            raise ImproperlyConfigured(f"Set {variable} before enabling S3 media storage.")
+    if not 60 <= AWS_QUERYSTRING_EXPIRE <= 3600:
+        raise ImproperlyConfigured("AWS_QUERYSTRING_EXPIRE must be between 60 and 3600 seconds.")
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "bucket_name": AWS_STORAGE_BUCKET_NAME,
+                "region_name": AWS_S3_REGION_NAME,
+                "location": AWS_MEDIA_LOCATION,
+                "default_acl": None,
+                "file_overwrite": False,
+                "querystring_auth": True,
+                "custom_domain": None,
+                "querystring_expire": AWS_QUERYSTRING_EXPIRE,
+                "signature_version": "s3v4",
+                **({"endpoint_url": AWS_S3_ENDPOINT_URL} if AWS_S3_ENDPOINT_URL else {}),
+            },
+        },
+        "staticfiles": {"BACKEND": STATICFILES_STORAGE_BACKEND},
+    }
+elif MEDIA_STORAGE_BACKEND == "filesystem":
+    if not DEBUG and not MEDIA_STORAGE_ALLOW_EPHEMERAL:
+        raise ImproperlyConfigured(
+            "Production requires S3 media storage. Set MEDIA_STORAGE_BACKEND=filesystem together with "
+            "MEDIA_STORAGE_ALLOW_EPHEMERAL=true only for a disposable demo deployment."
+        )
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": STATICFILES_STORAGE_BACKEND},
+    }
+else:
+    raise ImproperlyConfigured("MEDIA_STORAGE_BACKEND must be 's3' or 'filesystem'.")
+
 # Customer services: providers are opt-in; development never sends real messages.
 PUBLIC_SITE_URL = os.environ.get("PUBLIC_SITE_URL", "http://127.0.0.1:8000" if DEBUG else "").rstrip("/")
 NOTIFICATIONS_DELIVERY_ENABLED = os.environ.get("NOTIFICATIONS_DELIVERY_ENABLED", "false").lower() == "true"
@@ -280,6 +334,24 @@ if not DEBUG and os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true"
 # Readiness probe: broker checks default on in production and off in DEBUG so a
 # local probe does not fail when Redis is intentionally not running.
 HEALTHCHECK_BROKER = os.environ.get("HEALTHCHECK_BROKER", "false" if DEBUG else "true").lower() == "true"
+
+# Encrypted database backups. The backup directory must be durable, off the
+# application volume, and writable only by the service account. Backups are
+# encrypted with the existing key ring; losing every key makes them unreadable.
+BACKUP_DIRECTORY = Path(os.environ.get("BACKUP_DIRECTORY", BASE_DIR / "backups"))
+try:
+    BACKUP_RETENTION_COUNT = int(os.environ.get("BACKUP_RETENTION_COUNT", "14"))
+except ValueError:
+    raise ImproperlyConfigured("BACKUP_RETENTION_COUNT must be a whole number.")
+if BACKUP_RETENTION_COUNT < 1:
+    raise ImproperlyConfigured("BACKUP_RETENTION_COUNT must be at least 1.")
+# Warn (via check_operational_health) when the newest backup is older than this.
+try:
+    BACKUP_MAX_AGE_HOURS = int(os.environ.get("BACKUP_MAX_AGE_HOURS", "26"))
+except ValueError:
+    raise ImproperlyConfigured("BACKUP_MAX_AGE_HOURS must be a whole number.")
+if BACKUP_MAX_AGE_HOURS < 1:
+    raise ImproperlyConfigured("BACKUP_MAX_AGE_HOURS must be at least 1.")
 
 LOGIN_URL = "login"
 

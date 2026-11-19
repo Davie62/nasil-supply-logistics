@@ -1,0 +1,30 @@
+# Periodic operational health probe. Install to /etc/systemd/system/nasil-health.service
+# and enable nasil-health.timer. A failed unit is the alerting signal: forward
+# "systemctl --failed" or unit failure events to the monitoring service.
+[Unit]
+Description=NASIL operational health probe
+Documentation=file:///srv/nasil/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=nasil
+Group=nasil
+WorkingDirectory=/srv/nasil
+EnvironmentFile=/etc/nasil/nasil.env
+# --strict treats a missing or stale backup as a failure. --skip-storage is only
+# appropriate when media storage is deliberately unavailable.
+ExecStart=/srv/nasil/venv/bin/python manage.py check_operational_health --strict
+Nice=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true

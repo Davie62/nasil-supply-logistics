@@ -1,0 +1,13 @@
+# Run the operational health probe every 15 minutes. Install to
+# /etc/systemd/system/nasil-health.timer.
+[Unit]
+Description=Periodic NASIL operational health probe
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=15min
+AccuracySec=1min
+Unit=nasil-health.service
+
+[Install]
+WantedBy=timers.target

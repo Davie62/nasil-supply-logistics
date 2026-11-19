@@ -10,7 +10,9 @@ from django.test import SimpleTestCase
 
 class DeploymentConfigurationTests(SimpleTestCase):
     def settings(self, **environment):
-        with patch.dict(os.environ, environment, clear=True):
+        # settings.py loads the developer's .env file, which would otherwise
+        # refill the cleared environment and silently defeat these checks.
+        with patch.dict(os.environ, environment, clear=True), patch("dotenv.load_dotenv"):
             return runpy.run_path(str(Path(__file__).with_name("settings.py")))
 
     def production_environment(self):
@@ -21,6 +23,8 @@ class DeploymentConfigurationTests(SimpleTestCase):
             "POSTGRES_PASSWORD": "test-only", "POSTGRES_HOST": "db.example.com",
             "SECURITY_ENCRYPTION_KEYS": "dGVzdC1vbmx5LW5vdC1hLXByb2R1Y3Rpb24ta2V5ISE=",
             "CELERY_BROKER_URL": "rediss://redis.example.com:6379/0",
+            "AWS_STORAGE_BUCKET_NAME": "nasil-media-test",
+            "AWS_S3_REGION_NAME": "eu-central-1",
         }
 
     def test_no_environment_fails_closed(self):
@@ -39,6 +43,48 @@ class DeploymentConfigurationTests(SimpleTestCase):
         for policy in ("invalid", "[]", "null"):
             with self.subTest(policy=policy), self.assertRaises(ImproperlyConfigured):
                 self.settings(DJANGO_DEBUG="true", QUOTATION_APPROVAL_THRESHOLDS=policy)
+
+    def test_development_media_uses_the_filesystem(self):
+        settings = self.settings(DJANGO_DEBUG="true")
+        self.assertEqual(settings["MEDIA_STORAGE_BACKEND"], "filesystem")
+        self.assertEqual(settings["STORAGES"]["default"]["BACKEND"], "django.core.files.storage.FileSystemStorage")
+
+    def test_production_requires_durable_private_media(self):
+        environment = self.production_environment()
+        for variable in ("AWS_STORAGE_BUCKET_NAME", "AWS_S3_REGION_NAME"):
+            with self.subTest(variable=variable):
+                incomplete = {key: value for key, value in environment.items() if key != variable}
+                with self.assertRaises(ImproperlyConfigured):
+                    self.settings(**incomplete)
+
+    def test_production_media_is_private_s3_with_presigned_urls(self):
+        settings = self.settings(**self.production_environment())
+        media = settings["STORAGES"]["default"]
+        self.assertEqual(media["BACKEND"], "storages.backends.s3.S3Storage")
+        self.assertEqual(media["OPTIONS"]["bucket_name"], "nasil-media-test")
+        self.assertEqual(media["OPTIONS"]["region_name"], "eu-central-1")
+        self.assertEqual(media["OPTIONS"]["location"], "media")
+        self.assertIsNone(media["OPTIONS"]["default_acl"])
+        self.assertIsNone(media["OPTIONS"]["custom_domain"])
+        self.assertTrue(media["OPTIONS"]["querystring_auth"])
+        self.assertFalse(media["OPTIONS"]["file_overwrite"])
+        self.assertEqual(settings["STORAGES"]["staticfiles"]["BACKEND"], "django.contrib.staticfiles.storage.StaticFilesStorage")
+
+    def test_ephemeral_media_requires_explicit_acknowledgement(self):
+        environment = {**self.production_environment(), "MEDIA_STORAGE_BACKEND": "filesystem"}
+        with self.assertRaises(ImproperlyConfigured):
+            self.settings(**environment)
+        allowed = self.settings(**{**environment, "MEDIA_STORAGE_ALLOW_EPHEMERAL": "true"})
+        self.assertEqual(allowed["STORAGES"]["default"]["BACKEND"], "django.core.files.storage.FileSystemStorage")
+
+    def test_unsupported_media_backend_is_rejected(self):
+        with self.assertRaises(ImproperlyConfigured):
+            self.settings(**{**self.production_environment(), "MEDIA_STORAGE_BACKEND": "dropbox"})
+
+    def test_presigned_url_lifetime_is_bounded(self):
+        for value in ("30", "7200", "not-a-number"):
+            with self.subTest(value=value), self.assertRaises(ImproperlyConfigured):
+                self.settings(**{**self.production_environment(), "AWS_QUERYSTRING_EXPIRE": value})
 
     def test_production_has_https_postgresql_and_static_root(self):
         settings = self.settings(**self.production_environment())
@@ -92,3 +138,15 @@ class DeploymentConfigurationTests(SimpleTestCase):
         environment.pop("POSTGRES_DB")
         settings = self.settings(**{**environment, "POSTGRES_DATABASE": "neondb"})
         self.assertEqual(settings["DATABASES"]["default"]["NAME"], "neondb")
+
+    def test_backup_retention_and_age_are_validated(self):
+        for variable in ("BACKUP_RETENTION_COUNT", "BACKUP_MAX_AGE_HOURS"):
+            for value in ("0", "-3", "many"):
+                with self.subTest(variable=variable, value=value), self.assertRaises(ImproperlyConfigured):
+                    self.settings(**{**self.production_environment(), variable: value})
+
+    def test_backup_settings_have_safe_defaults(self):
+        settings = self.settings(**self.production_environment())
+        self.assertEqual(settings["BACKUP_RETENTION_COUNT"], 14)
+        self.assertEqual(settings["BACKUP_MAX_AGE_HOURS"], 26)
+        self.assertTrue(str(settings["BACKUP_DIRECTORY"]).endswith("backups"))

@@ -1,0 +1,46 @@
+# NASIL web application. Install to /etc/systemd/system/nasil-web.service.
+#
+# Assumes the application is deployed to /srv/nasil under an unprivileged
+# "nasil" account, the virtual environment is /srv/nasil/venv, and secrets live
+# in /etc/nasil/nasil.env (mode 0600, root:nasil). Adjust paths for the host.
+#
+# Reload and enable with:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now nasil-web.service
+[Unit]
+Description=NASIL Django web application (Gunicorn)
+Documentation=file:///srv/nasil/DEPLOYMENT.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+User=nasil
+Group=nasil
+WorkingDirectory=/srv/nasil
+EnvironmentFile=/etc/nasil/nasil.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/srv/nasil/venv/bin/gunicorn backend.wsgi:application --config deploy/gunicorn.conf.py
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=always
+RestartSec=5
+
+# Hardening. Keep the unit readable only by its owner and never allow privilege
+# escalation. ReadWritePaths must include MEDIA_ROOT only when filesystem media
+# is explicitly enabled for a disposable demo; production media lives in S3.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/srv/nasil/staticfiles /srv/nasil/logs
+
+[Install]
+WantedBy=multi-user.target

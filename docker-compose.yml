@@ -6,6 +6,7 @@ name: nasil
 services:
   db:
     image: postgres:17-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: nasil
       POSTGRES_USER: nasil
@@ -22,6 +23,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    restart: unless-stopped
     ports:
       - "6379:6379"
     healthcheck:
@@ -52,6 +54,7 @@ services:
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
     environment: *app_env
     ports:
       - "8000:8000"
@@ -69,23 +72,43 @@ services:
 
   worker:
     build: .
-    command: celery -A backend worker --loglevel=info
+    command: celery -A backend worker --loglevel=info --concurrency=2
+    restart: unless-stopped
     environment: *app_env
     depends_on:
       migrate:
         condition: service_completed_successfully
       redis:
         condition: service_healthy
+    # Give in-flight acks_late tasks time to finish before the container dies.
+    stop_grace_period: 2m
+    healthcheck:
+      test: ["CMD", "celery", "-A", "backend", "inspect", "ping", "--timeout", "5"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+      start_period: 30s
 
   beat:
     build: .
-    command: celery -A backend beat --loglevel=info
+    command: celery -A backend beat --loglevel=info --schedule=/var/lib/celery/celerybeat-schedule --pidfile=/tmp/celerybeat.pid
+    restart: unless-stopped
     environment: *app_env
     depends_on:
       migrate:
         condition: service_completed_successfully
       redis:
         condition: service_healthy
+    volumes:
+      # Persist the scheduler clock so a restart does not replay overdue tasks.
+      - beatstate:/var/lib/celery
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /tmp/celerybeat.pid && kill -0 $$(cat /tmp/celerybeat.pid)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
 volumes:
   pgdata:
+  beatstate:
