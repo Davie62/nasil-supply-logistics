@@ -6,9 +6,9 @@
 | --- | --- |
 | Document ID | NASIL-TST-2026-11-16 |
 | Title | Test Execution and Security Assurance Log |
-| Version | 1.3 |
-| Status | Phase 3 complete (operational readiness); awaiting engineering sign-off |
-| Date of record | 2026-11-16 (initial), 2026-11-18 (rerun), 2026-11-19 (Phase 3 and final verification) |
+| Version | 1.4 |
+| Status | Phase 3 complete (operational readiness); remote CI remediation verified locally; awaiting engineering sign-off |
+| Date of record | 2026-11-16 (initial), 2026-11-18 (rerun), 2026-11-19 (Phase 3, final verification and remote CI remediation) |
 | Classification | Internal — Engineering |
 | Repository | `Davie62/nasil-supply-logistics` |
 | Branch | `development` |
@@ -464,6 +464,40 @@ coverage data file after the fix.
 | Limitation | Docker is not installed in the local environment and no systemd host was available, so neither supervision path was started here |
 | Result | **Configured; host execution pending staging** |
 
+### 2026-11-19 — Remote CI remediation (PostgreSQL 17 reproduction)
+
+The first three remote CI runs on `development` were red. Because the GitHub
+Actions job logs are not readable without repository admin rights, the Linux
+job's PostgreSQL 17 condition was reproduced locally with a portable PostgreSQL
+17.10 cluster (`initdb`/`pg_ctl`, trust auth, port 55432) and CI-equivalent
+environment variables. Redis was not required: every broker check in the suite
+is mocked.
+
+Two independent root causes were confirmed and fixed:
+
+1. **Linux job — test-database teardown (F-10).** All four PostgreSQL-only
+   concurrency tests passed their assertions, but `DROP DATABASE test_nasil`
+   failed with `psycopg.errors.ObjectInUse: database "test_nasil" is being
+   accessed by other users` (2 lingering sessions). Each worker thread called
+   `close_old_connections()` in its `finally` block, which does **not** close a
+   healthy connection; the thread-local connection survived until process exit.
+   SQLite tolerated this, PostgreSQL did not. The workers now call
+   `connection.close()` directly.
+2. **Security job — dependency vulnerability (F-11).** `pip_audit` reported 7
+   known CVEs in `pypdf 6.21.2` (CVE-2026-119203/04/05/06/07/08/09), all fixed
+   in `6.21.4`. The pin was raised to `6.21.4`, the minimal fixed version that
+   keeps the existing `PdfReader` usage unchanged.
+
+| Field | Value |
+| --- | --- |
+| PostgreSQL reproduction | Portable PostgreSQL 17.10 on 127.0.0.1:55432, `DJANGO_DB_ENGINE=postgresql`, CI-equivalent env; four concurrency tests **4 passed, 0 failed**, test database dropped cleanly (no `ObjectInUse`) |
+| Full PostgreSQL command | `DJANGO_DEBUG=true DJANGO_DB_ENGINE=postgresql POSTGRES_DB=nasil POSTGRES_USER=nasil POSTGRES_PASSWORD=nasil POSTGRES_HOST=127.0.0.1 POSTGRES_PORT=55432 POSTGRES_SSLMODE=disable NOTIFICATIONS_DELIVERY_ENABLED=false INTEGRATIONS_DELIVERY_ENABLED=false venv/Scripts/python.exe -m coverage run manage.py test --noinput` |
+| Full PostgreSQL result | **327 tests, 327 passed, 0 skipped, 0 failed** — 250.8 s; all four PostgreSQL-only tests now execute and pass |
+| Coverage | **87% (5639 of 6510 statements)**; `coverage report` exit 0 against the 85% gate |
+| Dependency audit | `python -m pip_audit --vulnerability-service osv --timeout 60` → **No known vulnerabilities found** after the `pypdf` pin change |
+| Static checks | `ruff check .` clean; `manage.py check` clean; `makemigrations --check --dry-run` clean |
+| Limitation | This is a local reproduction of the CI environment, not the remote job itself. The remote run must still be observed green after the fix is pushed. |
+
 ---
 
 ## 8. Coverage assessment
@@ -649,14 +683,38 @@ objective.
 | Recommendation | Compare the PostgreSQL target name with the live database name, and resolve SQLite paths before the existence check; refuse on equality in both branches. |
 | Test disposition | `core/test_backup.py` now asserts that PostgreSQL refuses the live name and that SQLite refuses both an existing and an absent live path; 38 backup tests pass. |
 
+### F-10 — PostgreSQL concurrency tests leaked thread-local connections
+
+| Field | Value |
+| --- | --- |
+| Severity | Medium (CI reliability; created a permanently red Linux job) |
+| Component | `accounts/test_concurrency.py`, `core/test_workflow_concurrency.py`, `operations/test_concurrency.py` |
+| Status | **Closed — fixed during remote CI remediation** |
+| Evidence | Under portable PostgreSQL 17.10 the four assertions passed, but test-database teardown raised `psycopg.errors.ObjectInUse: database "test_nasil" is being accessed by other users` (2 sessions). `close_old_connections()` only closes invalid connections; healthy thread-local connections remained open until process exit. |
+| Impact | The Linux CI job failed after a passing test run, blocking Phase 3 release. The production code was unaffected — this is a test-harness defect. |
+| Recommendation | Close the connection explicitly in each worker's `finally` block so teardown can drop the test database. |
+| Test disposition | All three worker helpers now call `connection.close()`; the four tests pass and the test database drops cleanly under PostgreSQL. |
+
+### F-11 — Vulnerable `pypdf` pin in production requirements
+
+| Field | Value |
+| --- | --- |
+| Severity | Medium (known CVEs in a PDF-parsing dependency) |
+| Component | `requirements.txt` — `pypdf==6.21.2` |
+| Status | **Closed — fixed during remote CI remediation** |
+| Evidence | `pip_audit --vulnerability-service osv --timeout 60` reported 7 CVEs (CVE-2026-119203 through CVE-2026-119209) against `pypdf 6.21.2`; upstream fixed them in `6.21.4`. |
+| Impact | The security job was red on every pushed commit, and PDF ingestion would ship with known parser vulnerabilities. |
+| Recommendation | Raise the pin to the minimal fixed version `6.21.4`; keep the audit step as a blocking CI gate. |
+| Test disposition | Pinned to `6.21.4`, installed locally, audit re-run clean; the `PdfReader` call sites in `operations/services.py`, `operations/tests.py` and `customer_services/tests.py` pass in the full PostgreSQL run. |
+
 ---
 
 ## 10. Residual risk and limitations
 
 | Risk | Assessment | Mitigation / next step |
 | --- | --- | --- |
-| Docker unavailable locally | The PostgreSQL/Redis CI job and the compose supervision changes were configured and YAML-validated but not executed in this environment. | Observe the first remote CI run; treat a red run as a release blocker. Run `docker compose up` on a Docker-capable host before the pilot. |
-| PostgreSQL-specific behaviour | Local runs use SQLite; four concurrency checks are skipped. | The Linux CI job runs the full suite on PostgreSQL 17. |
+| Docker unavailable locally | Compose supervision changes were configured and YAML-validated but not started in this environment. The PostgreSQL CI condition was independently reproduced with a portable PostgreSQL 17.10 cluster. | Observe the first remote CI run; treat a red run as a release blocker. Run `docker compose up` on a Docker-capable host before the pilot. |
+| PostgreSQL-specific behaviour | Resolved for this release: the full suite now runs locally on PostgreSQL 17.10 (327 tests, 327 passed, 0 skipped) as well as on SQLite. | Keep the Linux CI job on PostgreSQL 17 so future regressions are caught. |
 | PostgreSQL restore drill | The local drill restored SQLite byte-for-byte. `pg_dump`/`pg_restore` argument construction is unit-tested with mocks, but no real PostgreSQL restore was executed. | Run `backup_database` then `restore_database --target-database <isolated>` on staging and compare counts. |
 | Live S3 bucket | Storage tests use the `moto` mock. Bucket policy, IAM role, lifecycle rules and presigned URL expiry against real AWS were not exercised. | Apply the documented bucket policy, verify an upload/presign/read cycle, and confirm public access is blocked at the account level. |
 | Systemd supervision | Unit and timer files are reviewed but not started; no host ran them. | Install on staging, confirm `systemctl list-timers`, kill the worker and beat to verify restart, and confirm beat does not replay overdue tasks. |
@@ -672,6 +730,7 @@ objective.
 
 | Date | Version | Change | Author |
 | --- | --- | --- | --- |
+| 2026-11-19 | 1.4 | Remote CI remediation: F-10 (thread-local connection leak blocked PostgreSQL test-DB teardown) and F-11 (`pypdf` CVEs) closed; full suite green on PostgreSQL 17.10 (327 passed, 0 skipped), 87% (5639/6510), `pip_audit` clean, static checks clean | QA / security review |
 | 2026-11-19 | 1.3 | Final verification after F-09: live-database refusal added to PostgreSQL/SQLite restore; 63 focused tests, 327 full tests (323 passed, 4 skipped), 87% (5632/6510); static checks clean | QA / security review |
 | 2026-11-19 | 1.2 | Phase 3 recorded: durable private S3 media, worker/beat supervision, encrypted backup/restore, operational health probe; 61 focused tests; full regression 325 tests, 321 passed, 4 skipped, 0 failed; 87% (5637/6508); byte-identical local restore drill; findings F-06–F-08 raised and closed | QA / security review |
 | 2026-11-18 | 1.1 | Rerun recorded: 273 tests, 269 passed, 4 skipped, 0 failed; clean coverage baseline 87% (5303/6109); F-05 raised and closed by freezing the clock in the public tracking rate-limit test; coverage gate set to `fail_under = 85` | QA / security review |
@@ -713,12 +772,23 @@ objective.
 | `.env.example`, `DEPLOYMENT.md` | Media, backup, restore-drill, monitoring and supervision documentation |
 | `TEST_AUDIT_LOG.md` | This document |
 
+### 11.3 Remote CI remediation change set
+
+| File | Change |
+| --- | --- |
+| `accounts/test_concurrency.py` | F-10: worker threads close their DB connection explicitly instead of relying on `close_old_connections()` |
+| `core/test_workflow_concurrency.py` | F-10: same connection-close fix in the workflow race helper |
+| `operations/test_concurrency.py` | F-10: same connection-close fix in the inventory race helper |
+| `requirements.txt` | F-11: `pypdf` pinned from `6.21.2` to `6.21.4` (7 CVEs fixed) |
+| `TEST_AUDIT_LOG.md` | This document |
+
 ---
 
 ## 12. Sign-off
 
 | Role | Name | Decision | Date |
 | --- | --- | --- | --- |
+| QA / security review | AI-assisted review | Remote CI remediation verified locally: F-10/F-11 closed, full suite green on PostgreSQL 17.10 (327/327), `pip_audit` clean; remote green run still to be confirmed | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 3 final verification passed; F-05–F-09 closed before release, F-01/F-02/F-04 remain low/informational backlog; no open critical/high findings | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 3 objective met; no critical/high findings | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 2 test objective met; no critical/high findings | 2026-11-16 |

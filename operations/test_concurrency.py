@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
 
 from django.core.exceptions import ValidationError
-from django.db import close_old_connections
+from django.db import close_old_connections, connection
 from django.test import TransactionTestCase, skipUnlessDBFeature
 
 from accounts.models import User
@@ -33,7 +33,9 @@ class InventoryConcurrencyTests(TransactionTestCase):
                 except ValidationError:
                     return "rejected"
             finally:
-                close_old_connections()
+                # close_old_connections() leaves healthy connections open; the
+                # thread-local connection would block PostgreSQL test DB teardown.
+                connection.close()
 
         with ThreadPoolExecutor(max_workers=2) as pool:
             futures = [pool.submit(issue) for _ in range(2)]

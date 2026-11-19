@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Barrier
 
 from django.core.exceptions import ValidationError
-from django.db import close_old_connections
+from django.db import close_old_connections, connection
 from django.test import TransactionTestCase, override_settings, skipUnlessDBFeature
 
 from accounts.models import User
@@ -32,7 +32,9 @@ class WorkflowConcurrencyTests(TransactionTestCase):
                 barrier.wait(timeout=10)
                 return operation(actor)
             finally:
-                close_old_connections()
+                # close_old_connections() leaves healthy connections open; the
+                # thread-local connection would block PostgreSQL test DB teardown.
+                connection.close()
 
         with ThreadPoolExecutor(max_workers=2) as pool:
             futures = [pool.submit(run) for _ in range(2)]

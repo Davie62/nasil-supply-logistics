@@ -17,7 +17,9 @@ class ConcurrentEmployeeIDTests(TransactionTestCase):
             try:
                 return EmployeeService.generate_employee_id()
             finally:
-                close_old_connections()
+                # close_old_connections() leaves healthy connections open; the
+                # thread-local connection would block PostgreSQL test DB teardown.
+                connection.close()
         for iteration in range(2):
             with self.subTest(iteration=iteration):
                 with ThreadPoolExecutor(max_workers=4) as pool:
