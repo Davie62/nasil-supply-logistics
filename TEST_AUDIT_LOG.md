@@ -6,8 +6,8 @@
 | --- | --- |
 | Document ID | NASIL-TST-2026-11-16 |
 | Title | Test Execution and Security Assurance Log |
-| Version | 1.4 |
-| Status | Phase 3 complete (operational readiness); remote CI remediation verified locally; awaiting engineering sign-off |
+| Version | 1.5 |
+| Status | Phase 3 complete (operational readiness); remote CI green; awaiting engineering sign-off |
 | Date of record | 2026-11-16 (initial), 2026-11-18 (rerun), 2026-11-19 (Phase 3, final verification and remote CI remediation) |
 | Classification | Internal — Engineering |
 | Repository | `Davie62/nasil-supply-logistics` |
@@ -496,7 +496,22 @@ Two independent root causes were confirmed and fixed:
 | Coverage | **87% (5639 of 6510 statements)**; `coverage report` exit 0 against the 85% gate |
 | Dependency audit | `python -m pip_audit --vulnerability-service osv --timeout 60` → **No known vulnerabilities found** after the `pypdf` pin change |
 | Static checks | `ruff check .` clean; `manage.py check` clean; `makemigrations --check --dry-run` clean |
-| Limitation | This is a local reproduction of the CI environment, not the remote job itself. The remote run must still be observed green after the fix is pushed. |
+| Limitation | This is a local reproduction of the CI environment, not the remote job itself. The remote run must still be observed green after the fix is pushed — confirmed in the next entry. |
+
+### 2026-11-19 — Remote CI confirmation (fix commit `c392370`)
+
+The fix commit was pushed to `origin/development` and both blocking jobs were
+observed to completion through the GitHub Checks API. This closes the release
+blocker recorded in §10; the remote result agrees with the local PostgreSQL
+reproduction above.
+
+| Field | Value |
+| --- | --- |
+| Workflow run | `44538891111` — `Security checks` on `c392370` |
+| `security` job | **success** (2026-11-19T13:59:05Z → 14:00:45Z) — [job](https://github.com/Davie62/nasil-supply-logistics/actions/runs/44538891111/job/135611618960) |
+| `linux` job | **success** (2026-11-19T13:59:06Z → 14:01:34Z) — [job](https://github.com/Davie62/nasil-supply-logistics/actions/runs/44538891111/job/135611618356) |
+| Other checks | `Vercel Preview Comments` success; no failing or cancelled checks on the commit |
+| Result | **Release blocker cleared — both required CI jobs green** |
 
 ---
 
@@ -730,6 +745,7 @@ objective.
 
 | Date | Version | Change | Author |
 | --- | --- | --- | --- |
+| 2026-11-19 | 1.5 | Remote CI confirmation recorded: workflow run `44538891111` — `security` and `linux` jobs both success on `c392370`; release blocker cleared (documentation only) | QA / security review |
 | 2026-11-19 | 1.4 | Remote CI remediation: F-10 (thread-local connection leak blocked PostgreSQL test-DB teardown) and F-11 (`pypdf` CVEs) closed; full suite green on PostgreSQL 17.10 (327 passed, 0 skipped), 87% (5639/6510), `pip_audit` clean, static checks clean | QA / security review |
 | 2026-11-19 | 1.3 | Final verification after F-09: live-database refusal added to PostgreSQL/SQLite restore; 63 focused tests, 327 full tests (323 passed, 4 skipped), 87% (5632/6510); static checks clean | QA / security review |
 | 2026-11-19 | 1.2 | Phase 3 recorded: durable private S3 media, worker/beat supervision, encrypted backup/restore, operational health probe; 61 focused tests; full regression 325 tests, 321 passed, 4 skipped, 0 failed; 87% (5637/6508); byte-identical local restore drill; findings F-06–F-08 raised and closed | QA / security review |
@@ -788,7 +804,7 @@ objective.
 
 | Role | Name | Decision | Date |
 | --- | --- | --- | --- |
-| QA / security review | AI-assisted review | Remote CI remediation verified locally: F-10/F-11 closed, full suite green on PostgreSQL 17.10 (327/327), `pip_audit` clean; remote green run still to be confirmed | 2026-11-19 |
+| QA / security review | AI-assisted review | Remote CI remediation verified locally and remotely: F-10/F-11 closed, full suite green on PostgreSQL 17.10 (327/327), `pip_audit` clean, workflow run `44538891111` both jobs success | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 3 final verification passed; F-05–F-09 closed before release, F-01/F-02/F-04 remain low/informational backlog; no open critical/high findings | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 3 objective met; no critical/high findings | 2026-11-19 |
 | QA / security review | AI-assisted review | Phase 2 test objective met; no critical/high findings | 2026-11-16 |
