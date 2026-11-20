@@ -49,9 +49,9 @@ This update delivers a more complete public-facing website and a more tailored q
 - **Home/About/Services content:** Removed the Home “Our Blog/Daily News & Updates” section and the duplicate “How We Work” process block (kept “How It Works” as canonical on About with `id="how-it-works"`). Refined Services into a single anchored page with clearer service sections.
 - **Tailored service quote flow:** Service CTAs on the Services page now pass a whitelisted `?service=` key (including custom coordination). The quote view renders service-specific headings/intro/placeholders and preserves context across validation/submission (same form/flow), with best-effort attachment of a matched active `logistics.Service` on submit; generic `/quote/` behavior remains unchanged.
 - **Header/UI refinements:** Removed desktop dropdown arrow indicators while preserving hover/focus dropdown behavior, kept recommended mobile off-canvas submenu toggles, and adjusted desktop header spacing so all primary nav links fit on one line.
-- **Operational fixes:** Made Celery optional for core Django commands (imports no longer fail when Celery is unavailable) and added merge migrations to resolve migration graph conflicts while preserving existing migration history and local data.
+- **Operational fixes:** Made Celery optional for core Django commands (imports no longer fail when Celery is unavailable).
 
-**Notes:** Legal pages are general placeholders and should be reviewed before production. No database schema changes were introduced for the public pages; merge migrations resolve existing graph conflicts only.
+**Notes:** Legal pages are general placeholders and should be reviewed before production. No database schema changes were introduced for the public pages.
 
 ## Local setup (PowerShell)
 
