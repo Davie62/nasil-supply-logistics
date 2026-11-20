@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Site Map | Nasil Supply & Logistics{% endblock %}
+{% block meta_description %}A complete directory of Nasil Supply & Logistics public pages, services, support, and legal information.{% endblock %}
+{% block og_title %}Site Map | Nasil Supply & Logistics{% endblock %}
+{% block og_description %}Browse every public page and service section on the Nasil Supply & Logistics website.{% endblock %}
+{% block twitter_title %}Site Map | Nasil Supply & Logistics{% endblock %}
+{% block twitter_description %}Browse every public page and service section on the Nasil Supply & Logistics website.{% endblock %}
+
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Site Map" %}
+{% endblock %}
+
+{% block content %}
+<section class="site-blocks-cover inner-page-cover overlay" style="background-image: url('{% static 'images/hero_bg_1.jpg' %}');" aria-labelledby="sitemap-title">
+  <div class="container">
+    <div class="row align-items-center justify-content-center text-center">
+      <div class="col-lg-9">
+        <h1 id="sitemap-title" class="text-white text-uppercase font-weight-bold">Site Map</h1>
+        <p class="lead text-white">Every public page and service section, in one place.</p>
+        <nav class="breadcrumb-custom" aria-label="Breadcrumb">
+          <a href="{% url 'home' %}">Home</a><span aria-hidden="true">/</span><span aria-current="page">Site Map</span>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="site-section" aria-labelledby="sitemap-groups-title">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <span class="section-eyebrow">Site navigation</span>
+        <h2 id="sitemap-groups-title">Browse our website</h2>
+        <p class="section-intro">Select a group below to explore the pages and service sections available on our site. For a machine-readable version, see our <a href="{% url 'sitemap' %}">XML sitemap</a>.</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="sitemap-groups">
+          {% for group in groups %}
+          <details class="sitemap-group" open>
+            <summary>{{ group.title }}</summary>
+            <ul class="sitemap-links">
+              {% for link in group.links %}
+              <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </details>
+          {% endfor %}
+        </div>
+        <p class="enterprise-note text-center">Looking for something specific? Use the search button in the header, or <a href="{% url 'contact' %}">contact our team</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

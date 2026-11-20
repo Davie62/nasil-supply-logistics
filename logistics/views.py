@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse
 from django.contrib import messages
 from core.forms import ContactMessageForm
 from customers.models import Customer
@@ -22,6 +23,59 @@ def about(request):
 
 def services(request):
     return render(request, "services.html")
+
+
+def html_sitemap(request):
+    """Human-readable directory of public pages and service sections.
+
+    Built from named routes only; it never exposes authenticated areas and has
+    no dependency on database content, so it cannot drift from the URLs that
+    actually resolve.
+    """
+    services_url = reverse("services")
+    groups = [
+        {
+            "title": "Main pages",
+            "links": [
+                {"title": "Home", "url": reverse("home")},
+                {"title": "About Us", "url": reverse("about")},
+                {"title": "Our Services", "url": services_url},
+                {"title": "Industries We Serve", "url": reverse("industries")},
+                {"title": "Global Coverage", "url": reverse("coverage")},
+                {"title": "Frequently Asked Questions", "url": reverse("faq")},
+            ],
+        },
+        {
+            "title": "Services",
+            "links": [
+                {"title": "Procurement & Sourcing", "url": services_url + "#procurement"},
+                {"title": "Supply Solutions", "url": services_url + "#supply"},
+                {"title": "Warehousing & Storage", "url": services_url + "#warehousing"},
+                {"title": "Transport & Distribution", "url": services_url + "#transport"},
+                {"title": "Import & Export Support", "url": services_url + "#import-export"},
+                {"title": "Tailored Logistics Coordination", "url": services_url + "#custom-solutions"},
+            ],
+        },
+        {
+            "title": "Support",
+            "links": [
+                {"title": "Request a Quote", "url": reverse("quote")},
+                {"title": "Contact Us", "url": reverse("contact")},
+                {"title": "Track a Shipment", "url": reverse("public_tracking")},
+                {"title": "Customer Portal", "url": reverse("portal_login")},
+            ],
+        },
+        {
+            "title": "Legal & site information",
+            "links": [
+                {"title": "Privacy Policy", "url": reverse("privacy")},
+                {"title": "Terms & Conditions", "url": reverse("terms")},
+                {"title": "Cookie Policy", "url": reverse("cookies")},
+                {"title": "Site Map", "url": reverse("html_sitemap")},
+            ],
+        },
+    ]
+    return render(request, "sitemap.html", {"groups": groups})
 
 
 QUOTE_SERVICE_CONTEXTS = {

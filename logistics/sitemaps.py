@@ -18,6 +18,7 @@ class PublicPageSitemap(Sitemap):
         "about": ("monthly", 0.8),
         "faq": ("monthly", 0.7),
         "contact": ("monthly", 0.7),
+        "html_sitemap": ("monthly", 0.5),
         "public_tracking": ("monthly", 0.5),
         "privacy": ("yearly", 0.3),
         "terms": ("yearly", 0.3),

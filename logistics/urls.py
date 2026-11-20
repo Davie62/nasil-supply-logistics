@@ -1,6 +1,6 @@
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 
 from . import views
 from .sitemaps import PublicPageSitemap
@@ -14,6 +14,11 @@ urlpatterns = [
         name="robots_txt",
     ),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
+    path(
+        "sitemap",
+        RedirectView.as_view(pattern_name="html_sitemap", permanent=True),
+    ),
+    path("sitemap/", views.html_sitemap, name="html_sitemap"),
     path("", views.home, name="home"),
     path("about/", views.about, name="about"),
     path("services/", views.services, name="services"),

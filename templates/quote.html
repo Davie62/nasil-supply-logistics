@@ -3,6 +3,10 @@
 
 {% block title %}Request a Quote{% if selected_service %} - {{ selected_service.label }}{% endif %} | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Request a tailored quote from Nasil Supply &amp; Logistics for {% if selected_service %}{{ selected_service.label|lower }}{% else %}procurement, supply, warehousing, transport, and import-export{% endif %} services worldwide.{% endblock %}
+{% block og_title %}Request a Quote{% if selected_service %} - {{ selected_service.label }}{% endif %} | Nasil Supply &amp; Logistics{% endblock %}
+{% block og_description %}Tell us your requirements and our team will prepare a tailored supply and logistics quote.{% endblock %}
+{% block twitter_title %}Request a Quote | Nasil Supply &amp; Logistics{% endblock %}
+{% block twitter_description %}Tell us your requirements and our team will prepare a tailored supply and logistics quote.{% endblock %}
 
 {% block extra_css_after %}
 <link rel="stylesheet" href="{% static 'css/quote.css' %}">
@@ -18,8 +22,9 @@
     <div class="container">
         <div class="row align-items-center justify-content-center text-center">
             <div class="col-md-8">
+                <p class="section-eyebrow">Tailored to your requirements</p>
                 <h1 class="text-white font-weight-light text-uppercase font-weight-bold">Request a Quote{% if selected_service %}: {{ selected_service.label }}{% endif %}</h1>
-                <p class="breadcrumb-custom"><a href="{% url 'home' %}">Home</a> <span class="mx-2">&gt;</span> <span>Request Quote</span></p>
+                <nav class="breadcrumb-custom" aria-label="Breadcrumb"><a href="{% url 'home' %}">Home</a> <span aria-hidden="true">&gt;</span> <span aria-current="page">Request Quote</span></nav>
             </div>
         </div>
     </div>
@@ -29,7 +34,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-7 mb-5">
-                <div class="p-5 bg-white quote-form-template">
+                <div class="p-5 bg-white quote-form-template enterprise-form">
                     {% if selected_service %}
                     <div class="mb-4 p-3 rounded" style="background: #f0f6ff; border: 1px solid #d7e6f7;">
                         <h2 class="h5 text-black mb-2">Service: {{ selected_service.label }}</h2>
@@ -46,13 +51,17 @@
                         {% csrf_token %}
                         {% if selected_service %}<input type="hidden" name="service" value="{{ selected_service.key }}">{% endif %}
 
-                        {{ form.non_field_errors }}
+                        {% if form.non_field_errors %}
+                        <div class="form-error-summary" role="alert">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
                         {% for field in form %}
                         <div class="form-group">
                             {{ field.label_tag }}{% if field.field.required %} *{% endif %}
                             {{ field }}
                             {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
-                            {% for error in field.errors %}<div class="text-danger" role="alert">{{ error }}</div>{% endfor %}
+                            {% for error in field.errors %}<div class="field-error" role="alert">{{ error }}</div>{% endfor %}
                         </div>
                         {% endfor %}
                         <button type="submit" class="btn btn-primary py-2 px-4 text-white">Request Quote</button>
