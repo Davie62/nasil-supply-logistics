@@ -41,6 +41,18 @@ individual quotation PDFs, notification delivery receipts and a REST API remain 
 Provider adapters need credentials and live staging verification. See ROADMAP.md for the
 phased implementation plan and REMEDIATION.md for the current verified baseline.
 
+## Public website & quote updates (development)
+
+This update delivers a more complete public-facing website and a more tailored quotation flow:
+
+- **Essential public pages and navigation:** Wired **Industries** and added **Coverage** (`/coverage/`, global coverage coordinated from a Kampala, Uganda base), **Privacy**, **Terms**, and **Cookies** policy pages. Added custom **404/500** error pages and updated global navigation/footer/legal links and metadata.
+- **Home/About/Services content:** Removed the Home “Our Blog/Daily News & Updates” section and the duplicate “How We Work” process block (kept “How It Works” as canonical on About with `id="how-it-works"`). Refined Services into a single anchored page with clearer service sections.
+- **Tailored service quote flow:** Service CTAs on the Services page now pass a whitelisted `?service=` key (including custom coordination). The quote view renders service-specific headings/intro/placeholders and preserves context across validation/submission (same form/flow), with best-effort attachment of a matched active `logistics.Service` on submit; generic `/quote/` behavior remains unchanged.
+- **Header/UI refinements:** Removed desktop dropdown arrow indicators while preserving hover/focus dropdown behavior, kept recommended mobile off-canvas submenu toggles, and adjusted desktop header spacing so all primary nav links fit on one line.
+- **Operational fixes:** Made Celery optional for core Django commands (imports no longer fail when Celery is unavailable) and added merge migrations to resolve migration graph conflicts while preserving existing migration history and local data.
+
+**Notes:** Legal pages are general placeholders and should be reviewed before production. No database schema changes were introduced for the public pages; merge migrations resolve existing graph conflicts only.
+
 ## Local setup (PowerShell)
 
 ```powershell

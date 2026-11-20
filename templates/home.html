@@ -1,14 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Nasil Supply &amp; Logistics | Global Procurement, Supply &amp; Logistics{% endblock %}
+{% block meta_description %}Nasil Supply &amp; Logistics delivers procurement, supply, warehousing, transport, and import-export solutions for clients worldwide from Kampala, Uganda.{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
   <div class="container">
     <div class="row align-items-center justify-content-center text-center">
       <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
-        <h1 class="text-white font-weight-light mb-5 text-uppercase font-weight-bold">NASIL SUPPLY & LOGISTICS SERVICES</h1>
-        <p><a href="{% url 'quote' %}" class="btn btn-primary py-3 px-5 text-white">Get Started!</a></p>
+        <h1 class="text-white font-weight-light mb-4 text-uppercase font-weight-bold">Global Supply &amp; Logistics Services</h1>
+        <p class="mb-5 text-white lead">Reliable procurement, supply, warehousing, transport, and import &amp; export solutions for clients worldwide from our base in Kampala, Uganda.</p>
+        <p>
+          <a href="{% url 'quote' %}" class="btn btn-primary py-3 px-5 text-white mr-2">Request a Quote</a>
+          <a href="{% url 'contact' %}" class="btn btn-outline-white py-3 px-5 text-white">Contact Us</a>
+        </p>
       </div>
     </div>
   </div>
@@ -18,14 +25,14 @@
   <div class="row align-items-center no-gutters align-items-stretch overlap-section">
     <div class="col-md-4">
       <div class="feature-1 pricing h-100 text-center">
-        <div class="icon"><i class="bi bi-currency-dollar"></i></div>
-        <h2 class="my-4 heading">Best Prices</h2>
-        <p>Flexible and cost-effective supply solutions built around your business needs.</p>
+        <div class="icon"><span class="flaticon-travel"></span></div>
+        <h2 class="my-4 heading">Worldwide Reach</h2>
+        <p>Coordinated supply and logistics support for local, regional, and international requirements.</p>
       </div>
     </div>
     <div class="col-md-4">
       <div class="free-quote bg-dark h-100">
-        <h2 class="my-4 heading text-center">Get Free Quote</h2>
+        <h2 class="my-4 heading text-center">Get a Free Quote</h2>
         <form method="get" action="{% url 'quote' %}">
           <div class="form-group">
             <label for="fq_name">Name</label>
@@ -43,9 +50,9 @@
     </div>
     <div class="col-md-4">
       <div class="feature-3 pricing h-100 text-center">
-        <div class="icon"><i class="bi bi-telephone-fill"></i></div>
-        <h2 class="my-4 heading">24/7 Support</h2>
-        <p>Experienced advisors and operations teams available whenever your business needs support.</p>
+        <div class="icon"><span class="flaticon-frontal-truck"></span></div>
+        <h2 class="my-4 heading">Reliable Delivery</h2>
+        <p>Practical planning, responsive coordination, and dependable handling from sourcing to delivery.</p>
       </div>
     </div>
   </div>
@@ -56,7 +63,7 @@
     <div class="row justify-content-center mb-5">
       <div class="col-md-7 text-center border-primary">
         <h2 class="mb-0 text-primary">What We Offer</h2>
-        <p class="color-black-opacity-5">Reliable Supply&logistics services designed around your operations.</p>
+        <p class="color-black-opacity-5">Integrated supply and logistics services designed around your operations.</p>
       </div>
     </div>
     <div class="row align-items-stretch">
@@ -64,9 +71,19 @@
         <div class="unit-4 d-flex">
           <div class="unit-4-icon mr-4"><span class="text-primary flaticon-travel"></span></div>
           <div>
-            <h3>Food Supply</h3>
-            <p>Reliable food supply chain solutions to ensure your products reach customers safely and efficiently.</p>
-            <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+            <h3>Procurement &amp; Sourcing</h3>
+            <p>Strategic sourcing and purchasing support to help you obtain the right goods, materials, and equipment.</p>
+            <p class="mb-0"><a href="{% url 'services' %}#procurement">Learn More</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
+        <div class="unit-4 d-flex">
+          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-barn"></span></div>
+          <div>
+            <h3>Warehousing &amp; Storage</h3>
+            <p>Secure handling and organized storage solutions to keep inventory controlled and ready to move.</p>
+            <p class="mb-0"><a href="{% url 'services' %}#warehousing">Learn More</a></p>
           </div>
         </div>
       </div>
@@ -74,19 +91,9 @@
         <div class="unit-4 d-flex">
           <div class="unit-4-icon mr-4"><span class="text-primary flaticon-sea-ship-with-containers"></span></div>
           <div>
-            <h3>Logistics & Transportation</h3>
-            <p>Flexible ocean logistics solutions for bulky goods, imports, and regional distribution.</p>
-            <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-4 mb-4 mb-lg-0">
-        <div class="unit-4 d-flex">
-          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-frontal-truck"></span></div>
-          <div>
-            <h3>General Supply</h3>
-            <p>Ground delivery and route planning to keep your goods moving reliably across locations.</p>
-            <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+            <h3>Transport &amp; Import/Export</h3>
+            <p>Coordinated distribution and cross-border or international shipment support tailored to your needs.</p>
+            <p class="mb-0"><a href="{% url 'services' %}#transport">Learn More</a></p>
           </div>
         </div>
       </div>
@@ -97,8 +104,8 @@
 <div class="site-section block-13">
   <div class="owl-carousel nonloop-block-13">
     <div>
-      <a href="{% url 'services' %}" class="unit-1 text-center">
-        <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_1.jpg' %}" alt="Storage" class="img-fluid">
+      <a href="{% url 'services' %}#warehousing" class="unit-1 text-center">
+        <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_1.jpg' %}" alt="Storage and warehousing" class="img-fluid">
         <div class="unit-1-text">
           <h3 class="unit-1-heading">Storage</h3>
           <p class="px-5">Secure, organized warehousing solutions designed for inventory control and efficient dispatch.</p>
@@ -106,38 +113,38 @@
       </a>
     </div>
     <div>
-      <a href="{% url 'services' %}" class="unit-1 text-center">
-        <img decoding="async" width="5760" height="3840" loading="lazy" src="{% static 'images/construction-supply.jpg' %}" alt="Construction supply" class="img-fluid">
+      <a href="{% url 'services' %}#supply" class="unit-1 text-center">
+        <img decoding="async" width="5760" height="3840" loading="lazy" src="{% static 'images/construction-supply.jpg' %}" alt="Construction and project supply" class="img-fluid">
         <div class="unit-1-text">
-          <h3 class="unit-1-heading">Construction supply</h3>
-          <p class="px-5">Reliable materials and equipment supply for construction projects and site operations.</p>
+          <h3 class="unit-1-heading">Project &amp; Construction Supply</h3>
+          <p class="px-5">Reliable materials and equipment supply to support projects and site operations.</p>
         </div>
       </a>
     </div>
     <div>
-      <a href="{% url 'services' %}" class="unit-1 text-center">
-        <img decoding="async" width="3000" height="4000" loading="lazy" src="{% static 'images/electrical-plumbing.jpg' %}" alt="Electrical and plumbing supplies" class="img-fluid">
+      <a href="{% url 'services' %}#supply" class="unit-1 text-center">
+        <img decoding="async" width="3000" height="4000" loading="lazy" src="{% static 'images/electrical-plumbing.jpg' %}" alt="Electrical and technical supplies" class="img-fluid">
         <div class="unit-1-text">
-          <h3 class="unit-1-heading">Electrical & Plumbing</h3>
-          <p class="px-5">Quality electrical and plumbing materials sourced and delivered for dependable project work.</p>
+          <h3 class="unit-1-heading">Technical &amp; Operational Supplies</h3>
+          <p class="px-5">Quality supplies sourced and delivered to keep facilities and operations running smoothly.</p>
         </div>
       </a>
     </div>
     <div>
-      <a href="{% url 'services' %}" class="unit-1 text-center">
-        <img decoding="async" width="5184" height="3456" loading="lazy" src="{% static 'images/printing-branding.jpg' %}" alt="Printing and branding" class="img-fluid">
+      <a href="{% url 'services' %}#supply" class="unit-1 text-center">
+        <img decoding="async" width="5184" height="3456" loading="lazy" src="{% static 'images/printing-branding.jpg' %}" alt="Printing and branding supplies" class="img-fluid">
         <div class="unit-1-text">
-          <h3 class="unit-1-heading">Printing and Branding</h3>
-          <p class="px-5">Professional printed materials and branded products to support your business presence.</p>
+          <h3 class="unit-1-heading">Printing &amp; Branding Supplies</h3>
+          <p class="px-5">Printed materials and branded products to support your organization’s presence and needs.</p>
         </div>
       </a>
     </div>
     <div>
-      <a href="{% url 'services' %}" class="unit-1 text-center">
-        <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_5.jpg' %}" alt="Ware Housing" class="img-fluid">
+      <a href="{% url 'services' %}#transport" class="unit-1 text-center">
+        <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_5.jpg' %}" alt="Distribution and transport" class="img-fluid">
         <div class="unit-1-text">
-          <h3 class="unit-1-heading">Ware Housing</h3>
-          <p class="px-5">Space planning and stock handling built to keep operations moving with confidence.</p>
+          <h3 class="unit-1-heading">Distribution</h3>
+          <p class="px-5">Planned dispatch and movement services to keep goods flowing with confidence.</p>
         </div>
       </a>
     </div>
@@ -148,40 +155,40 @@
   <div class="container">
     <div class="row justify-content-center mb-5">
       <div class="col-md-7 text-center border-primary">
-        <h2 class="font-weight-light text-primary">More Services</h2>
-        <p class="color-black-opacity-5">We Offer The Following Services</p>
+        <h2 class="font-weight-light text-primary">Industries We Serve</h2>
+        <p class="color-black-opacity-5">Tailored supply and logistics support for organizations across sectors worldwide.</p>
       </div>
     </div>
-    <div class="row align-items-stretch">
-      <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-        <div class="unit-4 d-flex">
-          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-travel"></span></div>
-          <div>
-            <h3>Procurement</h3>
-            <p>Strategic sourcing and purchasing support that keeps business operations aligned and efficient.</p>
-            <p><a href="{% url 'services' %}">Learn More</a></p>
-          </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="unit-4 h-100">
+          <h3 class="h5 text-black">Government Agencies</h3>
+          <p class="mb-0">Procurement and logistics support for public-sector operations and projects.</p>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-        <div class="unit-4 d-flex">
-          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-barn"></span></div>
-          <div>
-            <h3>Warehousing</h3>
-            <p>Secure storage and stock handling to support smoother and faster order fulfillment.</p>
-            <p><a href="{% url 'services' %}">Learn More</a></p>
-          </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="unit-4 h-100">
+          <h3 class="h5 text-black">NGOs &amp; Development Partners</h3>
+          <p class="mb-0">Reliable supply chain and delivery support for programs and field operations.</p>
         </div>
       </div>
-      <div class="col-md-6 col-lg-4 mb-4 mb-lg-4">
-        <div class="unit-4 d-flex">
-          <div class="unit-4-icon mr-4"><span class="text-primary flaticon-platform"></span></div>
-          <div>
-            <h3>Distribution</h3>
-            <p>Reliable dispatch planning and movement services that keep inventory flowing to customers.</p>
-            <p><a href="{% url 'services' %}">Learn More</a></p>
-          </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="unit-4 h-100">
+          <h3 class="h5 text-black">Healthcare Facilities</h3>
+          <p class="mb-0">Timely supply and delivery support for healthcare and medical needs.</p>
         </div>
+      </div>
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="unit-4 h-100">
+          <h3 class="h5 text-black">Corporate Organisations &amp; SMEs</h3>
+          <p class="mb-0">Flexible procurement and logistics solutions scaled to your business.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12 text-center">
+        <p class="mb-2">We also serve educational institutions, construction companies, and the hospitality industry.</p>
+        <p><a href="{% url 'industries' %}" class="btn btn-primary py-2 px-4 text-white">View All Industries</a></p>
       </div>
     </div>
   </div>
@@ -189,28 +196,19 @@
 
 <div class="site-section">
   <div class="container">
-    <div class="row justify-content-center mb-5">
-      <div class="col-md-7 text-center border-primary">
-        <h2 class="font-weight-light text-primary">Our Blog</h2>
-        <p class="color-black-opacity-5">See Our Daily News &amp; Updates</p>
+    <div class="row align-items-center mb-5">
+      <div class="col-md-6 mb-4 mb-md-0" data-aos="fade-right">
+        <img src="{% static 'images/img_3.jpg' %}" alt="Global supply and logistics coverage" class="img-fluid rounded">
       </div>
-    </div>
-    <div class="row mb-3 align-items-stretch">
-      <div class="col-md-6 col-lg-6 mb-4 mb-lg-4">
-        <div class="h-entry">
-          <img decoding="async" width="700" height="517" loading="lazy" src="{% static 'images/blog_1.jpg' %}" alt="Image" class="img-fluid">
-          <h2 class="font-size-regular"><a href="{% url 'services' %}">Warehouse and delivery planning</a></h2>
-          <div class="meta mb-4">by NASIL Team <span class="mx-2">&bullet;</span> Updated regularly <span class="mx-2">&bullet;</span> <a href="{% url 'services' %}">Logistics</a></div>
-          <p>Operational planning that supports smoother movement of goods and stronger control across inventory and customer demands.</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-lg-6 mb-4 mb-lg-4">
-        <div class="h-entry">
-          <img decoding="async" width="700" height="517" loading="lazy" src="{% static 'images/blog_2.jpg' %}" alt="Image" class="img-fluid">
-          <h2 class="font-size-regular"><a href="{% url 'services' %}">Reliable transport coordination</a></h2>
-          <div class="meta mb-4">by NASIL Team <span class="mx-2">&bullet;</span> Updated regularly <span class="mx-2">&bullet;</span> <a href="{% url 'services' %}">Operations</a></div>
-          <p>Practical logistics strategies that help businesses improve lead times, service quality, and overall supply chain confidence.</p>
-        </div>
+      <div class="col-md-5 ml-auto" data-aos="fade-left">
+        <h2 class="text-primary mb-3">Global Coverage, Local Coordination</h2>
+        <p>We provide worldwide supply and logistics support for clients across the globe. From our base in Kampala, Uganda, we coordinate local, regional, and international requirements—helping you source, move, and deliver with confidence.</p>
+        <ul class="ul-check list-unstyled">
+          <li>Procurement, supply, and sourcing support</li>
+          <li>Warehousing, transport, and distribution coordination</li>
+          <li>Import &amp; export and cross-border shipment support</li>
+        </ul>
+        <p class="mb-0"><a href="{% url 'coverage' %}" class="btn btn-primary py-2 px-4 text-white">Explore Global Coverage</a></p>
       </div>
     </div>
   </div>
@@ -220,8 +218,12 @@
   <div class="container">
     <div class="row text-center">
       <div class="col-md-12">
-        <h2 class="mb-5 text-black">Try Our Services</h2>
-        <p class="mb-0"><a href="{% url 'quote' %}" class="btn btn-primary py-3 px-5 text-white">Get Started</a></p>
+        <h2 class="mb-4 text-black">Ready to Get Started?</h2>
+        <p class="mb-4">Request a quote, track a shipment, or speak with our team about your supply and logistics needs.</p>
+        <p class="mb-0">
+          <a href="{% url 'quote' %}" class="btn btn-primary py-3 px-5 text-white mr-2">Request a Quote</a>
+          <a href="{% url 'public_tracking' %}" class="btn btn-outline-primary py-3 px-5">Track a Shipment</a>
+        </p>
       </div>
     </div>
   </div>

@@ -5,7 +5,7 @@
     <title>{% block title %}Nasil Supply & Logistics{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Nasil Supply & Logistics provides reliable procurement, supply and logistics solutions in Uganda and East Africa.">
+    <meta name="description" content="{% block meta_description %}Nasil Supply & Logistics provides procurement, supply, and logistics solutions for clients worldwide from our base in Kampala, Uganda.{% endblock %}">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -39,27 +39,30 @@
       <header class="site-navbar py-3" role="banner">
         <div class="container">
           <div class="row align-items-center">
-            <div class="col-11 col-xl-2">
+            <div class="col-11 col-xl-auto">
               <div class="mb-0"><a href="{% url 'home' %}" class="text-white h2 mb-0">Nasil</a></div>
             </div>
-            <div class="col-12 col-md-10 d-none d-xl-block">
+            <div class="col d-none d-xl-block">
               <nav class="site-navigation position-relative text-right" role="navigation">
                 <ul class="site-menu js-clone-nav mx-auto d-none d-lg-block">
                   <li{% if request.resolver_match.url_name == 'home' %} class="active"{% endif %}><a href="{% url 'home' %}">Home</a></li>
-                  <li><a href="{% url 'about' %}">About Us</a></li>
-                  <li class="has-children">
+                  <li{% if request.resolver_match.url_name == 'about' %} class="active"{% endif %}><a href="{% url 'about' %}">About Us</a></li>
+                  <li class="has-children{% if request.resolver_match.url_name == 'services' %} active{% endif %}">
                     <a href="{% url 'services' %}">Services</a>
                     <ul class="dropdown">
-                      <li><a href="{% url 'services' %}">Procurement</a></li>
-                      <li><a href="{% url 'services' %}">Ground Shipping</a></li>
-                      <li><a href="{% url 'services' %}">Storage</a></li>
-                      <li><a href="{% url 'services' %}">Import & Export</a></li>
+                      <li><a href="{% url 'services' %}#procurement">Procurement</a></li>
+                      <li><a href="{% url 'services' %}#supply">Supply Solutions</a></li>
+                      <li><a href="{% url 'services' %}#warehousing">Warehousing &amp; Storage</a></li>
+                      <li><a href="{% url 'services' %}#transport">Transport &amp; Distribution</a></li>
+                      <li><a href="{% url 'services' %}#import-export">Import &amp; Export</a></li>
                     </ul>
                   </li>
-                  <li><a href="{% url 'quote' %}">Request Quote</a></li>
+                  <li{% if request.resolver_match.url_name == 'industries' %} class="active"{% endif %}><a href="{% url 'industries' %}">Industries</a></li>
+                  <li{% if request.resolver_match.url_name == 'coverage' %} class="active"{% endif %}><a href="{% url 'coverage' %}">Coverage</a></li>
+                  <li{% if request.resolver_match.url_name == 'quote' %} class="active"{% endif %}><a href="{% url 'quote' %}">Request Quote</a></li>
                   <li class="has-children"><a href="{% url 'portal_login' %}">Customer portal</a><ul class="dropdown"><li><a href="{% url 'portal_login' %}">Customer login</a></li><li><a href="{% url 'public_tracking' %}">Track a shipment</a></li><li><a href="{% url 'login' %}">Staff login</a></li></ul></li>
                   <li{% if request.resolver_match.url_name == 'faq' %} class="active"{% endif %}><a href="{% url 'faq' %}"{% if request.resolver_match.url_name == 'faq' %} aria-current="page"{% endif %}>FAQ</a></li>
-                  <li><a href="{% url 'contact' %}">Contact</a></li>
+                  <li{% if request.resolver_match.url_name == 'contact' %} class="active"{% endif %}><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
               </nav>
             </div>
@@ -76,41 +79,44 @@
       <footer class="site-footer">
         <div class="container">
           <div class="row">
-                <div class="col-6 col-md-3">
-                  <h2 class="footer-heading mb-4">Quick Links</h2>
-                  <ul class="list-unstyled">
-                    <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="{% url 'services' %}">Services</a></li>
-                    <li><a href="{% url 'quote' %}">Request Quote</a></li>
-                    <li><a href="{% url 'portal_login' %}">Customer portal</a></li>
-                    <li><a href="{% url 'public_tracking' %}">Track shipment</a></li>
-                    <li><a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
-                      {% if request.user.is_authenticated %}Dashboard{% else %}Admin Login{% endif %}
-                    </a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                  </ul>
-                </div>
-                <div class="col-6 col-md-3">
-                  <h2 class="footer-heading mb-4">Solutions</h2>
-                  <ul class="list-unstyled">
-                    <li><a href="{% url 'services' %}">Supply Chain</a></li>
-                    <li><a href="{% url 'services' %}">Warehousing</a></li>
-                    <li><a href="{% url 'services' %}">Freight</a></li>
-                    <li><a href="{% url 'services' %}">Procurement</a></li>
-                  </ul>
-                </div>
-                <div class="col-6 col-md-3">
-                  <h2 class="footer-heading mb-4">Office</h2>
-                  <ul class="list-unstyled">
-                    <li><a href="tel:+256749676580">+256 749 676 580</a></li>
-                    <li><a href="tel:+256776988267">+256 776 988 267</a></li>
-                    <li><a href="tel:+256706820374">+256 706 820 374</a></li>
-                    <li><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></li>
-                    <li><a href="{% url 'contact' %}">French Plaza</a></li>
-                    <li><a href="{% url 'contact' %}">Shop T55</a></li>
-                    <li><a href="{% url 'contact' %}">Kampala, Uganda</a></li>
-                  </ul>
-                </div>
+            <div class="col-6 col-md-3">
+              <h2 class="footer-heading mb-4">Quick Links</h2>
+              <ul class="list-unstyled">
+                <li><a href="{% url 'about' %}">About Us</a></li>
+                <li><a href="{% url 'services' %}">Services</a></li>
+                <li><a href="{% url 'industries' %}">Industries</a></li>
+                <li><a href="{% url 'coverage' %}">Global Coverage</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+                <li><a href="{% url 'quote' %}">Request Quote</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-md-3">
+              <h2 class="footer-heading mb-4">Services &amp; Access</h2>
+              <ul class="list-unstyled">
+                <li><a href="{% url 'services' %}#procurement">Procurement</a></li>
+                <li><a href="{% url 'services' %}#supply">Supply Solutions</a></li>
+                <li><a href="{% url 'services' %}#warehousing">Warehousing &amp; Storage</a></li>
+                <li><a href="{% url 'services' %}#transport">Transport &amp; Distribution</a></li>
+                <li><a href="{% url 'services' %}#import-export">Import &amp; Export</a></li>
+                <li><a href="{% url 'portal_login' %}">Customer portal</a></li>
+                <li><a href="{% url 'public_tracking' %}">Track shipment</a></li>
+                <li><a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">{% if request.user.is_authenticated %}Dashboard{% else %}Staff login{% endif %}</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-md-3">
+              <h2 class="footer-heading mb-4">Office &amp; Legal</h2>
+              <ul class="list-unstyled">
+                <li><a href="tel:+256749676580">+256 749 676 580</a></li>
+                <li><a href="tel:+256776988267">+256 776 988 267</a></li>
+                <li><a href="tel:+256706820374">+256 706 820 374</a></li>
+                <li><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></li>
+                <li>French Plaza, Shop T55, Kampala, Uganda</li>
+                <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                <li><a href="{% url 'terms' %}">Terms &amp; Conditions</a></li>
+                <li><a href="{% url 'cookies' %}">Cookie Policy</a></li>
+              </ul>
+            </div>
 
             <div class="col-6 col-md-3">
               <h2 class="footer-heading mb-4">Request a Quote</h2>
@@ -122,14 +128,14 @@
                   </div>
                 </div>
               </form>
+              <p class="small text-white-50 mb-0">Serving clients worldwide from Kampala, Uganda.</p>
             </div>
           </div>
           <div class="row pt-3 mt-3 text-center">
             <div class="col-md-12">
               <div class="border-top pt-3">
-                <p>
-                  Copyright &copy;{% now 'Y' %} Nasil Supply & Logistics Ltd. All rights reserved.
-                </p>
+                <p class="mb-1">Copyright &copy;{% now 'Y' %} Nasil Supply &amp; Logistics Ltd. All rights reserved.</p>
+                <p class="mb-0"><a href="{% url 'privacy' %}">Privacy</a> &middot; <a href="{% url 'terms' %}">Terms</a> &middot; <a href="{% url 'cookies' %}">Cookies</a></p>
               </div>
             </div>
           </div>

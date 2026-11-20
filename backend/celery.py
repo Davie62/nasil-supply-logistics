@@ -1,7 +1,12 @@
 import os
-from celery import Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
-app = Celery("nasil")
-app.config_from_object("django.conf:settings", namespace="CELERY")
-app.autodiscover_tasks()
+
+try:
+    from celery import Celery
+except ModuleNotFoundError:
+    app = None
+else:
+    app = Celery("nasil")
+    app.config_from_object("django.conf:settings", namespace="CELERY")
+    app.autodiscover_tasks()

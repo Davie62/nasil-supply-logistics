@@ -272,6 +272,15 @@ svg, canvas, iframe { max-width: 100%; }
   .ui-dialog { max-height: calc(100dvh - 16px); }
   .ui-toasts { max-height: calc(100dvh - 88px); }
 }
+@media (min-width: 1200px) {
+  .site-navbar .site-navigation .site-menu {
+    white-space: nowrap;
+  }
+  .site-navbar .site-navigation .site-menu > li {
+    padding: 10px 8px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

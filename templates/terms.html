@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Terms &amp; Conditions | Nasil Supply &amp; Logistics{% endblock %}
+{% block meta_description %}Review the Nasil Supply &amp; Logistics terms and conditions for using our website, requesting quotes, and engaging with our supply and logistics services.{% endblock %}
+
+{% block content %}
+
+<div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
+  <div class="container">
+    <div class="row align-items-center justify-content-center text-center">
+      <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+        <h1 class="text-white font-weight-light text-uppercase font-weight-bold">Terms &amp; Conditions</h1>
+        <p class="breadcrumb-custom"><a href="{% url 'home' %}">Home</a> <span class="mx-2">&gt;</span> <span>Terms &amp; Conditions</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="site-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <p class="text-muted"><strong>Last updated:</strong> November 20, 2026</p>
+        <p>These Terms &amp; Conditions (“Terms”) govern your access to and use of the Nasil Supply &amp; Logistics (“NASIL”, “we”, “us”, or “our”) website and related online features, including quote requests, contact forms, shipment tracking, and portal access. By using this website, you agree to these Terms.</p>
+        <p class="small text-muted">These Terms are provided for general informational purposes and may be updated. They do not replace any specific written agreement, quotation, or contract entered into with NASIL for the provision of services.</p>
+
+        <h2 class="h4 text-primary mt-5">1. Use of the Website</h2>
+        <p>You agree to use this website lawfully and not to misuse it, attempt unauthorized access, interfere with its operation, or submit false, misleading, or harmful information.</p>
+
+        <h2 class="h4 text-primary mt-4">2. Quotes, Requests, and Service Engagements</h2>
+        <ul>
+          <li>Information provided on this website is general in nature and does not constitute a binding offer.</li>
+          <li>Submitting a quote or contact request does not create a contract for services. Any services, pricing, timelines, routes, or deliverables are subject to confirmation, feasibility, and agreement with NASIL.</li>
+          <li>Specific terms for procurement, supply, transport, warehousing, import/export, or other services may be set out in separate quotations, proposals, or written agreements, which will govern those engagements to the extent applicable.</li>
+        </ul>
+
+        <h2 class="h4 text-primary mt-4">3. Shipment Tracking and Information</h2>
+        <p>Tracking information and status updates (where available) are provided for convenience and may change as shipments progress. Availability, accuracy, and timeliness of tracking information can depend on operational factors and third parties.</p>
+
+        <h2 class="h4 text-primary mt-4">4. Accounts and Portals</h2>
+        <p>If you are provided access to a customer or staff portal, you are responsible for maintaining the confidentiality of your login credentials and for activities under your account. Please notify us promptly of any suspected unauthorized access.</p>
+
+        <h2 class="h4 text-primary mt-4">5. Intellectual Property</h2>
+        <p>Unless otherwise stated, the content, branding, logos, text, and materials on this website are owned by or licensed to NASIL and are protected by applicable intellectual property laws. You may not copy, reproduce, or distribute website materials without prior permission, except as permitted by law.</p>
+
+        <h2 class="h4 text-primary mt-4">6. Third-Party Links</h2>
+        <p>This website may include links to third-party websites or resources. We are not responsible for the content, availability, or practices of third parties.</p>
+
+        <h2 class="h4 text-primary mt-4">7. Disclaimers and Limitation of Liability</h2>
+        <p>This website and its content are provided on an “as is” and “as available” basis. To the extent permitted by applicable law, NASIL disclaims warranties regarding the website’s availability, accuracy, or completeness, and will not be liable for indirect, incidental, or consequential losses arising from use of the website. Nothing in these Terms limits liability where it cannot be limited under applicable law.</p>
+
+        <h2 class="h4 text-primary mt-4">8. International and Regulatory Considerations</h2>
+        <p>Supply and logistics services may involve cross-border or international requirements. Routes, transit times, customs, duties, and regulatory obligations vary by destination and shipment type and will be addressed as part of the applicable service arrangement or quotation.</p>
+
+        <h2 class="h4 text-primary mt-4">9. Privacy</h2>
+        <p>Your use of the website is also subject to our <a href="{% url 'privacy' %}">Privacy Policy</a> and <a href="{% url 'cookies' %}">Cookie Policy</a>.</p>
+
+        <h2 class="h4 text-primary mt-4">10. Changes to These Terms</h2>
+        <p>We may update these Terms from time to time. Changes will be posted on this page with an updated “Last updated” date. Continued use of the website after changes constitutes acceptance of the revised Terms.</p>
+
+        <h2 class="h4 text-primary mt-4">11. Contact Us</h2>
+        <p>If you have questions about these Terms, please contact us:</p>
+        <ul class="list-unstyled">
+          <li><strong>Nasil Supply &amp; Logistics</strong></li>
+          <li>French Plaza, Shop T55, Kampala, Uganda</li>
+          <li>Email: <a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></li>
+          <li>Phone: <a href="tel:+256749676580">+256 749 676 580</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

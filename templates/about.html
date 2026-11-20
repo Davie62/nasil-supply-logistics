@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}About Us | Nasil Supply &amp; Logistics{% endblock %}
+{% block meta_description %}Learn about Nasil Supply &amp; Logistics, a Kampala-based company providing procurement, supply, and logistics solutions for clients worldwide.{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
@@ -18,23 +21,23 @@
   <div class="container">
     <div class="row mb-5">
       <div class="col-md-5 ml-auto mb-5 order-md-2" data-aos="fade">
-        <img decoding="async" width="700" height="799" src="{% static 'images/img_1.jpg' %}" alt="About Nasil" class="img-fluid rounded">
+        <img decoding="async" width="700" height="799" src="{% static 'images/img_1.jpg' %}" alt="About Nasil Supply and Logistics" class="img-fluid rounded">
       </div>
       <div class="col-md-6 order-md-1" data-aos="fade">
         <div class="text-left pb-1 border-primary mb-4">
-          <h2 class="text-primary">Our History</h2>
+          <h2 class="text-primary">Who We Are</h2>
         </div>
-        <p>We are a Ugandan supply and logistics company focused on moving goods, materials, and services reliably for businesses across multiple sectors.</p>
-        <p class="mb-5">From procurement and import support to storage, distribution, and last-mile coordination, our team works closely with clients to keep operations efficient, dependable, and responsive.</p>
+        <p>Nasil Supply &amp; Logistics is a Kampala, Uganda–based supply and logistics company focused on moving goods, materials, and supplies reliably for organizations across multiple sectors.</p>
+        <p class="mb-4">From procurement and sourcing to storage, transport, distribution, and import &amp; export coordination, our team works closely with clients to keep operations efficient, dependable, and responsive. We support local, regional, and international requirements—serving clients worldwide.</p>
 
         <div class="row">
           <div class="col-md-12 mb-md-5 mb-0 col-lg-6">
             <div class="unit-4">
               <div class="unit-4-icon mb-3 mr-4"><span class="text-primary flaticon-frontal-truck"></span></div>
               <div>
-                <h3>Ground Shipping</h3>
-                <p>Reliable transport coordination for movement across regional and local routes.</p>
-                <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+                <h3>Transport &amp; Distribution</h3>
+                <p>Coordinated movement and delivery planning to keep goods flowing where they’re needed.</p>
+                <p class="mb-0"><a href="{% url 'services' %}#transport">Learn More</a></p>
               </div>
             </div>
           </div>
@@ -42,9 +45,9 @@
             <div class="unit-4">
               <div class="unit-4-icon mb-3 mr-4"><span class="text-primary flaticon-travel"></span></div>
               <div>
-                <h3>Air Freight</h3>
-                <p>Fast, dependable cargo movement for urgent and time-sensitive deliveries.</p>
-                <p class="mb-0"><a href="{% url 'services' %}">Learn More</a></p>
+                <h3>Procurement &amp; Sourcing</h3>
+                <p>Practical sourcing support to help you obtain the right materials and supplies on time.</p>
+                <p class="mb-0"><a href="{% url 'services' %}#procurement">Learn More</a></p>
               </div>
             </div>
           </div>
@@ -54,7 +57,38 @@
   </div>
 </div>
 
-<div class="site-section bg-image overlay" style="background-image: url('/static/images/hero_bg_4.jpg');">
+<div class="site-section bg-light">
+  <div class="container">
+    <div class="row mb-5 justify-content-center">
+      <div class="col-md-7 text-center border-primary">
+        <h2 class="font-weight-light text-primary">What Sets Us Apart</h2>
+        <p class="color-black-opacity-5">A practical, client-focused approach to supply and logistics.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="p-4 bg-white h-100 rounded">
+          <h3 class="h5 text-black">Global Reach</h3>
+          <p class="mb-0">Worldwide support for sourcing, supply, and logistics coordination from our Kampala base. <a href="{% url 'coverage' %}">See coverage</a>.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="p-4 bg-white h-100 rounded">
+          <h3 class="h5 text-black">Industry Experience</h3>
+          <p class="mb-0">Solutions tailored to diverse sectors and operational needs. <a href="{% url 'industries' %}">Industries we serve</a>.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="p-4 bg-white h-100 rounded">
+          <h3 class="h5 text-black">Clear Communication</h3>
+          <p class="mb-0">Responsive coordination and visibility so you can plan with confidence, including shipment tracking where available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="how-it-works" class="site-section bg-image overlay" style="background-image: url('/static/images/hero_bg_4.jpg');">
   <div class="container">
     <div class="row justify-content-center mb-5">
       <div class="col-md-7 text-center border-primary">
@@ -66,12 +100,12 @@
         <div class="how-it-work-item">
           <span class="number">1</span>
           <div class="how-it-work-body">
-            <h2>Choose Your Service</h2>
-            <p class="mb-5">We help you select the best logistics structure for your cargo, schedule, and business needs.</p>
+            <h2>Share Your Requirements</h2>
+            <p class="mb-5">Tell us what you need, the origin and destination, and your timeline so we can plan the right approach.</p>
             <ul class="ul-check list-unstyled white">
-              <li class="text-white">Flexible service planning</li>
-              <li class="text-white">Operational guidance</li>
-              <li class="text-white">Customer-focused support</li>
+              <li class="text-white">Service and sourcing planning</li>
+              <li class="text-white">Route and handling considerations</li>
+              <li class="text-white">Responsive guidance</li>
             </ul>
           </div>
         </div>
@@ -81,12 +115,12 @@
         <div class="how-it-work-item">
           <span class="number">2</span>
           <div class="how-it-work-body">
-            <h2>Select Your Payment</h2>
-            <p class="mb-5">Our team works with you on practical pricing and service planning that fits your business requirements.</p>
+            <h2>Get a Tailored Quote</h2>
+            <p class="mb-5">We review feasibility and options, then provide clear pricing and a coordination plan suited to your needs.</p>
             <ul class="ul-check list-unstyled white">
-              <li class="text-white">Clear pricing guidance</li>
-              <li class="text-white">Tailored solutions</li>
-              <li class="text-white">Transparent process</li>
+              <li class="text-white">Transparent proposals</li>
+              <li class="text-white">Practical solutions</li>
+              <li class="text-white">Worldwide coordination</li>
             </ul>
           </div>
         </div>
@@ -96,12 +130,12 @@
         <div class="how-it-work-item">
           <span class="number">3</span>
           <div class="how-it-work-body">
-            <h2>Tracking Your Order</h2>
-            <p class="mb-5">We keep communication consistent so you stay informed from dispatch through final delivery.</p>
+            <h2>Coordinate &amp; Track</h2>
+            <p class="mb-5">We manage execution and communication, and provide shipment tracking updates when available.</p>
             <ul class="ul-check list-unstyled white">
-              <li class="text-white">Shipment visibility</li>
-              <li class="text-white">Strong coordination</li>
-              <li class="text-white">Reliable delivery updates</li>
+              <li class="text-white">Ongoing coordination</li>
+              <li class="text-white">Delivery support</li>
+              <li class="text-white"><a href="{% url 'public_tracking' %}" class="text-white" style="text-decoration: underline;">Track a shipment</a></li>
             </ul>
           </div>
         </div>
@@ -110,5 +144,16 @@
   </div>
 </div>
 
+<div class="site-section border-top">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-12">
+        <h2 class="mb-4 text-black">Work With NASIL</h2>
+        <p class="mb-4">Need procurement, supply, or logistics support? Tell us about your requirements and we’ll help you plan the next step.</p>
+        <p class="mb-0"><a href="{% url 'quote' %}" class="btn btn-primary py-3 px-5 text-white mr-2">Request a Quote</a> <a href="{% url 'contact' %}" class="btn btn-outline-primary py-3 px-5">Contact Us</a></p>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
