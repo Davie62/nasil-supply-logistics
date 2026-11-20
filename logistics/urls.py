@@ -1,7 +1,19 @@
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path
+from django.views.generic import TemplateView
+
 from . import views
+from .sitemaps import PublicPageSitemap
+
+sitemaps = {"pages": PublicPageSitemap}
 
 urlpatterns = [
+    path(
+        "robots.txt",
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+        name="robots_txt",
+    ),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path("", views.home, name="home"),
     path("about/", views.about, name="about"),
     path("services/", views.services, name="services"),

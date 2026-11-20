@@ -13,14 +13,20 @@
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Nasil Supply &amp; Logistics">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Nasil Supply &amp; Logistics | Global Procurement, Supply &amp; Logistics">
     <meta property="og:description" content="Procurement, supply, warehousing, transport, and import-export coordination for clients worldwide, from Kampala, Uganda.">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
-    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.png' %}">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Nasil Supply &amp; Logistics — procurement, supply, and logistics from Kampala, Uganda">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Nasil Supply &amp; Logistics | Global Procurement, Supply &amp; Logistics">
     <meta name="twitter:description" content="Procurement, supply, warehousing, transport, and import-export coordination for clients worldwide.">
-    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.png' %}">
+    <meta name="twitter:image:alt" content="Nasil Supply &amp; Logistics — procurement, supply, and logistics from Kampala, Uganda">
 
     <script type="application/ld+json">
     {
@@ -40,6 +46,8 @@
     }
     </script>
 
+    {% block extra_head %}{% endblock %}
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
@@ -56,6 +64,7 @@
     {% block extra_css %}{% endblock %}
   <link rel="stylesheet" href="{% static 'css/app-ui.css' %}">
   <link rel="stylesheet" href="{% static 'css/professional-finish.css' %}">
+  {% block extra_css_after %}{% endblock %}
 <script src="{% static 'js/app-ui.js' %}" defer></script>
 </head>
   <body class="website-app">
@@ -148,7 +157,7 @@
                 <li><a href="tel:+256749676580">+256 749 676 580</a></li>
                 <li><a href="tel:+256776988267">+256 776 988 267</a></li>
                 <li><a href="tel:+256706820374">+256 706 820 374</a></li>
-                <li><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics@gmail.com</a></li>
+                <li><a href="mailto:nasilsupplyandlogistics@gmail.com">nasilsupplyandlogistics<wbr>@gmail.com</a></li>
                 <li>French Plaza, Shop T55, Kampala, Uganda</li>
                 <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
                 <li><a href="{% url 'terms' %}">Terms &amp; Conditions</a></li>

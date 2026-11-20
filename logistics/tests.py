@@ -55,6 +55,15 @@ class PublicSubmissionTests(TestCase):
         self.assertFalse(Customer.objects.exists())
         self.assertFalse(Quote.objects.exists())
 
+    def test_home_quick_quote_prefills_name_and_email(self):
+        response = self.client.get(
+            reverse("quote"),
+            {"fq_name": "Amina Namusoke", "fq_email": "amina@example.com"},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["form"].initial["full_name"], "Amina Namusoke")
+        self.assertEqual(response.context["form"].initial["email"], "amina@example.com")
+
     def test_contact_is_validated_and_preserves_full_name(self):
         self.assertRedirects(self.client.post(reverse("contact"), self.contact_data), reverse("contact"))
         message = ContactMessage.objects.get()

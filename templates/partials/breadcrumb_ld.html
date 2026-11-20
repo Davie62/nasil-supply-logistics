@@ -1,0 +1,24 @@
+{% comment %}
+BreadcrumbList structured data for inner pages.
+Usage: include "partials/breadcrumb_ld.html" with crumb="About Us".
+{% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ crumb }}",
+      "item": "{{ request.scheme }}://{{ request.get_host }}{{ request.path }}"
+    }
+  ]
+}
+</script>

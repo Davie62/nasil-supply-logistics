@@ -3,6 +3,10 @@
 {% block title %}Cookie Policy | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Learn how Nasil Supply &amp; Logistics uses cookies and similar technologies on our website for essential functionality and security.{% endblock %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Cookie Policy" %}
+{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">

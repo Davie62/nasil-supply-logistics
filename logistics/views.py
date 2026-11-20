@@ -111,7 +111,10 @@ def quote(request):
     service_key = (request.POST.get("service") or request.GET.get("service") or "").strip().lower()
     selected_service = QUOTE_SERVICE_CONTEXTS.get(service_key)
 
-    initial = {"email": request.GET.get("fq_email", "")}
+    initial = {
+        "email": request.GET.get("fq_email", ""),
+        "full_name": request.GET.get("fq_name", ""),
+    }
     form = PublicQuoteForm(request.POST if request.method == "POST" else None, initial=initial)
 
     if selected_service:

@@ -4,9 +4,28 @@
 {% block title %}Our Services | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Explore Nasil Supply &amp; Logistics services: procurement and sourcing, supply solutions, warehousing and storage, transport and distribution, and import &amp; export for clients worldwide.{% endblock %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Our Services" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Nasil Supply & Logistics Services",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "item": { "@type": "Service", "name": "Procurement & Sourcing", "serviceType": "Procurement and sourcing", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } },
+    { "@type": "ListItem", "position": 2, "item": { "@type": "Service", "name": "Supply Solutions", "serviceType": "Supply of materials and products", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } },
+    { "@type": "ListItem", "position": 3, "item": { "@type": "Service", "name": "Warehousing & Storage", "serviceType": "Warehousing and storage", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } },
+    { "@type": "ListItem", "position": 4, "item": { "@type": "Service", "name": "Transport & Distribution", "serviceType": "Transport and distribution", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } },
+    { "@type": "ListItem", "position": 5, "item": { "@type": "Service", "name": "Import & Export Support", "serviceType": "Import and export coordination", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } },
+    { "@type": "ListItem", "position": 6, "item": { "@type": "Service", "name": "Tailored Logistics Coordination", "serviceType": "End-to-end logistics coordination", "provider": { "@type": "Organization", "name": "Nasil Supply & Logistics" }, "areaServed": "Worldwide" } }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block content %}
 
-<div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
+<div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_4.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
   <div class="container">
     <div class="row align-items-center justify-content-center text-center">
       <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">

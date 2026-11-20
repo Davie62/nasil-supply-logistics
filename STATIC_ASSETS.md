@@ -19,3 +19,9 @@ Brand assets derived from `static/images/logo.png`:
 - `static/images/logo-header.png` — transparent monochrome header mark.
 - `static/images/favicon-32.png` and `static/images/apple-touch-icon.png` —
   square crops used for browser and home-screen icons.
+- `static/images/og-image.png` — 1200×630 social preview: the header mark over
+  `hero_bg_1.jpg` with the brand-blue wash.
+
+Photography in `static/images/` is re-encoded at web sizes (longest edge
+1600 px) for the carousel and section images; `hero_bg_*.jpg` keep their
+original resolution because they render full-bleed.

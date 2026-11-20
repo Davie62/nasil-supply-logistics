@@ -3,6 +3,10 @@
 {% block title %}Privacy Policy | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Read the Nasil Supply &amp; Logistics privacy policy to understand how we collect, use, and protect information when you contact us, request a quote, track shipments, or use our portal.{% endblock %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Privacy Policy" %}
+{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">

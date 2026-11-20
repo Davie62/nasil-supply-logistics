@@ -55,8 +55,8 @@ body.website-app ::selection {
   background: var(--pf-primary);
 }
 
-/* CTA blocks on quote, fleet and careers relied on a stylesheet that was
-   never loaded. Keep the intended block, using the site's own palette. */
+/* CTA blocks relied on a stylesheet that was never loaded. Keep the intended
+   block, using the site's own palette. */
 .website-app .cta-section {
   padding: 60px 0;
 }
@@ -102,6 +102,51 @@ body.website-app ::selection {
   color: #fff;
   border-color: var(--pf-primary-hover);
   background: var(--pf-primary-hover);
+}
+
+/* Footer details: the address list inherited the dark body colour on brand blue,
+   and the email token broke mid-word. Structural colour fixes only. */
+.website-app .site-footer ul li {
+  color: var(--pf-line);
+}
+.website-app .site-footer a[href^="mailto:"] {
+  overflow-wrap: break-word;
+}
+
+/* Narrow footer columns cannot fit the long local part; drop the size a step so
+   it still breaks at the <wbr> instead of mid-word. */
+@media (max-width: 575.98px) {
+  .website-app .site-footer a[href^="mailto:"] {
+    font-size: 13px;
+  }
+}
+
+/* The footer submit button was the same blue as the footer and disappeared. */
+.website-app .site-footer .btn-primary {
+  color: var(--pf-primary) !important;
+  border-color: #fff;
+  background: #fff;
+  font-weight: 600;
+}
+.website-app .site-footer .btn-primary:hover,
+.website-app .site-footer .btn-primary:focus {
+  color: #fff;
+  border-color: var(--pf-primary-hover);
+  background: var(--pf-primary-hover);
+}
+
+/* Headings and rules sit on a dark photo overlay; brand blue was unreadable. */
+.website-app .site-section.overlay h2.text-primary {
+  color: #fff !important;
+}
+.website-app .site-section.overlay .border-primary:after {
+  background: #EEAF1E;
+}
+
+/* Hero photography has bright patches behind the white copy, so give the
+   heading, lede and breadcrumb a soft shadow instead of darkening the photo. */
+.website-app .site-blocks-cover :is(h1, p.text-white, .breadcrumb-custom) {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .35);
 }
 
 @media (max-width: 767.98px) {

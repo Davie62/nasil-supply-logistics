@@ -4,6 +4,14 @@
 {% block title %}Request a Quote{% if selected_service %} - {{ selected_service.label }}{% endif %} | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Request a tailored quote from Nasil Supply &amp; Logistics for {% if selected_service %}{{ selected_service.label|lower }}{% else %}procurement, supply, warehousing, transport, and import-export{% endif %} services worldwide.{% endblock %}
 
+{% block extra_css_after %}
+<link rel="stylesheet" href="{% static 'css/quote.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Request a Quote" %}
+{% endblock %}
+
 {% block content %}
 
 <section class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg'); background-attachment: fixed;">
@@ -62,7 +70,7 @@
                 {% endif %}
 
                 <div class="p-4 mb-3 bg-white">
-                    <img decoding="async" width="700" height="799" src="{% static 'images/img_4.jpg' %}" alt="Logistics support" class="img-fluid rounded mb-3">
+                    <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_4.jpg' %}" alt="Logistics support" class="img-fluid rounded mb-3">
                     <h3 class="h5 text-black mb-3">Here to Help</h3>
                     <p>Need a quick answer? We help organizations plan sourcing, transport, storage, and supply schedules with clear, practical support.</p>
                 </div>
@@ -90,100 +98,5 @@
         </div>
     </div>
 </section>
-
-<style>
-    .site-blocks-cover {
-        position: relative;
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-        min-height: 420px;
-        display: flex;
-        align-items: center;
-    }
-    .site-blocks-cover.overlay:before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(13, 28, 45, 0.6);
-    }
-    .site-blocks-cover .container {
-        position: relative;
-        z-index: 1;
-    }
-    .breadcrumb-custom {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 14px;
-    }
-    .breadcrumb-custom a {
-        color: #fff;
-    }
-    .light-title {
-        color: #fff;
-    }
-    .quote-template-section {
-        padding: 80px 0;
-    }
-    .quote-form-template {
-        border-radius: 18px;
-        box-shadow: 0 12px 30px rgba(13, 28, 45, 0.08);
-        border: 1px solid rgba(13, 28, 45, 0.05);
-    }
-    .quote-form-template .form-control {
-        height: 48px;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        padding: 10px 14px;
-        color: #1f2937;
-        background: #fff;
-    }
-    .quote-form-template textarea.form-control {
-        height: auto;
-        min-height: 140px;
-    }
-    .quote-form-template .form-control:focus {
-        border-color: #114D84;
-        box-shadow: 0 0 0 0.2rem rgba(17, 77, 132, 0.12);
-    }
-    .quote-form-template label {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 8px;
-    }
-    .quote-messages {
-        margin-bottom: 20px;
-    }
-    .quote-msg {
-        padding: 12px 14px;
-        border-radius: 8px;
-        background-color: #f8d7da;
-        color: #721c24;
-        margin-bottom: 12px;
-    }
-    .quote-msg-success {
-        background-color: #d4edda;
-        color: #155724;
-    }
-    .template-check-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-    .template-check-list li {
-        position: relative;
-        padding-left: 26px;
-        margin-bottom: 12px;
-        color: #4b5563;
-        line-height: 1.7;
-    }
-    .template-check-list li::before {
-        content: "\2713";
-        position: absolute;
-        left: 0;
-        top: 0;
-        color: #114D84;
-        font-weight: 700;
-    }
-</style>
 
 {% endblock %}

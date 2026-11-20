@@ -4,6 +4,10 @@
 {% block title %}About Us | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Learn about Nasil Supply &amp; Logistics, a Kampala-based company providing procurement, supply, and logistics solutions for clients worldwide.{% endblock %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="About Us" %}
+{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">
@@ -21,7 +25,7 @@
   <div class="container">
     <div class="row mb-5">
       <div class="col-md-5 ml-auto mb-5 order-md-2" data-aos="fade">
-        <img decoding="async" width="700" height="799" src="{% static 'images/img_1.jpg' %}" alt="About Nasil Supply and Logistics" class="img-fluid rounded">
+        <img decoding="async" width="700" height="799" loading="lazy" src="{% static 'images/img_1.jpg' %}" alt="About Nasil Supply and Logistics" class="img-fluid rounded">
       </div>
       <div class="col-md-6 order-md-1" data-aos="fade">
         <div class="text-left pb-1 border-primary mb-4">

@@ -45,7 +45,7 @@ class QuoteForm(forms.ModelForm):
             }),
             'weight': forms.NumberInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Weight in kg',
+                'placeholder': 'e.g. 250',
                 'min': 0.01,
                 'step': 0.01,
                 'required': True

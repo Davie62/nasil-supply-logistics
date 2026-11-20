@@ -4,6 +4,10 @@
 {% block title %}Industries We Serve | Nasil Supply &amp; Logistics{% endblock %}
 {% block meta_description %}Nasil Supply &amp; Logistics serves government agencies, NGOs and development partners, educational institutions, healthcare facilities, construction companies, hospitality, corporate organisations and SMEs worldwide.{% endblock %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Industries" %}
+{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">

@@ -1,9 +1,93 @@
-﻿{% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Frequently Asked Questions | Nasil Supply & Logistics{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/faq.css' %}">
+{% endblock %}
+
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Frequently Asked Questions" %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What logistics services do you offer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We support businesses with procurement, supply, transport coordination, warehousing, storage, and distribution. Our team can help you plan a service around your goods, route, and delivery requirements."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which areas do you serve?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We support supply and logistics requirements in Uganda and coordinate regional movements through our partners. Share your pickup point and destination so our team can confirm availability for your specific route."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you handle specialized cargo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tell us about any fragile, perishable, high-value, oversized, or other goods that need special handling. Include the cargo type, dimensions, weight, and any handling requirements so we can assess the right transport and storage arrangements before booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I request a quotation?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Complete our Request Quote form with your contact details, pickup location, destination, cargo description, and estimated weight. Add any special instructions to help us understand your requirements. Your request receives a reference number, and our team will follow up to discuss the details and pricing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How quickly can you arrange a pickup?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pickup timing depends on your location, cargo, route, and transport availability. Let us know your preferred date and whether the shipment is urgent. Our team will confirm a practical pickup schedule before you book."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I arrange insurance for my shipment?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Please discuss insurance when requesting your quotation. Share the cargo type and declared value so our team can confirm available cover, applicable terms, and any additional cost before the shipment is arranged."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is online shipment tracking available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Public online tracking is not available yet. For an update, contact our team with your shipment or quotation reference. We will help you confirm the latest recorded status and next steps."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you arrange temperature-controlled transport?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If your goods require temperature control, include the required temperature range, cargo type, packaging, and delivery schedule in your enquiry. Our team will confirm whether suitable arrangements are available for your route before accepting the booking."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What payment methods do you accept?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our team will confirm the available payment methods, payment instructions, and agreed terms with your quotation or invoice. Contact us if your organization has specific billing requirements. Online payment through this website is not currently available."
+      }
+    }
+  ]
+}
+</script>
 {% endblock %}
 
 {% block content %}

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_head %}
+{% include "partials/breadcrumb_ld.html" with crumb="Contact Us" %}
+{% endblock %}
+
 {% block content %}
 
 <div class="site-blocks-cover inner-page-cover overlay" style="background-image: url('/static/images/hero_bg_1.jpg');" data-aos="fade" data-stellar-background-ratio="0.5">

@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Authenticated and internal areas.
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /dashboard/
+Disallow: /portal/
+Disallow: /customer-services/
+Disallow: /messages/
+Disallow: /operations/
+Disallow: /shipments/
+Disallow: /quotations/
+Disallow: /payments/
+Disallow: /customers/
+Disallow: /finance/
+Disallow: /inventory/
+Disallow: /orders/
+Disallow: /procurement/
+Disallow: /fleet/
+Disallow: /integrations/
+Disallow: /security/
+
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
