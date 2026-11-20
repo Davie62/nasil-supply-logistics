@@ -5,7 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#114D84">
+    <meta name="description" content="Secure sign-in for the NASIL Supply &amp; Logistics staff and customer portals.">
     <title>{% block title %}Log in{% endblock %} | NASIL Supply &amp; Logistics</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +21,7 @@
 <body class="nasil-login">
     <a class="login-skip" href="#login-card">Skip to login</a>
     <header class="login-header">
-        <a class="login-brand" href="{% url 'home' %}" aria-label="NASIL Supply and Logistics home"><span class="login-brand-mark" aria-hidden="true">N</span><span>NASIL<small>Supply &amp; Logistics</small></span></a>
+        <a class="login-brand" href="{% url 'home' %}" aria-label="NASIL Supply and Logistics home"><img class="login-brand-logo" src="{% static 'images/logo-header.png' %}" width="831" height="328" alt="" decoding="async"></a>
         <nav aria-label="Login navigation"><a href="{% url 'home' %}">Back to website <span aria-hidden="true">↗</span></a><span class="login-header-divider" aria-hidden="true"></span><span class="login-language">English <span aria-hidden="true">/</span> Uganda</span></nav>
     </header>
     <main class="login-stage">
@@ -38,7 +42,7 @@
             <p class="login-note">{% block login_note %}{% endblock %}</p>
         </section>
     </main>
-    <footer class="login-footer"><a class="login-footer-brand" href="{% url 'home' %}">NASIL<span>Supply &amp; Logistics</span></a><a href="{% url 'contact' %}">Contact support</a><span class="login-copyright">&copy; {% now 'Y' %} NASIL Supply &amp; Logistics. All rights reserved.</span></footer>
+    <footer class="login-footer"><a class="login-footer-brand" href="{% url 'home' %}" aria-label="NASIL Supply and Logistics home"><img class="login-footer-logo" src="{% static 'images/logo-header.png' %}" width="831" height="328" alt="" decoding="async"></a><a href="{% url 'contact' %}">Contact support</a><span class="login-copyright">&copy; {% now 'Y' %} NASIL Supply &amp; Logistics. All rights reserved.</span></footer>
 {% include "ui/toasts.html" %}
 </body>
 </html>

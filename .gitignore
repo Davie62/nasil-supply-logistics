@@ -39,3 +39,5 @@ htmlcov/
 # Skill packages are local agent tooling, not application source.
 .agents/skills/
 skills-lock.json
+# Graphify knowledge-graph outputs are generated local artifacts.
+graphify-out/

@@ -177,8 +177,7 @@ button, input, select, textarea { max-width: 100%; }
   .workflow-form input[type=file] { font-size: 13px; }
   .portal-wrap { padding-inline: 16px; }
   .portal-brand-row { gap: 12px; padding-block: 14px; align-items: center; flex-wrap: wrap; }
-  .portal-brand { gap: 8px; font-size: 20px; }
-  .portal-mark { width: 34px; height: 34px; }
+  .portal-brand-logo { height: 42px; max-width: 148px; }
   .portal-account { margin-left: auto; }
   .portal-account > span { display: none; }
   .portal-account form .btn { min-height: 44px; }

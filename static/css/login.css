@@ -8,10 +8,9 @@ body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; 
 .nasil-login :focus-visible { outline:3px solid var(--login-blue); outline-offset:4px; }
 .login-skip { position:absolute; left:20px; top:-80px; z-index:5; background:white; padding:12px; border-radius:6px; }
 .login-skip:focus { top:12px; }
-.login-header { min-height:80px; padding:16px clamp(24px,4vw,72px); background:var(--login-navy); color:#fff; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-.nasil-login .login-brand { display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none; font-size:28px; font-weight:800; letter-spacing:-.7px; line-height:1; }
-.login-brand-mark { width:43px; height:43px; display:grid; place-items:center; border:2px solid currentColor; border-radius:9px 9px 9px 2px; font-size:28px; font-weight:700; }
-.login-brand small { display:block; margin-top:6px; font-size:10px; letter-spacing:.5px; font-weight:600; }
+.login-header { min-height:80px; padding:14px clamp(24px,4vw,72px); background:var(--login-navy); color:#fff; display:flex; align-items:center; justify-content:space-between; gap:24px; box-shadow:0 2px 18px #0b1c2c33; }
+.nasil-login .login-brand { display:inline-flex; align-items:center; color:#fff; text-decoration:none; line-height:0; }
+.login-brand-logo { display:block; width:auto; height:48px; max-width:154px; object-fit:contain; object-position:left center; }
 .login-header nav { display:flex; align-items:center; gap:25px; font-size:12px; font-weight:600; }
 .login-header nav a { color:#fff; text-decoration:none; }
 .login-header nav a:hover { text-decoration:underline; }
@@ -21,7 +20,8 @@ body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; 
 .login-language span { padding-inline:8px; opacity:.5; }
 .login-stage { flex:1; position:relative; isolation:isolate; display:flex; justify-content:center; align-items:center; padding:56px 24px; background:#2b3439 url('../images/hero_bg_4.jpg') center 58% / cover no-repeat; }
 .login-stage::before { content:""; position:absolute; inset:0; background:rgba(17,23,28,.58); z-index:-1; }
-.login-card { width:100%; max-width:600px; background:#fff; border-radius:12px; padding:42px 48px 30px; box-shadow:0 18px 60px #00000026; }
+.login-card { position:relative; width:100%; max-width:600px; background:#fff; border-radius:12px; padding:42px 48px 30px; box-shadow:0 18px 60px #00000026; overflow:hidden; }
+.login-card::before { content:""; position:absolute; inset:0 0 auto; height:4px; background:linear-gradient(90deg,var(--login-navy) 0%,var(--login-burgundy) 68%,var(--login-gold) 100%); }
 .login-eyebrow { display:block; font-size:10px; letter-spacing:1.6px; font-weight:700; color:var(--login-burgundy); margin-bottom:10px; }
 .login-card h1 { font-size:32px; line-height:1.25; letter-spacing:-.8px; font-weight:750; margin:0 0 20px; }
 .login-intro { color:#505860; font-size:14px; margin-bottom:27px; }
@@ -49,9 +49,9 @@ body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; 
 .login-submit:hover { background:var(--login-burgundy); border-color:var(--login-burgundy); }
 .login-note { font-size:11px; line-height:1.9; color:var(--login-muted); margin:19px 0 0; text-align:center; }
 .login-note a { font-weight:600; }
-.login-footer { min-height:58px; display:flex; align-items:center; flex-wrap:wrap; gap:20px; padding:12px clamp(24px,4vw,72px); font-size:11px; background:#ededed; }
-.nasil-login .login-footer-brand { color:var(--login-ink); font-size:23px; font-weight:800; letter-spacing:-.6px; line-height:1; text-decoration:none; }
-.login-footer-brand span { display:block; margin-top:5px; font-size:8px; font-weight:500; letter-spacing:.2px; }
+.login-footer { min-height:58px; display:flex; align-items:center; flex-wrap:wrap; gap:20px; padding:10px clamp(24px,4vw,72px); font-size:11px; background:#ededed; }
+.nasil-login .login-footer-brand { display:inline-flex; align-items:center; padding:5px 11px; border-radius:8px; background:var(--login-navy); line-height:0; text-decoration:none; }
+.login-footer-logo { display:block; width:108px; height:auto; max-height:43px; object-fit:contain; }
 .login-footer>a:not(.login-footer-brand) { color:var(--login-ink); font-weight:600; }
 .login-copyright { margin-left:auto; color:#535960; }
 .login-alert { padding:12px 15px; border:1px solid #efb3a5; background:#fff4f0; color:#96311d; font-size:12px; border-radius:8px; margin:0 0 20px; }
@@ -71,7 +71,7 @@ body.nasil-login { margin:0; min-height:100vh; min-height:100dvh; display:flex; 
 .registration-resend button { border:0; padding:8px; background:transparent; color:var(--login-link); text-decoration:underline; text-underline-offset:3px; font-size:13px; cursor:pointer; }
 @media(max-width:767px) { .registration-form input { font-size:16px; } }
 @media(min-width:1600px) { .login-card { max-width:640px; padding:45px 50px 32px; } .login-card h1 { font-size:36px; } .login-stage { padding-block:70px; } }
-@media(max-width:767px) { .login-header { padding:16px 22px; min-height:76px; } .login-brand-mark { width:36px; height:36px; font-size:24px; } .nasil-login .login-brand { font-size:23px; gap:9px; } .login-brand small { font-size:8px; } .login-language,.login-header-divider { display:none; } .login-header nav { font-size:11px; } .login-stage { padding:35px 20px; } .login-card { max-width:520px; padding:32px 27px 26px; } .login-card h1 { font-size:28px; } .login-intro { font-size:13px; } .login-field input { font-size:16px; } .login-footer { gap:14px; padding:10px 22px; } .login-copyright { margin-left:0; flex-basis:100%; font-size:10px; } }
+@media(max-width:767px) { .login-header { padding:14px 22px; min-height:76px; } .login-brand-logo { height:42px; max-width:124px; } .login-language,.login-header-divider { display:none; } .login-header nav { font-size:11px; } .login-stage { padding:35px 20px; } .login-card { max-width:520px; padding:32px 27px 26px; } .login-card h1 { font-size:28px; } .login-intro { font-size:13px; } .login-field input { font-size:16px; } .login-footer { gap:14px; padding:10px 22px; } .login-footer-logo { width:96px; } .login-copyright { margin-left:0; flex-basis:100%; font-size:10px; } }
 @media(max-width:380px) { .login-stage { padding:25px 14px; } .login-card { padding:28px 21px 24px; } .login-card h1 { font-size:25px; } .login-options { font-size:11px; gap:10px; } .login-remember { gap:7px; } .login-header { padding-inline:18px; } }
 @media(max-height:560px) and (orientation:landscape) { .login-stage { align-items:flex-start; padding-block:16px; } .login-card { padding-block:22px; } .login-card h1 { margin-bottom:12px; } .login-intro { margin-bottom:16px; } .login-form { gap:12px; } .login-options { margin-block:2px 6px; } .login-note { margin-top:12px; } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; } }
