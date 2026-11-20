@@ -37,7 +37,13 @@ for name in names:
     if path.suffix == ".html":
         for match in re.finditer(r"<script\b([^>]*)>", source, re.I):
             attributes = match.group(1)
-            if "src=" not in attributes and "nonce=" not in attributes and "application/json" not in attributes:
+            script_is_safe = (
+                "src=" in attributes
+                or "nonce=" in attributes
+                or "application/json" in attributes
+                or "application/ld+json" in attributes
+            )
+            if not script_is_safe:
                 issues.append((name, source.count("\n", 0, match.start())+1, "inline-script-without-nonce"))
 for name, number, code in issues:
     print(f"{name}:{number}: {code}")  # Never echo a suspected secret's value.
