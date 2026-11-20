@@ -1,0 +1,114 @@
+/* Public-site finishing layer.
+   Loaded after app-ui.css. It refines inherited template styling without
+   touching layout geometry, AOS timings, or carousel behaviour. */
+
+:root {
+  --pf-primary: #114D84;
+  --pf-primary-hover: #661216;
+  --pf-ink: #231F20;
+  --pf-line: #D1D3D4;
+}
+
+body.website-app {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The legacy template selected text in pure black; use the brand instead. */
+body.website-app ::selection {
+  background: rgba(17, 77, 132, .18);
+  color: var(--pf-ink);
+}
+
+/* The logo replaces the text wordmark at a matching optical height. */
+.website-app .site-brand {
+  display: inline-flex;
+  align-items: center;
+}
+.website-app .site-brand-logo {
+  display: block;
+  width: auto;
+  height: 36px;
+}
+
+/* Quiet depth on content cards; no spacing or motion changes. */
+.website-app .unit-4,
+.website-app .bg-white.rounded,
+.website-app .quote-form-template {
+  box-shadow: 0 6px 18px rgba(17, 77, 132, .05);
+}
+
+.website-app .btn-outline-white {
+  border-color: rgba(255, 255, 255, .85);
+}
+.website-app .btn-outline-white:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, .12);
+}
+
+/* Align carousel indicators with the brand palette. */
+.website-app .owl-theme .owl-dots .owl-dot span {
+  background: var(--pf-line);
+}
+.website-app .owl-theme .owl-dots .owl-dot.active span,
+.website-app .owl-theme .owl-dots .owl-dot:hover span {
+  background: var(--pf-primary);
+}
+
+/* CTA blocks on quote, fleet and careers relied on a stylesheet that was
+   never loaded. Keep the intended block, using the site's own palette. */
+.website-app .cta-section {
+  padding: 60px 0;
+}
+.website-app .cta-box {
+  padding: 48px 32px;
+  border-radius: 24px;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(135deg, var(--pf-primary), #1389CA);
+}
+.website-app .cta-box h2 {
+  margin-bottom: 16px;
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+}
+.website-app .cta-box p {
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, .9);
+}
+.website-app .btn-primary-hero {
+  display: inline-block;
+  padding: 13px 30px;
+  border: 2px solid var(--pf-primary);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--pf-primary);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.website-app .btn-primary-hero:hover {
+  color: #fff;
+  border-color: var(--pf-primary-hover);
+  background: var(--pf-primary-hover);
+  text-decoration: none;
+}
+.website-app .cta-box .btn-primary-hero {
+  color: var(--pf-primary);
+  border-color: #fff;
+  background: #fff;
+}
+.website-app .cta-box .btn-primary-hero:hover {
+  color: #fff;
+  border-color: var(--pf-primary-hover);
+  background: var(--pf-primary-hover);
+}
+
+@media (max-width: 767.98px) {
+  .website-app .cta-section {
+    padding: 40px 0;
+  }
+  .website-app .cta-box {
+    padding: 34px 22px;
+  }
+}

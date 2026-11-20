@@ -6,6 +6,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{% block meta_description %}Nasil Supply & Logistics provides procurement, supply, and logistics solutions for clients worldwide from our base in Kampala, Uganda.{% endblock %}">
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta name="theme-color" content="#114D84">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Nasil Supply &amp; Logistics">
+    <meta property="og:title" content="Nasil Supply &amp; Logistics | Global Procurement, Supply &amp; Logistics">
+    <meta property="og:description" content="Procurement, supply, warehousing, transport, and import-export coordination for clients worldwide, from Kampala, Uganda.">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nasil Supply &amp; Logistics | Global Procurement, Supply &amp; Logistics">
+    <meta name="twitter:description" content="Procurement, supply, warehousing, transport, and import-export coordination for clients worldwide.">
+    <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Nasil Supply & Logistics Ltd",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}",
+      "telephone": "+256749676580",
+      "email": "nasilsupplyandlogistics@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "French Plaza, Shop T55",
+        "addressLocality": "Kampala",
+        "addressCountry": "UG"
+      },
+      "areaServed": "Worldwide"
+    }
+    </script>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,700,900|Display+Playfair:200,300,400,700">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
@@ -22,6 +55,7 @@
 
     {% block extra_css %}{% endblock %}
   <link rel="stylesheet" href="{% static 'css/app-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'css/professional-finish.css' %}">
 <script src="{% static 'js/app-ui.js' %}" defer></script>
 </head>
   <body class="website-app">
@@ -40,7 +74,11 @@
         <div class="container">
           <div class="row align-items-center">
             <div class="col-11 col-xl-auto">
-              <div class="mb-0"><a href="{% url 'home' %}" class="text-white h2 mb-0">Nasil</a></div>
+              <div class="mb-0">
+                <a href="{% url 'home' %}" class="site-brand" aria-label="Nasil Supply &amp; Logistics — home">
+                  <img src="{% static 'images/logo-header.png' %}" alt="Nasil Supply &amp; Logistics" class="site-brand-logo" width="831" height="328">
+                </a>
+              </div>
             </div>
             <div class="col d-none d-xl-block">
               <nav class="site-navigation position-relative text-right" role="navigation">
@@ -80,7 +118,7 @@
         <div class="container">
           <div class="row">
             <div class="col-6 col-md-3">
-              <h2 class="footer-heading mb-4">Quick Links</h2>
+              <h2 class="footer-heading mb-4">Explore</h2>
               <ul class="list-unstyled">
                 <li><a href="{% url 'about' %}">About Us</a></li>
                 <li><a href="{% url 'services' %}">Services</a></li>
@@ -92,7 +130,7 @@
               </ul>
             </div>
             <div class="col-6 col-md-3">
-              <h2 class="footer-heading mb-4">Services &amp; Access</h2>
+              <h2 class="footer-heading mb-4">Our Services</h2>
               <ul class="list-unstyled">
                 <li><a href="{% url 'services' %}#procurement">Procurement</a></li>
                 <li><a href="{% url 'services' %}#supply">Supply Solutions</a></li>
@@ -105,7 +143,7 @@
               </ul>
             </div>
             <div class="col-6 col-md-3">
-              <h2 class="footer-heading mb-4">Office &amp; Legal</h2>
+              <h2 class="footer-heading mb-4">Contact &amp; Legal</h2>
               <ul class="list-unstyled">
                 <li><a href="tel:+256749676580">+256 749 676 580</a></li>
                 <li><a href="tel:+256776988267">+256 776 988 267</a></li>
@@ -128,7 +166,7 @@
                   </div>
                 </div>
               </form>
-              <p class="small text-white-50 mb-0">Serving clients worldwide from Kampala, Uganda.</p>
+              <p class="small text-white-50 mb-0">Working with clients worldwide from Kampala, Uganda.</p>
             </div>
           </div>
           <div class="row pt-3 mt-3 text-center">
