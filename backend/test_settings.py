@@ -115,24 +115,6 @@ class DeploymentConfigurationTests(SimpleTestCase):
         settings = self.settings(**{**self.production_environment(), "DJANGO_TRUST_PROXY": "true", "SECURITY_TRUSTED_PROXY_NETWORKS": "127.0.0.1/32"})
         self.assertEqual(settings["SECURE_PROXY_SSL_HEADER"], ("HTTP_X_FORWARDED_PROTO", "https"))
 
-    def test_vercel_trusts_only_platform_deployment_hostnames(self):
-        environment = {**self.production_environment(), "VERCEL": "1",
-                       "DJANGO_ALLOWED_HOSTS": "", "VERCEL_URL": "nasil-demo-abc.vercel.app",
-                       "VERCEL_BRANCH_URL": "https://invalid.vercel.app",
-                       "VERCEL_PROJECT_PRODUCTION_URL": "nasil-supply-logistics.vercel.app"}
-        settings = self.settings(**environment)
-        self.assertEqual(settings["ALLOWED_HOSTS"], ["nasil-demo-abc.vercel.app", "nasil-supply-logistics.vercel.app"])
-        self.assertIn("https://nasil-demo-abc.vercel.app", settings["CSRF_TRUSTED_ORIGINS"])
-        self.assertNotIn(".vercel.app", settings["ALLOWED_HOSTS"])
-        self.assertEqual(settings["SECURE_PROXY_SSL_HEADER"], ("HTTP_X_FORWARDED_PROTO", "https"))
-        self.assertEqual(settings["DATABASES"]["default"]["CONN_MAX_AGE"], 0)
-        self.assertTrue(settings["DATABASES"]["default"]["DISABLE_SERVER_SIDE_CURSORS"])
-
-    def test_vercel_metadata_is_ignored_outside_platform(self):
-        settings = self.settings(**{**self.production_environment(), "VERCEL_URL": "foreign.vercel.app"})
-        self.assertNotIn("foreign.vercel.app", settings["ALLOWED_HOSTS"])
-        self.assertNotIn("SECURE_PROXY_SSL_HEADER", settings)
-
     def test_neon_database_name_alias(self):
         environment = self.production_environment()
         environment.pop("POSTGRES_DB")

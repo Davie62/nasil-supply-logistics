@@ -119,5 +119,5 @@ After the last public-form refinements, the public/core/shared suite ran 47 test
 HTTP 200 with the new shared assets.
 Local screenshot/interaction artifacts are kept in ignored `output/playwright/`.
 
-No deployment is implied by these local changes. A Vercel preview must be rebuilt
-and its client sharing link renewed separately before a remote demonstration.
+No deployment is implied by these local changes; a remote demonstration requires a
+separate deployment step.

@@ -510,7 +510,7 @@ reproduction above.
 | Workflow run | `44538891111` — `Security checks` on `c392370` |
 | `security` job | **success** (2026-11-19T13:59:05Z → 14:00:45Z) — [job](https://github.com/Davie62/nasil-supply-logistics/actions/runs/44538891111/job/135611618960) |
 | `linux` job | **success** (2026-11-19T13:59:06Z → 14:01:34Z) — [job](https://github.com/Davie62/nasil-supply-logistics/actions/runs/44538891111/job/135611618356) |
-| Other checks | `Vercel Preview Comments` success; no failing or cancelled checks on the commit |
+| Other checks | No failing or cancelled checks on the commit |
 | Result | **Release blocker cleared — both required CI jobs green** |
 
 ---

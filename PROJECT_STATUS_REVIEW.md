@@ -81,8 +81,8 @@ The frontend uses Django templates, Bootstrap 5 in the workspace/portal, legacy
 Bootstrap 4 in the public website and vanilla JavaScript progressive enhancement.
 It is a responsive web application, not a native mobile app or public REST API.
 SQLite supports local development; production settings require PostgreSQL with
-verified TLS and a TLS Redis broker. A Vercel preview configuration exists alongside
-traditional Nginx/Gunicorn deployment examples.
+verified TLS and a TLS Redis broker. Traditional Nginx/Gunicorn deployment examples
+are provided.
 
 The architecture has useful safeguards: transaction boundaries, `select_for_update`,
 record versions, idempotency keys, database constraints, service-controlled writes,
@@ -139,7 +139,7 @@ Core flows and limits:
 | Integrations | Odoo JSON-2 invoice/purchase export, Flutterwave collection/verification/webhook, pawaPay collection/verification polling, retries/recheck screens | Live sandbox/merchant/accounting acceptance, refunds and broader/bidirectional ERP synchronization |
 | Security | Shared lockout, TOTP MFA/recovery codes, encrypted MFA secrets, session expiry/revocation, CSRF/CSP, bounded inputs, strict JSON, redacted logs and security alerts | External monitoring/alert forwarding, immutable audit protection, retention, malware scanning and infrastructure acceptance |
 | Reports/admin | QuerySet search/pagination, date/status/staff filters, CSV/PDF exports and configurable business policy | Dedicated company/branch/department screens, scheduled reports and advanced BI |
-| APIs/deployment | Provider callback/payment routes, Django/Vercel configuration, CI definitions and deployment examples | General REST API/mobile API, production rollout, Linux/PostgreSQL acceptance and release operationalization |
+| APIs/deployment | Provider callback/payment routes, Django configuration, CI definitions and deployment examples | General REST API/mobile API, production rollout, Linux/PostgreSQL acceptance and release operationalization |
 
 ### Important storage and integration distinctions
 
@@ -167,7 +167,6 @@ not run Celery workers or beat.
 | --- | --- | --- |
 | Resolved: release | Conflicting Linux Gunicorn dependencies | Runtime and production requirements are separated; the production Gunicorn pin no longer conflicts with the runtime file. Linux CI installs the production dependency set. |
 | Resolved: release | Git dashboard path casing | The tracked package is normalized to lowercase `dashboard/`, matching Python imports on case-sensitive systems. |
-| Resolved: release | Invalid Vercel builder override | Removed an untracked legacy `vercel.json` whose builder source did not exist; Django framework discovery uses root `manage.py`. |
 | Resolved: release | Linux application checks | CI now runs security scan, Django system/migration checks and the app test suite on Linux as well as Windows. |
 | Resolved: maintainability | Runtime dependency contamination | Runtime, Linux production and security/development requirements are split; dev/security tools and duplicate PostgreSQL drivers are not installed by the app runtime file. |
 | Resolved: documentation | Stale architecture and roadmap | Architecture reflects current source; README/ROADMAP no longer report MFA as unimplemented. |
@@ -194,11 +193,6 @@ checks skipped. Subsequent focused suites passed. Mobile evidence covers 405
 page/viewport combinations across nine widths, eight interaction checks, and
 additional internal portal-table clipping checks. These are local regression results,
 not proof of production load, real provider delivery or WCAG certification.
-
-The 27 October Vercel preview is recorded as built successfully. The mobile changes
-were not redeployed in the last task, and the original seven-day client share link
-has passed its original validity window. Remote deployment health and any subsequent
-changes were not checked in this review.
 
 Recommended phases after the release fixes are committed:
 

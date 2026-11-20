@@ -70,9 +70,8 @@ deployment/operations tasks. A Redis broker URL alone does not run Celery worker
 or beat.
 
 Runtime dependencies are in `requirements.txt`; Linux Gunicorn deployment uses
-`requirements-production.txt`; development/security tools are separate. Vercel
-uses Django framework discovery and the runtime dependency file. Nginx/Gunicorn
-examples are in `deploy/` and `DEPLOYMENT.md`. Both are deployment options, not
+`requirements-production.txt`; development/security tools are separate. Nginx/Gunicorn
+examples are in `deploy/` and `DEPLOYMENT.md`. These are deployment examples, not
 proof of a currently running or production-accepted system.
 
 Delivery-proof bytes are stored in a database `BinaryField` and served by

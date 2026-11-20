@@ -30,9 +30,7 @@ output/playwright/
 output/
 .playwright-cli/
 .local/
-.vercel/
 .env.*.local
-.vercel
 .env*
 # Coverage data and HTML reports are build artifacts.
 .coverage

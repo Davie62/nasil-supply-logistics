@@ -73,9 +73,8 @@ development uses SQLite and a stable development-only signing key; supply a priv
 DJANGO_SECRET_KEY for any shared environment.
 
 `requirements.txt` contains application runtime dependencies. Linux deployments
-that use Gunicorn should install `requirements-production.txt`; the Vercel Django
-build uses the runtime file. Security/development tooling is in
-`requirements-security.txt` and `requirements-development.txt`.
+that use Gunicorn should install `requirements-production.txt`. Security/development
+tooling is in `requirements-security.txt` and `requirements-development.txt`.
 
 ## Docker development stack
 

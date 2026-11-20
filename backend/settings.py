@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 import json
 import ipaddress
-import re
 import secrets
 import ssl
 import certifi
@@ -54,14 +53,6 @@ if not SECRET_KEY or (not DEBUG and (len(SECRET_KEY) < 50 or SECRET_KEY.startswi
 ALLOWED_HOSTS =[host.strip() for host in os.environ.get(
     "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1" if DEBUG else ""
 ).split(",") if host.strip()]
-# Trust only this deployment's platform-supplied names, never all *.vercel.app.
-VERCEL_DEPLOYMENT_HOSTS = []
-if os.environ.get("VERCEL") == "1":
-    for variable in ("VERCEL_URL", "VERCEL_BRANCH_URL", "VERCEL_PROJECT_PRODUCTION_URL"):
-        hostname = os.environ.get(variable, "").lower()
-        if re.fullmatch(r"[a-z0-9][a-z0-9.-]*\.vercel\.app", hostname):
-            VERCEL_DEPLOYMENT_HOSTS.append(hostname)
-    ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS + VERCEL_DEPLOYMENT_HOSTS))
 if not DEBUG and (not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS):
     raise ImproperlyConfigured("Set DJANGO_ALLOWED_HOSTS to explicit production hostnames.")
 CSRF_TRUSTED_ORIGINS = [
@@ -69,9 +60,6 @@ CSRF_TRUSTED_ORIGINS = [
         "DJANGO_CSRF_TRUSTED_ORIGINS", ""
     ).split(",") if origin.strip()
 ]
-CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(
-    CSRF_TRUSTED_ORIGINS + [f"https://{host}" for host in VERCEL_DEPLOYMENT_HOSTS]
-))
 
 # Application definition
 
@@ -153,9 +141,8 @@ elif DB_ENGINE == "postgresql":
         "NAME": postgres_database, "USER": os.environ["POSTGRES_USER"],
         "PASSWORD": os.environ["POSTGRES_PASSWORD"], "HOST": os.environ["POSTGRES_HOST"],
         "PORT": os.environ.get("POSTGRES_PORT", "5432"),
-        "CONN_MAX_AGE": 0 if os.environ.get("VERCEL") == "1" else 60,
+        "CONN_MAX_AGE": 60,
         "CONN_HEALTH_CHECKS": True,
-        "DISABLE_SERVER_SIDE_CURSORS": os.environ.get("VERCEL") == "1",
         "OPTIONS": {
             "sslmode": os.environ.get("POSTGRES_SSLMODE", "verify-full"),
             "sslrootcert": os.environ.get("PGSSLROOTCERT") or certifi.where(),
@@ -394,9 +381,6 @@ SECURE_HSTS_PRELOAD = os.environ.get("DJANGO_HSTS_PRELOAD", "false").lower() == 
 SECURE_REFERRER_POLICY = "same-origin"
 # Enable only when the trusted proxy strips incoming forwarded-proto headers.
 if os.environ.get("DJANGO_TRUST_PROXY", "false").lower() == "true":
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-# Vercel terminates TLS and supplies the original protocol to its function runtime.
-if os.environ.get("VERCEL") == "1":
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 LOGGING = {

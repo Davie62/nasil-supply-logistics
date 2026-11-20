@@ -1,5 +1,5 @@
 # Application runtime dependencies. Keep development and security tooling out of
-# the serverless/runtime install; requirements-production.txt adds the WSGI server.
+# the runtime install; requirements-production.txt adds the WSGI server.
 Django==6.1.2
 Pillow==13.0.0
 boto3==1.44.6
